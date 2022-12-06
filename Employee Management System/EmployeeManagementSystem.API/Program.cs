@@ -9,10 +9,6 @@ using EmployeeManagementSystem.Repository.Contracts;
 using EmployeeManagementSystem.Repository;
 using EmployeeManagementSystem.Repository.Repositories.Contracts;
 using EmployeeManagementSystem.Repository.Repositories;
-using EmployeeManagementSystem.Service.Sorting.Contracts;
-using EmployeeManagementSystem.Service.Sorting;
-using EmployeeManagementSystem.Service.Selection.Contracts;
-using EmployeeManagementSystem.Service.Selection;
 
 var builder = WebApplication.CreateBuilder(args);
 
