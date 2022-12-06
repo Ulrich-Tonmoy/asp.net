@@ -6,7 +6,7 @@ namespace EmployeeManagementSystem.Repository.Contracts
     public interface IRepositoryBase<T>
     {
         IQueryable<T> GetAllNoTracking();
-        IQueryable<T> GetAllNoTrackingWithParam(QueryParametersBase param);
+        IQueryable<T> GetAllNoTrackingWithParam(QueryParametersBase param, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy);
         IQueryable<T> GetAllWithTracking();
         IQueryable<T> GetByConditionNoTracking(Expression<Func<T, bool>> expression);
         IQueryable<T> GetByConditionWithTracking(Expression<Func<T, bool>> expression);

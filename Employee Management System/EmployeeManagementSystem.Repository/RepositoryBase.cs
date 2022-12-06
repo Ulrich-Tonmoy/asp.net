@@ -18,12 +18,12 @@ namespace EmployeeManagementSystem.Repository
         {
             return _dbSet.AsNoTracking();
         }
-        public IQueryable<T> GetAllNoTrackingWithParam(QueryParametersBase param)
+        public IQueryable<T> GetAllNoTrackingWithParam(QueryParametersBase param, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy)
         {
-            return _dbSet
+            return orderBy(_dbSet
                 .Skip((param.PageNumber - 1) * param.PageSize)
                 .Take(param.PageSize)
-                .AsNoTracking();
+                .AsNoTracking());
         }
 
         public IQueryable<T> GetAllWithTracking()
