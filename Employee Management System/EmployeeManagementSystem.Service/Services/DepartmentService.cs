@@ -7,23 +7,17 @@ using EmployeeManagementSystem.DTO.Department;
 using EmployeeManagementSystem.Common.QueryParameters;
 using EmployeeManagementSystem.Common.Pagination;
 using Microsoft.EntityFrameworkCore;
-using EmployeeManagementSystem.Service.Sorting.Contracts;
-using EmployeeManagementSystem.Service.Selection.Contracts;
-using System.Dynamic;
+using System.Linq.Dynamic.Core;
 
 namespace EmployeeManagementSystem.Service.Services
 {
     public class DepartmentService : IDepartmentService
     {
         private IUnitOfWork _unitOfWork;
-        private IDepartmentSort _deptSort;
-        private IDepartmentDataShaper _deptDataShaper;
 
-        public DepartmentService(IUnitOfWork unitOfWork, IDepartmentSort deptSort, IDepartmentDataShaper deptDataShaper)
+        public DepartmentService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _deptSort = deptSort;
-            _deptDataShaper = deptDataShaper;
         }
 
         public async Task<List<DepartmentResponseDto>> GetAllDepartmentsAsync()
@@ -35,15 +29,14 @@ namespace EmployeeManagementSystem.Service.Services
             return departmentsResult;
         }
 
-        public async Task<PagedList<ExpandoObject>> GetAllDepartmentsAsyncWithParam(DepartmentQueryParameters deptParameters)
+        public async Task<PagedList<DepartmentResponseDto>> GetAllDepartmentsAsyncWithParam(DepartmentQueryParameters deptParameters)
         {
-            IQueryable<Department> departments = _unitOfWork.DepartmentRepository.GetAllNoTrackingWithParam(deptParameters);
+            IQueryable<Department> departments = _unitOfWork.DepartmentRepository.GetAllNoTrackingWithParam(deptParameters, x => x.OrderBy(d => d.DepartmentName));
 
-            departments = _deptSort.ApplySort(departments, deptParameters.OrderBy);
-            List<ExpandoObject> dept = _deptDataShaper.ShapeData(departments, deptParameters.Fields).ToList();
+            List<DepartmentResponseDto> deptRes = Mapping.Mapper.Map<List<DepartmentResponseDto>>(departments);
 
             int count = await _unitOfWork.DepartmentRepository.CountAllAsync();
-            PagedList<ExpandoObject> departmentsResult = PagedList<ExpandoObject>.ToPagedList(dept, count, deptParameters.PageNumber, deptParameters.PageSize);
+            PagedList<DepartmentResponseDto> departmentsResult = PagedList<DepartmentResponseDto>.ToPagedList(deptRes, count, deptParameters.PageNumber, deptParameters.PageSize);
 
             return departmentsResult;
         }

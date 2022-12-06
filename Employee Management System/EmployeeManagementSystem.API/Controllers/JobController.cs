@@ -42,7 +42,7 @@ namespace EmployeeManagementSystemAPI.Controllers
         {
             try
             {
-                PagedList<ExpandoObject> jobTitleResults = await _jobService.GetAllJobAsyncWithParam(jobParameters);
+                PagedList<JobResponseDto> jobTitleResults = await _jobService.GetAllJobAsyncWithParam(jobParameters);
 
                 var jobTitleResultsData = new
                 {

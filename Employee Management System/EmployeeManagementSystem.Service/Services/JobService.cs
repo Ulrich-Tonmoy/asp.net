@@ -7,23 +7,16 @@ using EmployeeManagementSystem.DTO.Job;
 using EmployeeManagementSystem.Common.QueryParameters;
 using EmployeeManagementSystem.Common.Pagination;
 using Microsoft.EntityFrameworkCore;
-using EmployeeManagementSystem.Service.Sorting.Contracts;
-using EmployeeManagementSystem.Service.Selection.Contracts;
-using System.Dynamic;
 
 namespace EmployeeManagementSystem.Service.Services
 {
     public class JobService : IJobService
     {
         private IUnitOfWork _unitOfWork;
-        private IJobSort _jobSort;
-        private IJobDataShaper _jobDataShaper;
 
-        public JobService(IUnitOfWork repositoryWrapper, IJobSort jobSort, IJobDataShaper jobDataShaper)
+        public JobService(IUnitOfWork repositoryWrapper)
         {
             _unitOfWork = repositoryWrapper;
-            _jobSort = jobSort;
-            _jobDataShaper = jobDataShaper;
         }
 
         public async Task<List<JobResponseDto>> GetAllJobAsync()
@@ -35,17 +28,14 @@ namespace EmployeeManagementSystem.Service.Services
             return jobsResult;
         }
 
-        public async Task<PagedList<ExpandoObject>> GetAllJobAsyncWithParam(JobQueryParameters jobParameters)
+        public async Task<PagedList<JobResponseDto>> GetAllJobAsyncWithParam(JobQueryParameters jobParameters)
         {
+            IQueryable<Job> jobs = _unitOfWork.JobRepository.GetAllNoTrackingWithParam(jobParameters, x => x.OrderBy(j => j.JobTitle));
 
-            IQueryable<Job> jobs = _unitOfWork.JobRepository.GetAllNoTrackingWithParam(jobParameters);
-
-            jobs = _jobSort.ApplySort(jobs, jobParameters.OrderBy);
-
-            List<ExpandoObject> jobObj = _jobDataShaper.ShapeData(jobs, jobParameters.Fields).ToList();
+            List<JobResponseDto> jobRes = Mapping.Mapper.Map<List<JobResponseDto>>(jobs);
 
             var count = await _unitOfWork.JobRepository.CountAllAsync();
-            PagedList<ExpandoObject> jobResponseResult = PagedList<ExpandoObject>.ToPagedList(jobObj, count, jobParameters.PageNumber, jobParameters.PageSize);
+            PagedList<JobResponseDto> jobResponseResult = PagedList<JobResponseDto>.ToPagedList(jobRes, count, jobParameters.PageNumber, jobParameters.PageSize);
 
             return jobResponseResult;
         }

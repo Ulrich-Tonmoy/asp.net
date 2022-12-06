@@ -1,14 +1,13 @@
 ﻿using EmployeeManagementSystem.Common.Pagination;
 using EmployeeManagementSystem.Common.QueryParameters;
 using EmployeeManagementSystem.DTO.Department;
-using System.Dynamic;
 
 namespace EmployeeManagementSystem.Service.Services.Contracts
 {
     public interface IDepartmentService
     {
         Task<List<DepartmentResponseDto>> GetAllDepartmentsAsync();
-        Task<PagedList<ExpandoObject>> GetAllDepartmentsAsyncWithParam(DepartmentQueryParameters deptParameters);
+        Task<PagedList<DepartmentResponseDto>> GetAllDepartmentsAsyncWithParam(DepartmentQueryParameters deptParameters);
         Task<DepartmentResponseDto> GetDepartmentByIdAsync(Guid id);
         Task<DepartmentCreateResponseDto> CreateDepartmentAsync(DepartmentCreateDto employee);
         Task<List<DepartmentCreateResponseDto>> CreateDepartmentAsyncRange(List<DepartmentCreateDto> employee);

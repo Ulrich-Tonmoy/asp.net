@@ -29,14 +29,6 @@ builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-// Helper
-builder.Services.AddScoped<IDepartmentSort, DepartmentSort>();
-builder.Services.AddScoped<IEmployeeSort, EmployeeSort>();
-builder.Services.AddScoped<IJobSort, JobSort>();
-builder.Services.AddScoped<IDepartmentDataShaper, DepartmentDataShaper>();
-builder.Services.AddScoped<IEmployeeDataShaper, EmployeeDataShaper>();
-builder.Services.AddScoped<IJobDataShaper, JobDataShaper>();
-
 // Services
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();

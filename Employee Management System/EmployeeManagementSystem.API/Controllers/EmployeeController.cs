@@ -39,7 +39,7 @@ namespace EmployeeManagementSystemAPI.Controllers
         {
             try
             {
-                PagedList<ExpandoObject> employeesResults = await _employeeService.GetAllEmployeesAsyncWithParam(empParameters);
+                PagedList<EmployeeResponseDto> employeesResults = await _employeeService.GetAllEmployeesAsyncWithParam(empParameters);
 
                 var employeesResultsData = new
                 {

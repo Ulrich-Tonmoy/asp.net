@@ -7,23 +7,16 @@ using EmployeeManagementSystem.DTO.Employee;
 using EmployeeManagementSystem.Common.QueryParameters;
 using EmployeeManagementSystem.Common.Pagination;
 using Microsoft.EntityFrameworkCore;
-using EmployeeManagementSystem.Service.Sorting.Contracts;
-using System.Dynamic;
-using EmployeeManagementSystem.Service.Selection.Contracts;
 
 namespace EmployeeManagementSystem.Service.Services
 {
     public class EmployeeService : IEmployeeService
     {
         private IUnitOfWork _unitOfWork;
-        private IEmployeeSort _empSort;
-        private IEmployeeDataShaper _empDataShaper;
 
-        public EmployeeService(IUnitOfWork repositoryWrapper, IEmployeeSort empSort, IEmployeeDataShaper empDataShaper)
+        public EmployeeService(IUnitOfWork repositoryWrapper)
         {
             _unitOfWork = repositoryWrapper;
-            _empSort = empSort;
-            _empDataShaper = empDataShaper;
         }
 
         public async Task<List<EmployeeResponseDto>> GetAllEmployeesAsync()
@@ -35,16 +28,14 @@ namespace EmployeeManagementSystem.Service.Services
             return employeesResult;
         }
 
-        public async Task<PagedList<ExpandoObject>> GetAllEmployeesAsyncWithParam(EmployeeQueryParameters empParameters)
+        public async Task<PagedList<EmployeeResponseDto>> GetAllEmployeesAsyncWithParam(EmployeeQueryParameters empParameters)
         {
+            IQueryable<Employee> employees = _unitOfWork.EmployeeRepository.GetAllNoTrackingWithParam(empParameters, x => x.OrderBy(e => e.Id));
 
-            IQueryable<Employee> employees = _unitOfWork.EmployeeRepository.GetAllNoTrackingWithParam(empParameters);
-
-            employees = _empSort.ApplySort(employees, empParameters.OrderBy);
-            List<ExpandoObject> emp = _empDataShaper.ShapeData(employees, empParameters.Fields).ToList();
+            List<EmployeeResponseDto> empRes = Mapping.Mapper.Map<List<EmployeeResponseDto>>(employees);
 
             var count = await _unitOfWork.EmployeeRepository.CountAllAsync();
-            PagedList<ExpandoObject> employeesResult = PagedList<ExpandoObject>.ToPagedList(emp, count, empParameters.PageNumber, empParameters.PageSize);
+            PagedList<EmployeeResponseDto> employeesResult = PagedList<EmployeeResponseDto>.ToPagedList(empRes, count, empParameters.PageNumber, empParameters.PageSize);
 
             return employeesResult;
         }
