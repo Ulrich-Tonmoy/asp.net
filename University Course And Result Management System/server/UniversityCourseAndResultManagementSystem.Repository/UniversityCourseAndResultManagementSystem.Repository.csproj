@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\Contracts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UniversityCourseAndResultManagementSystem.Common\UniversityCourseAndResultManagementSystem.Common.csproj" />
+    <ProjectReference Include="..\UniversityCourseAndResultManagementSystem.Data\UniversityCourseAndResultManagementSystem.Data.csproj" />
+  </ItemGroup>
+
 </Project>
