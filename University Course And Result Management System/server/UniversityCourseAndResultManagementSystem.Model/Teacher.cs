@@ -8,9 +8,12 @@
         public string Email { get; set; }
         public string ContactNo { get; set; }
         public Guid DesignationId { get; set; }
+        public Designation Designation { get; set; }
         public Guid DepartmentId { get; set; }
+        public Department Department { get; set; }
         public int CreditToBeTaken { get; set; }
         public int CreditTaken { get; set; }
         public Guid AssignedCourseId { get; set; }
+        public List<AssignedCourse> AssignedCourses { get; set; }
     }
 }

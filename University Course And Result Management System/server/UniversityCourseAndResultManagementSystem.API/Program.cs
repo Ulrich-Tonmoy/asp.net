@@ -1,6 +1,20 @@
+using Microsoft.EntityFrameworkCore;
+using UniversityCourseAndResultManagementSystem.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+// Connect to db
+builder.Services.AddDbContext<UniversityCourseAndResultManagementSystemContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("EmployeeManagementDbConnection")));
+builder.Services.AddScoped<DbContext, UniversityCourseAndResultManagementSystemContext>();
+
+// Repositories
+
+// Services
+
+// Fluent Validation
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
