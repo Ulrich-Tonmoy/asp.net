@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Connect to db
 builder.Services.AddDbContext<UniversityCourseAndResultManagementSystemContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("EmployeeManagementDbConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("UniversityCourseAndResultManagementSystemDbConnection")));
 builder.Services.AddScoped<DbContext, UniversityCourseAndResultManagementSystemContext>();
 
 // Repositories
