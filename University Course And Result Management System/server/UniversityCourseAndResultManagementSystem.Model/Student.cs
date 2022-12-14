@@ -9,9 +9,8 @@
         public string ContactNo { get; set; }
         public DateTime Date { get; set; }
         public string Address { get; set; }
-        public Guid DepartmentId { get; set; }
         public Department Department { get; set; }
-        public Guid EnrolledCourseId { get; set; }
+        public Guid DepartmentId { get; set; }
         public List<EnrolledCourse> EnrolledCourses { get; set; }
     }
 }
