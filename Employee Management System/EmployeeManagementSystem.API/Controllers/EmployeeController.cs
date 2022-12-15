@@ -198,7 +198,7 @@ namespace EmployeeManagementSystemAPI.Controllers
                     return NotFound();
                 }
 
-                return Ok(employee);
+                return Ok(employeeEntity);
             }
             catch (Exception ex)
             {
@@ -222,7 +222,7 @@ namespace EmployeeManagementSystemAPI.Controllers
                     return NotFound();
                 }
 
-                return Ok(employee);
+                return Ok(employeeEntity);
             }
             catch (Exception ex)
             {

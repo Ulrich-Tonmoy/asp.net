@@ -170,7 +170,7 @@ namespace EmployeeManagementSystemAPI.Controllers
                     return NotFound();
                 }
 
-                return Ok(job);
+                return Ok(jobEntity);
             }
             catch (Exception ex)
             {
@@ -194,7 +194,7 @@ namespace EmployeeManagementSystemAPI.Controllers
                     return NotFound();
                 }
 
-                return Ok(job);
+                return Ok(jobEntity);
             }
             catch (Exception ex)
             {
