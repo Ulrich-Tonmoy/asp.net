@@ -35,33 +35,43 @@ namespace UniversityCourseAndResultManagementSystem.Common
         public MappingProfile()
         {
             CreateMap<AssignedCourseCreateDto, AssignedCourse>();
+            CreateMap<AssignedCourseUpdateDto, AssignedCourse>();
             CreateMap<AssignedCourse, AssignedCourseResponseDto>();
 
             CreateMap<CourseCreateDto, Course>();
+            CreateMap<CourseUpdateDto, Course>();
             CreateMap<Course, CourseResponseDto>();
 
             CreateMap<DepartmentCreateDto, Department>();
+            CreateMap<DepartmentUpdateDto, Department>();
             CreateMap<Department, DepartmentResponseDto>();
 
             CreateMap<DesignationCreateDto, Designation>();
+            CreateMap<DesignationUpdateDto, Designation>();
             CreateMap<Designation, DesignationResponseDto>();
 
             CreateMap<EnrolledCourseCreateDto, EnrolledCourse>();
+            CreateMap<EnrolledCourseUpdateDto, EnrolledCourse>();
             CreateMap<EnrolledCourse, EnrolledCourseResponseDto>();
 
             CreateMap<RoomCreateDto, Room>();
+            CreateMap<RoomUpdateDto, Room>();
             CreateMap<Room, RoomResponseDto>();
 
             CreateMap<ScheduleCreateDto, Schedule>();
+            CreateMap<ScheduleUpdateDto, Schedule>();
             CreateMap<Schedule, ScheduleResponseDto>();
 
             CreateMap<SemesterCreateDto, Semester>();
+            CreateMap<SemesterUpdateDto, Semester>();
             CreateMap<Semester, SemesterResponseDto>();
 
             CreateMap<StudentCreateDto, Student>();
+            CreateMap<StudentUpdateDto, Student>();
             CreateMap<Student, StudentResponseDto>();
 
             CreateMap<TeacherCreateDto, Teacher>();
+            CreateMap<TeacherUpdateDto, Teacher>();
             CreateMap<Teacher, TeacherResponseDto>();
         }
     }
