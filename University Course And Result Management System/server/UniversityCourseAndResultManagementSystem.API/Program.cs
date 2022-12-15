@@ -7,6 +7,8 @@ using UniversityCourseAndResultManagementSystem.Repository.Repositories;
 using UniversityCourseAndResultManagementSystem.Repository.Repositories.Contracts;
 using UniversityCourseAndResultManagementSystem.Repository.Contracts;
 using UniversityCourseAndResultManagementSystem.Repository;
+using UniversityCourseAndResultManagementSystem.Service;
+using UniversityCourseAndResultManagementSystem.Service.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +33,16 @@ builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Services
+builder.Services.AddScoped<IAssignedCourseService, AssignedCourseService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IDesignationService, DesignationService>();
+builder.Services.AddScoped<IEnrolledCourseService, EnrolledCourseService>();
+builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<IScheduleService, ScheduleService>();
+builder.Services.AddScoped<ISemesterService, SemesterService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ITeacherService, TeacherService>();
 
 // Fluent Validation
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
