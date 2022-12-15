@@ -7,8 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UniversityCourseAndResultManagementSystem.Common\UniversityCourseAndResultManagementSystem.Common.csproj" />
-    <ProjectReference Include="..\UniversityCourseAndResultManagementSystem.Data\UniversityCourseAndResultManagementSystem.Data.csproj" />
+    <ProjectReference Include="..\UniversityCourseAndResultManagementSystem.DTO\UniversityCourseAndResultManagementSystem.DTO.csproj" />
   </ItemGroup>
 
 </Project>
