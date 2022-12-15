@@ -2,7 +2,6 @@
 {
     public class ScheduleCreateDto
     {
-        public Guid Id { get; set; }
         public Guid RoomId { get; set; }
         public string Day { get; set; }
         public string From { get; set; }
