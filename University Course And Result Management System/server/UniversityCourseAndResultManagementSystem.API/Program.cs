@@ -5,6 +5,8 @@ using UniversityCourseAndResultManagementSystem.Common.Validators;
 using UniversityCourseAndResultManagementSystem.Data;
 using UniversityCourseAndResultManagementSystem.Repository.Repositories;
 using UniversityCourseAndResultManagementSystem.Repository.Repositories.Contracts;
+using UniversityCourseAndResultManagementSystem.Repository.Contracts;
+using UniversityCourseAndResultManagementSystem.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,7 @@ builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
 builder.Services.AddScoped<ISemesterRepository, SemesterRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Services
 
