@@ -3,7 +3,7 @@ using UniversityCourseAndResultManagementSystem.DTO.AssignedCourseDto;
 
 namespace UniversityCourseAndResultManagementSystem.Common.Validators
 {
-    public class AssignedCourseValidator : AbstractValidator<AssignCourseCreateDto>
+    public class AssignedCourseValidator : AbstractValidator<AssignedCourseCreateDto>
     {
         public AssignedCourseValidator()
         {
