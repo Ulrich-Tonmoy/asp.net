@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using UniversityCourseAndResultManagementSystem.Common;
+using UniversityCourseAndResultManagementSystem.Common.QueryParameters;
+using UniversityCourseAndResultManagementSystem.DTO.ScheduleDto;
+using UniversityCourseAndResultManagementSystem.Service.Contracts;
 
 namespace UniversityCourseAndResultManagementSystem.API.Controllers
 {
@@ -8,36 +10,124 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
     [ApiController]
     public class ScheduleController : ControllerBase
     {
-        // GET: api/<ScheduleController>
+        private IScheduleService _scheduleService;
+
+        public ScheduleController(IScheduleService scheduleService)
+        {
+            _scheduleService = scheduleService;
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get([FromQuery] ScheduleQueryParameters scheduleParam)
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                PagedList<ScheduleResponseDto> scheduleResults = await _scheduleService.GetAllScheduleAsyncWithParam(scheduleParam);
+
+                var scheduleResultstsData = new
+                {
+                    scheduleResults.TotalCount,
+                    scheduleResults.PageSize,
+                    scheduleResults.CurrentPage,
+                    scheduleResults.TotalPages,
+                    scheduleResults.HasNext,
+                    scheduleResults.HasPrevious,
+                    data = scheduleResults
+                };
+
+                return Ok(scheduleResultstsData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // GET api/<ScheduleController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+
+        [HttpGet("{id}", Name = "ScheduleById")]
+        public async Task<IActionResult> Get(Guid id)
         {
-            return "value";
+            try
+            {
+                ScheduleResponseDto scheduleResult = await _scheduleService.GetScheduleByIdAsync(id);
+
+                if (scheduleResult == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(scheduleResult);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // POST api/<ScheduleController>
+
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] ScheduleCreateDto schedule)
         {
+            try
+            {
+                if (schedule == null)
+                {
+                    return BadRequest(string.Format(GlobalConstants.OBJECT_NULL, "Schedule"));
+                }
+
+                ScheduleResponseDto createdSchedule = await _scheduleService.CreateScheduleAsync(schedule);
+
+                return CreatedAtRoute("ScheduleById", new { id = createdSchedule.Id }, createdSchedule);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // PUT api/<ScheduleController>
+
         [HttpPut]
-        public void Put([FromBody] string value)
+        public async Task<IActionResult> Put([FromBody] ScheduleUpdateDto schedule)
         {
+            try
+            {
+                if (schedule == null)
+                {
+                    return BadRequest(string.Format(GlobalConstants.OBJECT_NULL, "Schedule"));
+                }
+
+                ScheduleResponseDto scheduleEntity = await _scheduleService.UpdateScheduleAsync(schedule);
+                if (scheduleEntity == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(scheduleEntity);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // DELETE api/<ScheduleController>/5
+
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
+            try
+            {
+                string schedule = await _scheduleService.DeleteScheduleAsync(id);
+                if (schedule == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(schedule);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
     }
 }

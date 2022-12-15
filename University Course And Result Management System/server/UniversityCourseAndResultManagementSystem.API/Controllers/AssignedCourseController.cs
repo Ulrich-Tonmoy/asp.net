@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using UniversityCourseAndResultManagementSystem.Common;
+using UniversityCourseAndResultManagementSystem.Common.QueryParameters;
+using UniversityCourseAndResultManagementSystem.DTO.AssignedCourseDto;
+using UniversityCourseAndResultManagementSystem.Service.Contracts;
 
 namespace UniversityCourseAndResultManagementSystem.API.Controllers
 {
@@ -7,36 +10,126 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
     [ApiController]
     public class AssignedCourseController : ControllerBase
     {
-        // GET: api/<AssignedCourseController>
+        private IAssignedCourseService _assignedCourseService;
+
+        public AssignedCourseController(IAssignedCourseService assignedCourseService)
+        {
+            _assignedCourseService = assignedCourseService;
+        }
+
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get([FromQuery] AssignedCourseQueryParameters assignedCourseParam)
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                PagedList<AssignedCourseResponseDto> assignedCourseResults = await _assignedCourseService.GetAllAssignedCourseAsyncWithParam(assignedCourseParam);
+
+                var assignedCourseResultsData = new
+                {
+                    assignedCourseResults.TotalCount,
+                    assignedCourseResults.PageSize,
+                    assignedCourseResults.CurrentPage,
+                    assignedCourseResults.TotalPages,
+                    assignedCourseResults.HasNext,
+                    assignedCourseResults.HasPrevious,
+                    data = assignedCourseResults
+                };
+
+                return Ok(assignedCourseResultsData);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // GET api/<AssignedCourseController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{id}", Name = "AssignedCourseById")]
+        public async Task<IActionResult> Get(Guid id)
         {
-            return "value";
+            try
+            {
+                AssignedCourseResponseDto assignedCourseResult = await _assignedCourseService.GetAssignedCourseByIdAsync(id);
+
+                if (assignedCourseResult == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(assignedCourseResult);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // POST api/<AssignedCourseController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] AssignedCourseCreateDto assignedCourse)
         {
+            try
+            {
+                if (assignedCourse == null)
+                {
+                    return BadRequest(string.Format(GlobalConstants.OBJECT_NULL, "AssignedCourse"));
+                }
+
+                AssignedCourseResponseDto createdAssignedCourse = await _assignedCourseService.CreateAssignedCourseAsync(assignedCourse);
+
+                return CreatedAtRoute("AssignedCourseById", new { id = createdAssignedCourse.Id }, createdAssignedCourse);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // PUT api/<AssignedCourseController>
         [HttpPut]
-        public void Put([FromBody] string value)
+        public async Task<IActionResult> Put([FromBody] AssignedCourseUpdateDto assignedCourse)
         {
+            try
+            {
+                if (assignedCourse == null)
+                {
+                    return BadRequest(string.Format(GlobalConstants.OBJECT_NULL, "AssignedCourse"));
+                }
+
+                AssignedCourseResponseDto assignedCourseEntity = await _assignedCourseService.UpdateAssignedCourseAsync(assignedCourse);
+                if (assignedCourseEntity == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(assignedCourseEntity);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // DELETE api/<AssignedCourseController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
+            try
+            {
+                string assignedCourse = await _assignedCourseService.DeleteAssignedCourseAsync(id);
+                if (assignedCourse == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(assignedCourse);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
     }
 }

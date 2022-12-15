@@ -1,4 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UniversityCourseAndResultManagementSystem.Common;
+using UniversityCourseAndResultManagementSystem.Common.QueryParameters;
+using UniversityCourseAndResultManagementSystem.DTO.CourseDto;
+using UniversityCourseAndResultManagementSystem.DTO.TeacherDto;
+using UniversityCourseAndResultManagementSystem.Model;
+using UniversityCourseAndResultManagementSystem.Service;
+using UniversityCourseAndResultManagementSystem.Service.Contracts;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,36 +15,124 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
     [ApiController]
     public class TeacherController : ControllerBase
     {
-        // GET: api/<TeacherController>
+        private ITeacherService _teacherService;
+
+        public TeacherController(ITeacherService teacherService)
+        {
+            _teacherService = teacherService;
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get([FromQuery] TeacherQueryParameters teacherParam)
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                PagedList<TeacherResponseDto> teacherResults = await _teacherService.GetAllTeacherAsyncWithParam(teacherParam);
+
+                var teacherResultstsData = new
+                {
+                    teacherResults.TotalCount,
+                    teacherResults.PageSize,
+                    teacherResults.CurrentPage,
+                    teacherResults.TotalPages,
+                    teacherResults.HasNext,
+                    teacherResults.HasPrevious,
+                    data = teacherResults
+                };
+
+                return Ok(teacherResultstsData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // GET api/<TeacherController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+
+        [HttpGet("{id}", Name = "TeacherById")]
+        public async Task<IActionResult> Get(Guid id)
         {
-            return "value";
+            try
+            {
+                TeacherResponseDto teacherResult = await _teacherService.GetTeacherByIdAsync(id);
+
+                if (teacherResult == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(teacherResult);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // POST api/<TeacherController>
+
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] TeacherCreateDto teacher)
         {
+            try
+            {
+                if (teacher == null)
+                {
+                    return BadRequest(string.Format(GlobalConstants.OBJECT_NULL, "Teacher"));
+                }
+
+                TeacherResponseDto createdTeacher = await _teacherService.CreateTeacherAsync(teacher);
+
+                return CreatedAtRoute("TeacherById", new { id = createdTeacher.Id }, createdTeacher);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // PUT api/<TeacherController>
+
         [HttpPut]
-        public void Put([FromBody] string value)
+        public async Task<IActionResult> Put([FromBody] TeacherUpdateDto teacher)
         {
+            try
+            {
+                if (teacher == null)
+                {
+                    return BadRequest(string.Format(GlobalConstants.OBJECT_NULL, "Course"));
+                }
+
+                TeacherResponseDto teacherEntity = await _teacherService.UpdateTeacherAsync(teacher);
+                if (teacherEntity == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(teacherEntity);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // DELETE api/<TeacherController>/5
+
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
+            try
+            {
+                string teacher = await _teacherService.DeleteTeacherAsync(id);
+                if (teacher == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(teacher);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
     }
 }

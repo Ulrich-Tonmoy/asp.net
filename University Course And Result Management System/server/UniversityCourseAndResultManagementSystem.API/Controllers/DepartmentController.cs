@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using UniversityCourseAndResultManagementSystem.Common;
+using UniversityCourseAndResultManagementSystem.Common.QueryParameters;
+using UniversityCourseAndResultManagementSystem.DTO.DepartmentDto;
+using UniversityCourseAndResultManagementSystem.Service.Contracts;
 
 namespace UniversityCourseAndResultManagementSystem.API.Controllers
 {
@@ -7,36 +10,120 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
     [ApiController]
     public class DepartmentController : ControllerBase
     {
-        // GET: api/<DepartmentController>
+        private IDepartmentService _departmentService;
+
+        public DepartmentController(IDepartmentService departmentService)
+        {
+            _departmentService = departmentService;
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get([FromQuery] DepartmentQueryParameters deptParam)
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                PagedList<DepartmentResponseDto> deptResults = await _departmentService.GetAllDepartmentAsyncWithParam(deptParam);
+
+                var deptResultstsData = new
+                {
+                    deptResults.TotalCount,
+                    deptResults.PageSize,
+                    deptResults.CurrentPage,
+                    deptResults.TotalPages,
+                    deptResults.HasNext,
+                    deptResults.HasPrevious,
+                    data = deptResults
+                };
+
+                return Ok(deptResultstsData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // GET api/<DepartmentController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{id}", Name = "DepartmentById")]
+        public async Task<IActionResult> Get(Guid id)
         {
-            return "value";
+            try
+            {
+                DepartmentResponseDto deptResult = await _departmentService.GetDepartmentByIdAsync(id);
+
+                if (deptResult == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(deptResult);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // POST api/<DepartmentController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] DepartmentCreateDto dept)
         {
+            try
+            {
+                if (dept == null)
+                {
+                    return BadRequest(string.Format(GlobalConstants.OBJECT_NULL, "Department"));
+                }
+
+                DepartmentResponseDto createdDept = await _departmentService.CreateDepartmentAsync(dept);
+
+                return CreatedAtRoute("DepartmentById", new { id = createdDept.Id }, createdDept);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // PUT api/<DepartmentController>
         [HttpPut]
-        public void Put([FromBody] string value)
+        public async Task<IActionResult> Put([FromBody] DepartmentUpdateDto dept)
         {
+            try
+            {
+                if (dept == null)
+                {
+                    return BadRequest(string.Format(GlobalConstants.OBJECT_NULL, "Department"));
+                }
+
+                DepartmentResponseDto deptEntity = await _departmentService.UpdateDepartmentAsync(dept);
+                if (deptEntity == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(deptEntity);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // DELETE api/<DepartmentController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
+            try
+            {
+                string dept = await _departmentService.DeleteDepartmentAsync(id);
+                if (dept == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(dept);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
     }
 }

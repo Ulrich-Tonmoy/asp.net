@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using UniversityCourseAndResultManagementSystem.Common;
+using UniversityCourseAndResultManagementSystem.Common.QueryParameters;
+using UniversityCourseAndResultManagementSystem.DTO.CourseDto;
+using UniversityCourseAndResultManagementSystem.Service.Contracts;
 
 namespace UniversityCourseAndResultManagementSystem.API.Controllers
 {
@@ -7,36 +10,121 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
     [ApiController]
     public class CourseController : ControllerBase
     {
-        // GET: api/<CourseController>
+        private ICourseService _courseService;
+
+        public CourseController(ICourseService courseService)
+        {
+            _courseService = courseService;
+        }
+
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get([FromQuery] CourseQueryParameters courseParam)
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                PagedList<CourseResponseDto> courseResults = await _courseService.GetAllCourseAsyncWithParam(courseParam);
+
+                var courseResultstsData = new
+                {
+                    courseResults.TotalCount,
+                    courseResults.PageSize,
+                    courseResults.CurrentPage,
+                    courseResults.TotalPages,
+                    courseResults.HasNext,
+                    courseResults.HasPrevious,
+                    data = courseResults
+                };
+
+                return Ok(courseResultstsData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // GET api/<CourseController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{id}", Name = "CourseById")]
+        public async Task<IActionResult> Get(Guid id)
         {
-            return "value";
+            try
+            {
+                CourseResponseDto courseResult = await _courseService.GetCourseByIdAsync(id);
+
+                if (courseResult == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(courseResult);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // POST api/<CourseController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] CourseCreateDto course)
         {
+            try
+            {
+                if (course == null)
+                {
+                    return BadRequest(string.Format(GlobalConstants.OBJECT_NULL, "Course"));
+                }
+
+                CourseResponseDto createdCourse = await _courseService.CreateCourseAsync(course);
+
+                return CreatedAtRoute("CourseById", new { id = createdCourse.Id }, createdCourse);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // PUT api/<CourseController>
         [HttpPut]
-        public void Put([FromBody] string value)
+        public async Task<IActionResult> Put([FromBody] CourseUpdateDto course)
         {
+            try
+            {
+                if (course == null)
+                {
+                    return BadRequest(string.Format(GlobalConstants.OBJECT_NULL, "Course"));
+                }
+
+                CourseResponseDto courseEntity = await _courseService.UpdateCourseAsync(course);
+                if (courseEntity == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(courseEntity);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
 
-        // DELETE api/<CourseController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
+            try
+            {
+                string course = await _courseService.DeleteCourseAsync(id);
+                if (course == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(course);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
         }
     }
 }
