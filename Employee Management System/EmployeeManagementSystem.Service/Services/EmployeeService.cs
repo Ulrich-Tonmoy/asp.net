@@ -14,9 +14,9 @@ namespace EmployeeManagementSystem.Service.Services
     {
         private IUnitOfWork _unitOfWork;
 
-        public EmployeeService(IUnitOfWork repositoryWrapper)
+        public EmployeeService(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = repositoryWrapper;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<List<EmployeeResponseDto>> GetAllEmployeesAsync()
