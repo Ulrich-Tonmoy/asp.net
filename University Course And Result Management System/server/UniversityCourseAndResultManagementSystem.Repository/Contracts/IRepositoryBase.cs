@@ -5,7 +5,6 @@ namespace UniversityCourseAndResultManagementSystem.Repository.Contracts
 {
     public interface IRepositoryBase<T>
     {
-        IQueryable<T> GetAllNoTracking();
         IQueryable<T> GetAllNoTrackingWithParam(QueryParametersBase param, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy);
         IQueryable<T> GetByConditionNoTracking(Expression<Func<T, bool>> expression);
         Task AddAsync(T entity);

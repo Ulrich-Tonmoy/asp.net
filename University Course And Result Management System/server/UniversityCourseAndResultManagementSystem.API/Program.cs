@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using UniversityCourseAndResultManagementSystem.Data;
+using UniversityCourseAndResultManagementSystem.Repository.Repositories;
+using UniversityCourseAndResultManagementSystem.Repository.Repositories.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,16 @@ builder.Services.AddDbContext<UniversityCourseAndResultManagementSystemContext>(
 builder.Services.AddScoped<DbContext, UniversityCourseAndResultManagementSystemContext>();
 
 // Repositories
+builder.Services.AddScoped<IAssignedCourseRepository, AssignedCourseRepository>();
+builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<IDesignationRepository, DesignationRepository>();
+builder.Services.AddScoped<IEnrolledCourseRepository, EnrolledCourseRepository>();
+builder.Services.AddScoped<IRoomRepository, RoomRepository>();
+builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
+builder.Services.AddScoped<ISemesterRepository, SemesterRepository>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 
 // Services
 

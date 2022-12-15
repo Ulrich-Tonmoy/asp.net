@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using UniversityCourseAndResultManagementSystem.Common.QueryParameters;
 using UniversityCourseAndResultManagementSystem.Repository.Contracts;
@@ -10,14 +9,9 @@ namespace UniversityCourseAndResultManagementSystem.Repository
     {
         private readonly DbSet<T> _dbSet;
 
-        public RepositoryBase(DbContext employeeManagementSystemContext)
+        public RepositoryBase(DbContext universityCourseAndResultManagementSystemContext)
         {
-            _dbSet = employeeManagementSystemContext.Set<T>();
-        }
-
-        public IQueryable<T> GetAllNoTracking()
-        {
-            return _dbSet.AsNoTracking();
+            _dbSet = universityCourseAndResultManagementSystemContext.Set<T>();
         }
 
         public IQueryable<T> GetAllNoTrackingWithParam(QueryParametersBase param, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy)
