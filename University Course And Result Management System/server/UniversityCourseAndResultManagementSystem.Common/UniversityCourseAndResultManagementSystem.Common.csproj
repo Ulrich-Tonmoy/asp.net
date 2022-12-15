@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UniversityCourseAndResultManagementSystem.Data\UniversityCourseAndResultManagementSystem.Data.csproj" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UniversityCourseAndResultManagementSystem.DTO\UniversityCourseAndResultManagementSystem.DTO.csproj" />
   </ItemGroup>
 
 </Project>

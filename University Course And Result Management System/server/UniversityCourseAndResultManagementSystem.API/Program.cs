@@ -1,4 +1,7 @@
+using FluentValidation.AspNetCore;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using UniversityCourseAndResultManagementSystem.Common.Validators;
 using UniversityCourseAndResultManagementSystem.Data;
 using UniversityCourseAndResultManagementSystem.Repository.Repositories;
 using UniversityCourseAndResultManagementSystem.Repository.Repositories.Contracts;
@@ -27,6 +30,8 @@ builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 // Services
 
 // Fluent Validation
+builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<IValidationWrapper>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
