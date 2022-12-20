@@ -69,7 +69,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<string> DeleteDepartmentAsync(Guid id)
         {
-            Department dept = _unitOfWork.DepartmentRepository.GetByConditionNoTracking(e => e.Id.Equals(id)).FirstOrDefault();
+            Department dept = _unitOfWork.DepartmentRepository.GetByConditionNoTracking(d => d.Id.Equals(id)).FirstOrDefault();
             if (dept == null)
             {
                 return null;
@@ -83,7 +83,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<bool> AnyDepartmentAsync(string code)
         {
-            return await _unitOfWork.DepartmentRepository.AnyAsync(e => e.Code.Equals(code));
+            return await _unitOfWork.DepartmentRepository.AnyAsync(d => d.Code.Equals(code));
         }
 
         public async Task<int> CountAllDepartmentAsync()
@@ -106,7 +106,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<List<DepartmentResponseDto>> UpdateDepartmentAsyncRange(List<DepartmentUpdateDto> departments)
         {
-            List<Guid> id = departments.Select(e => e.Id).ToList();
+            List<Guid> id = departments.Select(d => d.Id).ToList();
             List<Department> deptEntity = await _unitOfWork.DepartmentRepository.GetByConditionNoTracking(e => id.Contains(e.Id)).ToListAsync();
             if (deptEntity.Count() != id.Count())
             {
@@ -126,7 +126,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<string> DeleteDepartmentAsyncRange(List<Guid> ids)
         {
-            List<Department> dept = await _unitOfWork.DepartmentRepository.GetByConditionNoTracking(e => ids.Contains(e.Id)).ToListAsync();
+            List<Department> dept = await _unitOfWork.DepartmentRepository.GetByConditionNoTracking(d => ids.Contains(d.Id)).ToListAsync();
             if (dept.Count() != ids.Count())
             {
                 return null;
