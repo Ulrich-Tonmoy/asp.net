@@ -15,8 +15,8 @@ namespace UniversityCourseAndResultManagementSystem.Service.Contracts
         Task<int> CountAllStudentAsync();
         Task<int> CountStudentByDepartmentAsync(Guid id);
 
-        Task<List<StudentResponseDto>> CreateStudentAsyncRange(List<StudentCreateDto> student);
-        Task<List<StudentResponseDto>> UpdateStudentAsyncRange(List<StudentUpdateDto> student);
-        Task<string> DeleteStudentAsyncRange(List<Guid> id);
+        Task<List<StudentResponseDto>> CreateStudentAsyncRange(List<StudentCreateDto> students);
+        Task<List<StudentResponseDto>> UpdateStudentAsyncRange(List<StudentUpdateDto> students);
+        Task<string> DeleteStudentAsyncRange(List<Guid> ids);
     }
 }
