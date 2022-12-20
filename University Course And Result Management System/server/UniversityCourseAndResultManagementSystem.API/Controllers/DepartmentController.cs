@@ -24,7 +24,7 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
             {
                 PagedList<DepartmentResponseDto> deptResults = await _departmentService.GetAllDepartmentAsyncWithParam(deptParam);
 
-                var deptResultstsData = new
+                var deptResponse = new
                 {
                     deptResults.TotalCount,
                     deptResults.PageSize,
@@ -35,7 +35,7 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
                     data = deptResults
                 };
 
-                return Ok(deptResultstsData);
+                return Ok(deptResponse);
             }
             catch (Exception ex)
             {
@@ -48,14 +48,14 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
         {
             try
             {
-                DepartmentResponseDto deptResult = await _departmentService.GetDepartmentByIdAsync(id);
+                DepartmentResponseDto deptResponse = await _departmentService.GetDepartmentByIdAsync(id);
 
-                if (deptResult == null)
+                if (deptResponse == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(deptResult);
+                return Ok(deptResponse);
             }
             catch (Exception ex)
             {
@@ -93,13 +93,13 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
                     return BadRequest(string.Format(GlobalConstants.OBJECT_NULL, "Department"));
                 }
 
-                DepartmentResponseDto deptEntity = await _departmentService.UpdateDepartmentAsync(dept);
-                if (deptEntity == null)
+                DepartmentResponseDto deptResponse = await _departmentService.UpdateDepartmentAsync(dept);
+                if (deptResponse == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(deptEntity);
+                return Ok(deptResponse);
             }
             catch (Exception ex)
             {
@@ -112,13 +112,13 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
         {
             try
             {
-                string dept = await _departmentService.DeleteDepartmentAsync(id);
-                if (dept == null)
+                string deptResponse = await _departmentService.DeleteDepartmentAsync(id);
+                if (deptResponse == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(dept);
+                return Ok(deptResponse);
             }
             catch (Exception ex)
             {
