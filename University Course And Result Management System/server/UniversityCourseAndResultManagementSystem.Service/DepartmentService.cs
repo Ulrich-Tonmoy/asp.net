@@ -1,6 +1,8 @@
-﻿using UniversityCourseAndResultManagementSystem.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using UniversityCourseAndResultManagementSystem.Common;
 using UniversityCourseAndResultManagementSystem.Common.QueryParameters;
 using UniversityCourseAndResultManagementSystem.DTO.DepartmentDto;
+using UniversityCourseAndResultManagementSystem.Model;
 using UniversityCourseAndResultManagementSystem.Repository.Contracts;
 using UniversityCourseAndResultManagementSystem.Service.Contracts;
 
@@ -15,54 +17,125 @@ namespace UniversityCourseAndResultManagementSystem.Service
             _unitOfWork = unitOfWork;
         }
 
-        public Task<PagedList<DepartmentResponseDto>> GetAllDepartmentAsyncWithParam(DepartmentQueryParameters departmentParam)
+        public async Task<PagedList<DepartmentResponseDto>> GetAllDepartmentAsyncWithParam(DepartmentQueryParameters departmentParam)
         {
-            throw new NotImplementedException();
+            IQueryable<Department> depts = _unitOfWork.DepartmentRepository.GetAllNoTrackingWithParam(departmentParam, x => x.OrderBy(d => d.Id));
+
+            List<DepartmentResponseDto> deptDtos = Mapping.Mapper.Map<List<DepartmentResponseDto>>(depts);
+
+            int count = await CountAllDepartmentAsync();
+            PagedList<DepartmentResponseDto> deptResults = PagedList<DepartmentResponseDto>.ToPagedList(deptDtos, count, departmentParam.PageNumber, departmentParam.PageSize);
+
+            return deptResults;
         }
 
-        public Task<DepartmentResponseDto> GetDepartmentByIdAsync(Guid id)
+        public async Task<DepartmentResponseDto> GetDepartmentByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            Department dept = _unitOfWork.DepartmentRepository.GetByConditionNoTracking(d => d.Id.Equals(id)).FirstOrDefault();
+            DepartmentResponseDto deptResult = Mapping.Mapper.Map<DepartmentResponseDto>(dept);
+
+            return deptResult;
         }
 
-        public Task<DepartmentResponseDto> CreateDepartmentAsync(DepartmentCreateDto department)
+        public async Task<DepartmentResponseDto> CreateDepartmentAsync(DepartmentCreateDto department)
         {
-            throw new NotImplementedException();
+            Department dept = Mapping.Mapper.Map<Department>(department);
+            await _unitOfWork.DepartmentRepository.AddAsync(dept);
+            await _unitOfWork.SaveAsync();
+
+            DepartmentResponseDto deptResult = Mapping.Mapper.Map<DepartmentResponseDto>(dept);
+
+            return deptResult;
         }
 
-        public Task<DepartmentResponseDto> UpdateDepartmentAsync(DepartmentUpdateDto department)
+        public async Task<DepartmentResponseDto> UpdateDepartmentAsync(DepartmentUpdateDto department)
         {
-            throw new NotImplementedException();
+            Department deptEntity = _unitOfWork.DepartmentRepository.GetByConditionNoTracking(d => d.Id.Equals(department.Id)).FirstOrDefault();
+            if (deptEntity == null)
+            {
+                return null;
+            }
+
+            Mapping.Mapper.Map(department, deptEntity);
+
+            await _unitOfWork.DepartmentRepository.Update(deptEntity);
+            await _unitOfWork.SaveAsync();
+
+
+            DepartmentResponseDto deptResult = Mapping.Mapper.Map<DepartmentResponseDto>(deptEntity);
+
+            return deptResult;
         }
 
-        public Task<string> DeleteDepartmentAsync(Guid id)
+        public async Task<string> DeleteDepartmentAsync(Guid id)
         {
-            throw new NotImplementedException();
+            Department dept = _unitOfWork.DepartmentRepository.GetByConditionNoTracking(e => e.Id.Equals(id)).FirstOrDefault();
+            if (dept == null)
+            {
+                return null;
+            }
+
+            await _unitOfWork.DepartmentRepository.Delete(dept);
+            await _unitOfWork.SaveAsync();
+
+            return string.Format(GlobalConstants.SUCCESSFULLY_DELETED, "Department");
         }
 
-        public Task<bool> AnyDepartmentAsync(string code)
+        public async Task<bool> AnyDepartmentAsync(string code)
         {
-            throw new NotImplementedException();
+            return await _unitOfWork.DepartmentRepository.AnyAsync(e => e.Code.Equals(code));
         }
 
-        public Task<int> CountAllDepartmentAsync()
+        public async Task<int> CountAllDepartmentAsync()
         {
-            throw new NotImplementedException();
+            var totalDepts = await _unitOfWork.DepartmentRepository.CountAllAsync();
+
+            return totalDepts;
         }
 
-        public Task<List<DepartmentResponseDto>> CreateDepartmentAsyncRange(List<DepartmentCreateDto> department)
+        public async Task<List<DepartmentResponseDto>> CreateDepartmentAsyncRange(List<DepartmentCreateDto> departments)
         {
-            throw new NotImplementedException();
+            List<Department> depts = Mapping.Mapper.Map<List<Department>>(departments);
+            await _unitOfWork.DepartmentRepository.AddAsyncRange(depts);
+            await _unitOfWork.SaveAsync();
+
+            List<DepartmentResponseDto> deptResults = Mapping.Mapper.Map<List<DepartmentResponseDto>>(depts);
+
+            return deptResults;
         }
 
-        public Task<List<DepartmentResponseDto>> UpdateDepartmentAsyncRange(List<DepartmentUpdateDto> department)
+        public async Task<List<DepartmentResponseDto>> UpdateDepartmentAsyncRange(List<DepartmentUpdateDto> departments)
         {
-            throw new NotImplementedException();
+            List<Guid> id = departments.Select(e => e.Id).ToList();
+            List<Department> deptEntity = await _unitOfWork.DepartmentRepository.GetByConditionNoTracking(e => id.Contains(e.Id)).ToListAsync();
+            if (deptEntity.Count() != id.Count())
+            {
+                return null;
+            }
+
+            Mapping.Mapper.Map(departments, deptEntity);
+
+            await _unitOfWork.DepartmentRepository.UpdateRange(deptEntity);
+            await _unitOfWork.SaveAsync();
+
+
+            List<DepartmentResponseDto> deptResults = Mapping.Mapper.Map<List<DepartmentResponseDto>>(deptEntity);
+
+            return deptResults;
         }
 
-        public Task<string> DeleteDepartmentAsyncRange(List<Guid> id)
+        public async Task<string> DeleteDepartmentAsyncRange(List<Guid> ids)
         {
-            throw new NotImplementedException();
+            List<Department> dept = await _unitOfWork.DepartmentRepository.GetByConditionNoTracking(e => ids.Contains(e.Id)).ToListAsync();
+            if (dept.Count() != ids.Count())
+            {
+                return null;
+            }
+
+            await _unitOfWork.DepartmentRepository.DeleteRange(dept);
+            await _unitOfWork.SaveAsync();
+
+            return string.Format(GlobalConstants.SUCCESSFULLY_DELETED, "Department");
         }
     }
 }
