@@ -1,6 +1,6 @@
 ﻿namespace UniversityCourseAndResultManagementSystem.Common.QueryParameters
 {
-    public class StudentQueryParameters
+    public class StudentQueryParameters : QueryParametersBase
     {
     }
 }
