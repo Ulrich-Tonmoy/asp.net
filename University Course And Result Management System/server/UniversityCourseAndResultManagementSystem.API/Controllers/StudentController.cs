@@ -24,7 +24,7 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
             {
                 PagedList<StudentResponseDto> studentResults = await _studentService.GetAllStudentAsyncWithParam(studentParam);
 
-                var studentResultstsData = new
+                var studentResponse = new
                 {
                     studentResults.TotalCount,
                     studentResults.PageSize,
@@ -35,7 +35,7 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
                     data = studentResults
                 };
 
-                return Ok(studentResultstsData);
+                return Ok(studentResponse);
             }
             catch (Exception ex)
             {
@@ -49,14 +49,14 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
         {
             try
             {
-                StudentResponseDto studentResult = await _studentService.GetStudentByIdAsync(id);
+                StudentResponseDto studentResponse = await _studentService.GetStudentByIdAsync(id);
 
-                if (studentResult == null)
+                if (studentResponse == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(studentResult);
+                return Ok(studentResponse);
             }
             catch (Exception ex)
             {
@@ -96,13 +96,13 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
                     return BadRequest(string.Format(GlobalConstants.OBJECT_NULL, "Student"));
                 }
 
-                StudentResponseDto studentEntity = await _studentService.UpdateStudentAsync(student);
-                if (studentEntity == null)
+                StudentResponseDto studentResponse = await _studentService.UpdateStudentAsync(student);
+                if (studentResponse == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(studentEntity);
+                return Ok(studentResponse);
             }
             catch (Exception ex)
             {
@@ -116,13 +116,13 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
         {
             try
             {
-                string student = await _studentService.DeleteStudentAsync(id);
-                if (student == null)
+                string studentResponse = await _studentService.DeleteStudentAsync(id);
+                if (studentResponse == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(student);
+                return Ok(studentResponse);
             }
             catch (Exception ex)
             {
