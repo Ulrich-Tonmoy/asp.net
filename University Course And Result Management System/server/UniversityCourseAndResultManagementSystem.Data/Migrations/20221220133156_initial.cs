@@ -139,30 +139,6 @@ namespace UniversityCourseAndResultManagementSystem.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CourseSemester",
-                columns: table => new
-                {
-                    CoursesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SemestersId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CourseSemester", x => new { x.CoursesId, x.SemestersId });
-                    table.ForeignKey(
-                        name: "FK_CourseSemester_Courses_CoursesId",
-                        column: x => x.CoursesId,
-                        principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CourseSemester_Semesters_SemestersId",
-                        column: x => x.SemestersId,
-                        principalTable: "Semesters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "EnrolledCourses",
                 columns: table => new
                 {
@@ -211,6 +187,31 @@ namespace UniversityCourseAndResultManagementSystem.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SemesterCourses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SemesterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SemesterCourses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SemesterCourses_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SemesterCourses_Semesters_SemesterId",
+                        column: x => x.SemesterId,
+                        principalTable: "Semesters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AssignedCourses",
                 columns: table => new
                 {
@@ -236,24 +237,25 @@ namespace UniversityCourseAndResultManagementSystem.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EnrolledCourseStudent",
+                name: "StudentEnrolledCourses",
                 columns: table => new
                 {
-                    EnrolledCoursesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    StudentsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EnrolledCourseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EnrolledCourseStudent", x => new { x.EnrolledCoursesId, x.StudentsId });
+                    table.PrimaryKey("PK_StudentEnrolledCourses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EnrolledCourseStudent_EnrolledCourses_EnrolledCoursesId",
-                        column: x => x.EnrolledCoursesId,
+                        name: "FK_StudentEnrolledCourses_EnrolledCourses_EnrolledCourseId",
+                        column: x => x.EnrolledCourseId,
                         principalTable: "EnrolledCourses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EnrolledCourseStudent_Students_StudentsId",
-                        column: x => x.StudentsId,
+                        name: "FK_StudentEnrolledCourses_Students_StudentId",
+                        column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
@@ -276,20 +278,10 @@ namespace UniversityCourseAndResultManagementSystem.Data.Migrations
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CourseSemester_SemestersId",
-                table: "CourseSemester",
-                column: "SemestersId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_EnrolledCourses_CourseId",
                 table: "EnrolledCourses",
                 column: "CourseId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EnrolledCourseStudent_StudentsId",
-                table: "EnrolledCourseStudent",
-                column: "StudentsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Schedules_CourseId",
@@ -300,6 +292,26 @@ namespace UniversityCourseAndResultManagementSystem.Data.Migrations
                 name: "IX_Schedules_RoomId",
                 table: "Schedules",
                 column: "RoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SemesterCourses_CourseId",
+                table: "SemesterCourses",
+                column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SemesterCourses_SemesterId",
+                table: "SemesterCourses",
+                column: "SemesterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentEnrolledCourses_EnrolledCourseId",
+                table: "StudentEnrolledCourses",
+                column: "EnrolledCourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentEnrolledCourses_StudentId",
+                table: "StudentEnrolledCourses",
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_DepartmentId",
@@ -324,16 +336,19 @@ namespace UniversityCourseAndResultManagementSystem.Data.Migrations
                 name: "AssignedCourses");
 
             migrationBuilder.DropTable(
-                name: "CourseSemester");
-
-            migrationBuilder.DropTable(
-                name: "EnrolledCourseStudent");
-
-            migrationBuilder.DropTable(
                 name: "Schedules");
 
             migrationBuilder.DropTable(
+                name: "SemesterCourses");
+
+            migrationBuilder.DropTable(
+                name: "StudentEnrolledCourses");
+
+            migrationBuilder.DropTable(
                 name: "Teachers");
+
+            migrationBuilder.DropTable(
+                name: "Rooms");
 
             migrationBuilder.DropTable(
                 name: "Semesters");
@@ -343,9 +358,6 @@ namespace UniversityCourseAndResultManagementSystem.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Students");
-
-            migrationBuilder.DropTable(
-                name: "Rooms");
 
             migrationBuilder.DropTable(
                 name: "Designations");

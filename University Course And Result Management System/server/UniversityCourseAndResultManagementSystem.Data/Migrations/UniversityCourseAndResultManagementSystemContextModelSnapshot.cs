@@ -22,36 +22,6 @@ namespace UniversityCourseAndResultManagementSystem.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CourseSemester", b =>
-                {
-                    b.Property<Guid>("CoursesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("SemestersId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("CoursesId", "SemestersId");
-
-                    b.HasIndex("SemestersId");
-
-                    b.ToTable("CourseSemester");
-                });
-
-            modelBuilder.Entity("EnrolledCourseStudent", b =>
-                {
-                    b.Property<Guid>("EnrolledCoursesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("StudentsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("EnrolledCoursesId", "StudentsId");
-
-                    b.HasIndex("StudentsId");
-
-                    b.ToTable("EnrolledCourseStudent");
-                });
-
             modelBuilder.Entity("UniversityCourseAndResultManagementSystem.Model.AssignedCourse", b =>
                 {
                     b.Property<Guid>("Id")
@@ -230,6 +200,27 @@ namespace UniversityCourseAndResultManagementSystem.Data.Migrations
                     b.ToTable("Semesters");
                 });
 
+            modelBuilder.Entity("UniversityCourseAndResultManagementSystem.Model.SemesterCourse", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SemesterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("SemesterId");
+
+                    b.ToTable("SemesterCourses");
+                });
+
             modelBuilder.Entity("UniversityCourseAndResultManagementSystem.Model.Student", b =>
                 {
                     b.Property<Guid>("Id")
@@ -267,6 +258,27 @@ namespace UniversityCourseAndResultManagementSystem.Data.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("UniversityCourseAndResultManagementSystem.Model.StudentEnrolledCourse", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EnrolledCourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolledCourseId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("StudentEnrolledCourses");
                 });
 
             modelBuilder.Entity("UniversityCourseAndResultManagementSystem.Model.Teacher", b =>
@@ -310,36 +322,6 @@ namespace UniversityCourseAndResultManagementSystem.Data.Migrations
                     b.HasIndex("DesignationId");
 
                     b.ToTable("Teachers");
-                });
-
-            modelBuilder.Entity("CourseSemester", b =>
-                {
-                    b.HasOne("UniversityCourseAndResultManagementSystem.Model.Course", null)
-                        .WithMany()
-                        .HasForeignKey("CoursesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UniversityCourseAndResultManagementSystem.Model.Semester", null)
-                        .WithMany()
-                        .HasForeignKey("SemestersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EnrolledCourseStudent", b =>
-                {
-                    b.HasOne("UniversityCourseAndResultManagementSystem.Model.EnrolledCourse", null)
-                        .WithMany()
-                        .HasForeignKey("EnrolledCoursesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UniversityCourseAndResultManagementSystem.Model.Student", null)
-                        .WithMany()
-                        .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("UniversityCourseAndResultManagementSystem.Model.AssignedCourse", b =>
@@ -402,6 +384,25 @@ namespace UniversityCourseAndResultManagementSystem.Data.Migrations
                     b.Navigation("Room");
                 });
 
+            modelBuilder.Entity("UniversityCourseAndResultManagementSystem.Model.SemesterCourse", b =>
+                {
+                    b.HasOne("UniversityCourseAndResultManagementSystem.Model.Course", "Course")
+                        .WithMany("SemesterCourse")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniversityCourseAndResultManagementSystem.Model.Semester", "Semester")
+                        .WithMany("SemesterCourse")
+                        .HasForeignKey("SemesterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Semester");
+                });
+
             modelBuilder.Entity("UniversityCourseAndResultManagementSystem.Model.Student", b =>
                 {
                     b.HasOne("UniversityCourseAndResultManagementSystem.Model.Department", "Department")
@@ -411,6 +412,25 @@ namespace UniversityCourseAndResultManagementSystem.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("UniversityCourseAndResultManagementSystem.Model.StudentEnrolledCourse", b =>
+                {
+                    b.HasOne("UniversityCourseAndResultManagementSystem.Model.EnrolledCourse", "EnrolledCourse")
+                        .WithMany("StudentEnrolledCourse")
+                        .HasForeignKey("EnrolledCourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniversityCourseAndResultManagementSystem.Model.Student", "Student")
+                        .WithMany("StudentEnrolledCourse")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EnrolledCourse");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("UniversityCourseAndResultManagementSystem.Model.Teacher", b =>
@@ -441,6 +461,8 @@ namespace UniversityCourseAndResultManagementSystem.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Schedules");
+
+                    b.Navigation("SemesterCourse");
                 });
 
             modelBuilder.Entity("UniversityCourseAndResultManagementSystem.Model.Department", b =>
@@ -457,9 +479,24 @@ namespace UniversityCourseAndResultManagementSystem.Data.Migrations
                     b.Navigation("Teachers");
                 });
 
+            modelBuilder.Entity("UniversityCourseAndResultManagementSystem.Model.EnrolledCourse", b =>
+                {
+                    b.Navigation("StudentEnrolledCourse");
+                });
+
             modelBuilder.Entity("UniversityCourseAndResultManagementSystem.Model.Room", b =>
                 {
                     b.Navigation("Schedules");
+                });
+
+            modelBuilder.Entity("UniversityCourseAndResultManagementSystem.Model.Semester", b =>
+                {
+                    b.Navigation("SemesterCourse");
+                });
+
+            modelBuilder.Entity("UniversityCourseAndResultManagementSystem.Model.Student", b =>
+                {
+                    b.Navigation("StudentEnrolledCourse");
                 });
 
             modelBuilder.Entity("UniversityCourseAndResultManagementSystem.Model.Teacher", b =>

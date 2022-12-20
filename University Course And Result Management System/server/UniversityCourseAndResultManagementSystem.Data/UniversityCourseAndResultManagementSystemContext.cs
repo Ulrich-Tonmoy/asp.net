@@ -17,5 +17,7 @@ namespace UniversityCourseAndResultManagementSystem.Data
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<AssignedCourse> AssignedCourses { get; set; }
+        public DbSet<SemesterCourse> SemesterCourses { get; set; }
+        public DbSet<StudentEnrolledCourse> StudentEnrolledCourses { get; set; }
     }
 }
