@@ -19,7 +19,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<PagedList<DepartmentResponseDto>> GetAllDepartmentAsyncWithParam(DepartmentQueryParameters departmentParam)
         {
-            IQueryable<Department> depts = _unitOfWork.DepartmentRepository.GetAllNoTrackingWithParam(departmentParam, x => x.OrderBy(d => d.Id)).Include(d => d.Students);
+            IQueryable<Department> depts = _unitOfWork.DepartmentRepository.GetAllNoTrackingWithParam(departmentParam, x => x.OrderBy(d => d.Id)).Include(d => d.Students).Include(d => d.Teachers);
 
             List<DepartmentResponseDto> deptDtos = Mapping.Mapper.Map<List<DepartmentResponseDto>>(depts);
 
@@ -31,7 +31,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<DepartmentResponseDto> GetDepartmentByIdAsync(Guid id)
         {
-            Department dept = _unitOfWork.DepartmentRepository.GetByConditionNoTracking(d => d.Id.Equals(id)).FirstOrDefault();
+            Department dept = _unitOfWork.DepartmentRepository.GetByConditionNoTracking(d => d.Id.Equals(id)).Include(d => d.Students).Include(d => d.Teachers).FirstOrDefault();
             DepartmentResponseDto deptResult = Mapping.Mapper.Map<DepartmentResponseDto>(dept);
 
             return deptResult;

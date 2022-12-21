@@ -19,7 +19,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<PagedList<TeacherResponseDto>> GetAllTeacherAsyncWithParam(TeacherQueryParameters teacherParam)
         {
-            IQueryable<Teacher> teachers = _unitOfWork.TeacherRepository.GetAllNoTrackingWithParam(teacherParam, x => x.OrderBy(t => t.Id)).Include(t => t.Department);
+            IQueryable<Teacher> teachers = _unitOfWork.TeacherRepository.GetAllNoTrackingWithParam(teacherParam, x => x.OrderBy(t => t.Id)).Include(t => t.Department).Include(t => t.Designation);
 
             List<TeacherResponseDto> teacherDtos = Mapping.Mapper.Map<List<TeacherResponseDto>>(teachers);
 
@@ -31,7 +31,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<TeacherResponseDto> GetTeacherByIdAsync(Guid id)
         {
-            Teacher teacher = _unitOfWork.TeacherRepository.GetByConditionNoTracking(t => t.Id.Equals(id)).FirstOrDefault();
+            Teacher teacher = _unitOfWork.TeacherRepository.GetByConditionNoTracking(t => t.Id.Equals(id)).Include(t => t.Department).Include(t => t.Designation).FirstOrDefault();
             TeacherResponseDto teacherResult = Mapping.Mapper.Map<TeacherResponseDto>(teacher);
 
             return teacherResult;

@@ -19,7 +19,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<PagedList<DesignationResponseDto>> GetAllDesignationAsyncWithParam(DesignationQueryParameters designationParam)
         {
-            IQueryable<Designation> designations = _unitOfWork.DesignationRepository.GetAllNoTrackingWithParam(designationParam, x => x.OrderBy(e => e.Id));
+            IQueryable<Designation> designations = _unitOfWork.DesignationRepository.GetAllNoTrackingWithParam(designationParam, x => x.OrderBy(d => d.Id)).Include(t => t.Teachers);
 
             List<DesignationResponseDto> designationDtos = Mapping.Mapper.Map<List<DesignationResponseDto>>(designations);
 
@@ -31,7 +31,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<DesignationResponseDto> GetDesignationByIdAsync(Guid id)
         {
-            Designation designation = _unitOfWork.DesignationRepository.GetByConditionNoTracking(e => e.Id.Equals(id)).FirstOrDefault();
+            Designation designation = _unitOfWork.DesignationRepository.GetByConditionNoTracking(d => d.Id.Equals(id)).Include(d => d.Teachers).FirstOrDefault();
             DesignationResponseDto designationResult = Mapping.Mapper.Map<DesignationResponseDto>(designation);
 
             return designationResult;
@@ -50,7 +50,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<DesignationResponseDto> UpdateDesignationAsync(DesignationUpdateDto designation)
         {
-            Designation designationEntity = _unitOfWork.DesignationRepository.GetByConditionNoTracking(e => e.Id.Equals(designation.Id)).FirstOrDefault();
+            Designation designationEntity = _unitOfWork.DesignationRepository.GetByConditionNoTracking(d => d.Id.Equals(designation.Id)).FirstOrDefault();
             if (designationEntity == null)
             {
                 return null;
@@ -69,7 +69,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<string> DeleteDesignationAsync(Guid id)
         {
-            Designation designation = _unitOfWork.DesignationRepository.GetByConditionNoTracking(e => e.Id.Equals(id)).FirstOrDefault();
+            Designation designation = _unitOfWork.DesignationRepository.GetByConditionNoTracking(d => d.Id.Equals(id)).FirstOrDefault();
             if (designation == null)
             {
                 return null;
@@ -83,7 +83,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<bool> AnyDesignationAsync(string name)
         {
-            return await _unitOfWork.DesignationRepository.AnyAsync(e => e.Name.Equals(name));
+            return await _unitOfWork.DesignationRepository.AnyAsync(d => d.Name.Equals(name));
         }
 
         public async Task<int> CountAllDesignationAsync()
@@ -105,7 +105,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<List<DesignationResponseDto>> UpdateDesignationAsyncRange(List<DesignationUpdateDto> designation)
         {
-            List<Guid> id = designation.Select(e => e.Id).ToList();
+            List<Guid> id = designation.Select(d => d.Id).ToList();
 
             List<Designation> designationEntity = await _unitOfWork.DesignationRepository.GetByConditionNoTracking(e => id.Contains(e.Id)).ToListAsync();
             if (designationEntity.Count() != id.Count())
