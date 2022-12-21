@@ -88,9 +88,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<int> CountAllDepartmentAsync()
         {
-            int totalDepts = await _unitOfWork.DepartmentRepository.CountAllAsync();
-
-            return totalDepts;
+            return await _unitOfWork.DepartmentRepository.CountAllAsync();
         }
 
         public async Task<List<DepartmentResponseDto>> CreateDepartmentAsyncRange(List<DepartmentCreateDto> departments)

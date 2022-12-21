@@ -94,9 +94,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<int> CountStudentByDepartmentAsync(Guid id)
         {
-            int totalStudentsByDepartment = await _unitOfWork.StudentRepository.CountByConditionAsync(s => s.DepartmentId.Equals(id));
-
-            return totalStudentsByDepartment;
+            return await _unitOfWork.StudentRepository.CountByConditionAsync(s => s.DepartmentId.Equals(id));
         }
 
         public async Task<List<StudentResponseDto>> CreateStudentAsyncRange(List<StudentCreateDto> students)
