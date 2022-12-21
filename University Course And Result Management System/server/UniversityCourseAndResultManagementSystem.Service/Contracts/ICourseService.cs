@@ -13,10 +13,10 @@ namespace UniversityCourseAndResultManagementSystem.Service.Contracts
         Task<string> DeleteCourseAsync(Guid id);
         Task<bool> AnyCourseAsync(string code);
         Task<int> CountAllCourseAsync();
-        Task<int> CountCourseByDepartmentAsync(Guid departmentId);
+        Task<int> CountCourseByDepartmentAsync(Guid id);
 
-        Task<List<CourseResponseDto>> CreateCourseAsyncRange(List<CourseCreateDto> course);
-        Task<List<CourseResponseDto>> UpdateCourseAsyncRange(List<CourseUpdateDto> course);
-        Task<string> DeleteCourseAsyncRange(List<Guid> id);
+        Task<List<CourseResponseDto>> CreateCourseAsyncRange(List<CourseCreateDto> courses);
+        Task<List<CourseResponseDto>> UpdateCourseAsyncRange(List<CourseUpdateDto> courses);
+        Task<string> DeleteCourseAsyncRange(List<Guid> ids);
     }
 }
