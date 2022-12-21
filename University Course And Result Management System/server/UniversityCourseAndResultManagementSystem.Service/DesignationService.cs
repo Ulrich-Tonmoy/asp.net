@@ -107,7 +107,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
         {
             List<Guid> id = designation.Select(d => d.Id).ToList();
 
-            List<Designation> designationEntity = await _unitOfWork.DesignationRepository.GetByConditionNoTracking(e => id.Contains(e.Id)).ToListAsync();
+            List<Designation> designationEntity = await _unitOfWork.DesignationRepository.GetByConditionNoTracking(d => id.Contains(d.Id)).ToListAsync();
             if (designationEntity.Count() != id.Count())
             {
                 return null;
@@ -126,7 +126,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<string> DeleteDesignationAsyncRange(List<Guid> ids)
         {
-            List<Designation> designation = await _unitOfWork.DesignationRepository.GetByConditionNoTracking(e => ids.Contains(e.Id)).ToListAsync();
+            List<Designation> designation = await _unitOfWork.DesignationRepository.GetByConditionNoTracking(d => ids.Contains(d.Id)).ToListAsync();
             if (designation.Count() != ids.Count())
             {
                 return null;

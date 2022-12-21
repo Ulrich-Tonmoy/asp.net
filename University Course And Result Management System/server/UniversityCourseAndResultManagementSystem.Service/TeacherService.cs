@@ -117,7 +117,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
         {
             List<Guid> id = teachers.Select(t => t.Id).ToList();
 
-            List<Teacher> teacherEntity = await _unitOfWork.TeacherRepository.GetByConditionNoTracking(e => id.Contains(e.Id)).ToListAsync();
+            List<Teacher> teacherEntity = await _unitOfWork.TeacherRepository.GetByConditionNoTracking(t => id.Contains(t.Id)).ToListAsync();
             if (teacherEntity.Count() != id.Count())
             {
                 return null;
@@ -136,7 +136,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<string> DeleteTeacherAsyncRange(List<Guid> ids)
         {
-            List<Teacher> teacher = await _unitOfWork.TeacherRepository.GetByConditionNoTracking(e => ids.Contains(e.Id)).ToListAsync();
+            List<Teacher> teacher = await _unitOfWork.TeacherRepository.GetByConditionNoTracking(t => ids.Contains(t.Id)).ToListAsync();
             if (teacher.Count() != ids.Count())
             {
                 return null;
