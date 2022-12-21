@@ -19,7 +19,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<PagedList<StudentResponseDto>> GetAllStudentAsyncWithParam(StudentQueryParameters studentParam)
         {
-            IQueryable<Student> students = _unitOfWork.StudentRepository.GetAllNoTrackingWithParam(studentParam, x => x.OrderBy(s => s.Id));
+            IQueryable<Student> students = _unitOfWork.StudentRepository.GetAllNoTrackingWithParam(studentParam, x => x.OrderBy(s => s.Id)).Include(s => s.Department);
 
             List<StudentResponseDto> studentDtos = Mapping.Mapper.Map<List<StudentResponseDto>>(students);
 

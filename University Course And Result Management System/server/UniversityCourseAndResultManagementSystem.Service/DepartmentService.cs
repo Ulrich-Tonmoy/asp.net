@@ -19,7 +19,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<PagedList<DepartmentResponseDto>> GetAllDepartmentAsyncWithParam(DepartmentQueryParameters departmentParam)
         {
-            IQueryable<Department> depts = _unitOfWork.DepartmentRepository.GetAllNoTrackingWithParam(departmentParam, x => x.OrderBy(d => d.Id));
+            IQueryable<Department> depts = _unitOfWork.DepartmentRepository.GetAllNoTrackingWithParam(departmentParam, x => x.OrderBy(d => d.Id)).Include(d => d.Students);
 
             List<DepartmentResponseDto> deptDtos = Mapping.Mapper.Map<List<DepartmentResponseDto>>(depts);
 
@@ -107,7 +107,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
         public async Task<List<DepartmentResponseDto>> UpdateDepartmentAsyncRange(List<DepartmentUpdateDto> departments)
         {
             List<Guid> id = departments.Select(d => d.Id).ToList();
-            List<Department> deptEntity = await _unitOfWork.DepartmentRepository.GetByConditionNoTracking(e => id.Contains(e.Id)).ToListAsync();
+            List<Department> deptEntity = await _unitOfWork.DepartmentRepository.GetByConditionNoTracking(d => id.Contains(d.Id)).ToListAsync();
             if (deptEntity.Count() != id.Count())
             {
                 return null;
