@@ -69,9 +69,9 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
             try
             {
                 if (dept == null)
-                {
                     return BadRequest(string.Format(GlobalConstants.OBJECT_NULL, "Department"));
-                }
+                else if (await _departmentService.AnyDepartmentAsync(dept.Code))
+                    return BadRequest(string.Format(GlobalConstants.OBJECT_Exist, "Department", "Code"));
 
                 DepartmentResponseDto createdDept = await _departmentService.CreateDepartmentAsync(dept);
 
@@ -89,9 +89,7 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
             try
             {
                 if (dept == null)
-                {
                     return BadRequest(string.Format(GlobalConstants.OBJECT_NULL, "Department"));
-                }
 
                 DepartmentResponseDto deptResponse = await _departmentService.UpdateDepartmentAsync(dept);
                 if (deptResponse == null)
@@ -118,7 +116,7 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
                     return NotFound();
                 }
 
-                return Ok(deptResponse);
+                return Ok(new { response = deptResponse });
             }
             catch (Exception ex)
             {

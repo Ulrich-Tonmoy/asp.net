@@ -90,50 +90,5 @@ namespace UniversityCourseAndResultManagementSystem.Service
         {
             return await _unitOfWork.DepartmentRepository.CountAllAsync();
         }
-
-        public async Task<List<DepartmentResponseDto>> CreateDepartmentAsyncRange(List<DepartmentCreateDto> departments)
-        {
-            List<Department> depts = Mapping.Mapper.Map<List<Department>>(departments);
-            await _unitOfWork.DepartmentRepository.AddAsyncRange(depts);
-            await _unitOfWork.SaveAsync();
-
-            List<DepartmentResponseDto> deptResults = Mapping.Mapper.Map<List<DepartmentResponseDto>>(depts);
-
-            return deptResults;
-        }
-
-        public async Task<List<DepartmentResponseDto>> UpdateDepartmentAsyncRange(List<DepartmentUpdateDto> departments)
-        {
-            List<Guid> id = departments.Select(d => d.Id).ToList();
-            List<Department> deptEntity = await _unitOfWork.DepartmentRepository.GetByConditionNoTracking(d => id.Contains(d.Id)).ToListAsync();
-            if (deptEntity.Count() != id.Count())
-            {
-                return null;
-            }
-
-            Mapping.Mapper.Map(departments, deptEntity);
-
-            await _unitOfWork.DepartmentRepository.UpdateRange(deptEntity);
-            await _unitOfWork.SaveAsync();
-
-
-            List<DepartmentResponseDto> deptResults = Mapping.Mapper.Map<List<DepartmentResponseDto>>(deptEntity);
-
-            return deptResults;
-        }
-
-        public async Task<string> DeleteDepartmentAsyncRange(List<Guid> ids)
-        {
-            List<Department> dept = await _unitOfWork.DepartmentRepository.GetByConditionNoTracking(d => ids.Contains(d.Id)).ToListAsync();
-            if (dept.Count() != ids.Count())
-            {
-                return null;
-            }
-
-            await _unitOfWork.DepartmentRepository.DeleteRange(dept);
-            await _unitOfWork.SaveAsync();
-
-            return string.Format(GlobalConstants.SUCCESSFULLY_DELETED, "Department");
-        }
     }
 }
