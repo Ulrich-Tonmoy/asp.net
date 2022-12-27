@@ -13,9 +13,5 @@ namespace UniversityCourseAndResultManagementSystem.Service.Contracts
         Task<string> DeleteRoomAsync(Guid id);
         Task<bool> AnyRoomAsync(string roomNo);
         Task<int> CountAllRoomAsync();
-
-        Task<List<RoomResponseDto>> CreateRoomAsyncRange(List<RoomCreateDto> room);
-        Task<List<RoomResponseDto>> UpdateRoomAsyncRange(List<RoomUpdateDto> room);
-        Task<string> DeleteRoomAsyncRange(List<Guid> id);
     }
 }

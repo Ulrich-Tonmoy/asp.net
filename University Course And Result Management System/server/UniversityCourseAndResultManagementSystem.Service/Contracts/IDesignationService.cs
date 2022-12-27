@@ -13,9 +13,5 @@ namespace UniversityCourseAndResultManagementSystem.Service.Contracts
         Task<string> DeleteDesignationAsync(Guid id);
         Task<bool> AnyDesignationAsync(string name);
         Task<int> CountAllDesignationAsync();
-
-        Task<List<DesignationResponseDto>> CreateDesignationAsyncRange(List<DesignationCreateDto> designations);
-        Task<List<DesignationResponseDto>> UpdateDesignationAsyncRange(List<DesignationUpdateDto> designations);
-        Task<string> DeleteDesignationAsyncRange(List<Guid> ids);
     }
 }

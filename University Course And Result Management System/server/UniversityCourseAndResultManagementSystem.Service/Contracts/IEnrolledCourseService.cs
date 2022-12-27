@@ -13,9 +13,5 @@ namespace UniversityCourseAndResultManagementSystem.Service.Contracts
         Task<string> DeleteEnrolledCourseAsync(Guid id);
         Task<bool> AnyEnrolledCourseAsync(Guid courseId, Guid studentId);
         Task<int> CountAllEnrolledCourseAsync();
-
-        Task<List<EnrolledCourseResponseDto>> CreateEnrolledCourseAsyncRange(List<EnrolledCourseCreateDto> enrolledCourse);
-        Task<List<EnrolledCourseResponseDto>> UpdateEnrolledCourseAsyncRange(List<EnrolledCourseUpdateDto> enrolledCourse);
-        Task<string> DeleteEnrolledCourseAsyncRange(List<Guid> id);
     }
 }

@@ -13,9 +13,5 @@ namespace UniversityCourseAndResultManagementSystem.Service.Contracts
         Task<string> DeleteAssignedCourseAsync(Guid id);
         Task<bool> AnyAssignedCourseAsync(Guid courseId, Guid teacherId);
         Task<int> CountAllAssignedCourseAsync();
-
-        Task<List<AssignedCourseResponseDto>> CreateAssignedCourseAsyncRange(List<AssignedCourseCreateDto> assignedCourse);
-        Task<List<AssignedCourseResponseDto>> UpdateAssignedCourseAsyncRange(List<AssignedCourseUpdateDto> assignedCourse);
-        Task<string> DeleteAssignedCourseAsyncRange(List<Guid> id);
     }
 }

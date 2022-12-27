@@ -13,9 +13,5 @@ namespace UniversityCourseAndResultManagementSystem.Service.Contracts
         Task<string> DeleteScheduleAsync(Guid id);
         Task<bool> AnyScheduleAsync(Guid courseId, Guid roomId, string day, string from);
         Task<int> CountAllScheduleAsync();
-
-        Task<List<ScheduleResponseDto>> CreateScheduleAsyncRange(List<ScheduleCreateDto> schedule);
-        Task<List<ScheduleResponseDto>> UpdateScheduleAsyncRange(List<ScheduleUpdateDto> schedule);
-        Task<string> DeleteScheduleAsyncRange(List<Guid> id);
     }
 }

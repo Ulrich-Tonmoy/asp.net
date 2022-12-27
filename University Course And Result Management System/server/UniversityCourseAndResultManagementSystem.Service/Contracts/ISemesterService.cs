@@ -13,9 +13,5 @@ namespace UniversityCourseAndResultManagementSystem.Service.Contracts
         Task<string> DeleteSemesterAsync(Guid id);
         Task<bool> AnySemesterAsync(string name);
         Task<int> CountAllSemesterAsync();
-
-        Task<List<SemesterResponseDto>> CreateSemesterAsyncRange(List<SemesterCreateDto> semester);
-        Task<List<SemesterResponseDto>> UpdateSemesterAsyncRange(List<SemesterUpdateDto> semester);
-        Task<string> DeleteSemesterAsyncRange(List<Guid> id);
     }
 }
