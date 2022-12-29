@@ -2,6 +2,7 @@
     width: 100vw;
     height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -20,6 +21,23 @@
     -o-border-radius: 25px;
 }
 
-table {
+mat-toolbar {
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+.student-table-container {
     width: 100%;
+    overflow: auto;
+}
+
+table {
+    white-space: nowrap;
+}
+
+.spacer {
+    flex: 1 1 auto;
 }

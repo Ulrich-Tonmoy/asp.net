@@ -1,0 +1,80 @@
+<h1 mat-dialog-title>{{ formName }}</h1>
+<div mat-dialog-content>
+    <form [formGroup]="studentForm">
+        <mat-form-field>
+            <mat-label>Registration No</mat-label>
+            <input formControlName="regiNo" matInput />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Full name</mat-label>
+            <input formControlName="name" matInput />
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+            <mat-label>Email</mat-label>
+            <input
+                type="email"
+                matInput
+                [formControl]="emailFormControl"
+                [errorStateMatcher]="matcher"
+                placeholder="Ex. pat@example.com"
+            />
+            <mat-hint>Errors appear instantly!</mat-hint>
+            <mat-error
+                *ngIf="
+                    emailFormControl.hasError('email') &&
+                    !emailFormControl.hasError('required')
+                "
+            >
+                Please enter a valid email address
+            </mat-error>
+            <mat-error *ngIf="emailFormControl.hasError('required')">
+                Email is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Contact No</mat-label>
+            <input
+                type="tel"
+                pattern="[0-9]{11}"
+                formControlName="contactNo"
+                matInput
+            />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Date</mat-label>
+            <input
+                matInput
+                [matDatepicker]="date"
+                [formControl]="currentDate"
+            />
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle
+                matIconSuffix
+                [for]="date"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #date></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Address</mat-label>
+            <textarea
+                formControlName="address"
+                matInput
+                placeholder="Ex. 100 Main St"
+            ></textarea>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Department</mat-label>
+            <mat-select disableRipple formControlName="departmentId">
+                <mat-option *ngFor="let data of deptData" [value]="data.id">
+                    {{ data.code }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+    <div mat-dialog-actions [align]="'end'">
+        <button mat-raised-button color="warn" mat-dialog-close>Close</button>
+        <button mat-raised-button color="primary" (click)="formAction()">
+            {{ actionButton }}
+        </button>
+    </div>
+</div>
