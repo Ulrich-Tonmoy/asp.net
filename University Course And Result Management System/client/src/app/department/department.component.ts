@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, ViewChild, Inject } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormComponent } from './form/form.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DeptFormComponent } from './form/form.component';
 
 @Component({
     selector: 'app-department',
@@ -23,7 +23,7 @@ export class DepartmentComponent {
 
     openDialog() {
         this.dialog
-            .open(FormComponent, { width: '40%' })
+            .open(DeptFormComponent, { width: '40%' })
             .afterClosed()
             .subscribe((res) => {
                 if (res == 'save') this.getDepartment();
@@ -32,7 +32,7 @@ export class DepartmentComponent {
 
     editDepartment(element: any) {
         this.dialog
-            .open(FormComponent, { width: '40%', data: element })
+            .open(DeptFormComponent, { width: '40%', data: element })
             .afterClosed()
             .subscribe((res) => {
                 if (res == 'update') this.getDepartment();
@@ -58,7 +58,6 @@ export class DepartmentComponent {
                 .delete('https://localhost:7026/api/department/' + element.id)
                 .subscribe({
                     next: (data) => {
-                        console.log(data);
                         this.getDepartment();
                     },
                     error: (err) => {

@@ -11,19 +11,24 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
-import { FormComponent } from './department/form/form.component';
+import { DeptFormComponent } from './department/form/form.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ReactiveFormsModule } from '@angular/forms';
+import { StudentFormComponent } from './student/form/form.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
     declarations: [
         AppComponent,
         DepartmentComponent,
         StudentComponent,
-        FormComponent,
+        DeptFormComponent,
+        StudentFormComponent,
     ],
     imports: [
         BrowserModule,
@@ -40,6 +45,9 @@ import { ReactiveFormsModule } from '@angular/forms';
         MatButtonModule,
         MatTooltipModule,
         ReactiveFormsModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatSelectModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

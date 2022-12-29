@@ -4,11 +4,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-    selector: 'app-form',
+    selector: 'dept-form',
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.scss'],
 })
-export class FormComponent {
+export class DeptFormComponent {
     deptForm!: FormGroup;
     actionButton: string = 'Save';
     formName: string = 'Add New Department';
@@ -17,7 +17,7 @@ export class FormComponent {
         @Inject(MAT_DIALOG_DATA) public editData: any,
         private http: HttpClient,
         private formBuilder: FormBuilder,
-        private dialogRef: MatDialogRef<FormComponent>
+        private dialogRef: MatDialogRef<DeptFormComponent>
     ) {}
 
     ngOnInit(): void {
@@ -51,7 +51,6 @@ export class FormComponent {
                 )
                 .subscribe({
                     next: (data) => {
-                        console.log(data);
                         this.deptForm.reset();
                         this.dialogRef.close('save');
                     },
@@ -71,7 +70,6 @@ export class FormComponent {
                 })
                 .subscribe({
                     next: (data) => {
-                        console.log(data);
                         this.deptForm.reset();
                         this.dialogRef.close('update');
                     },
