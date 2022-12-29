@@ -122,7 +122,7 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
                     return NotFound();
                 }
 
-                return Ok(studentResponse);
+                return Ok(new { response = studentResponse });
             }
             catch (Exception ex)
             {
