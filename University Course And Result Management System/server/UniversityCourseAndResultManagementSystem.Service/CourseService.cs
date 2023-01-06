@@ -21,14 +21,25 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<PagedList<CourseResponseDto>> GetAllCourseAsyncWithParam(CourseQueryParameters courseParam)
         {
-            IQueryable<Course> courses = _unitOfWork.CourseRepository.GetAllNoTrackingWithParam(courseParam, x => x.OrderBy(c => c.Id)).Include(c => c.Department);
+            IQueryable<Course> courses = _unitOfWork.CourseRepository.GetAllNoTrackingWithParam(courseParam, x => x.OrderBy(c => c.Id)).Include(c => c.Department).Include(c => c.SemesterCourse).ThenInclude(s => s.Semester).Include(c => c.AssignedCourse).ThenInclude(t => t.Teacher);
 
             List<CourseResponseDto> courseDtos = Mapping.Mapper.Map<List<CourseResponseDto>>(courses);
 
             var count = await CountAllCourseAsync();
-            PagedList<CourseResponseDto> CourseResults = PagedList<CourseResponseDto>.ToPagedList(courseDtos, count, courseParam.PageNumber, courseParam.PageSize);
+            PagedList<CourseResponseDto> courseResults = PagedList<CourseResponseDto>.ToPagedList(courseDtos, count, courseParam.PageNumber, courseParam.PageSize);
 
-            return CourseResults;
+            return courseResults;
+        }
+
+        public async Task<PagedList<CourseResponseDto>> GetCourseByDeptAsync(Guid id, CourseQueryParameters courseParam)
+        {
+            IQueryable<Course> course = _unitOfWork.CourseRepository.GetByConditionNoTracking(c => c.DepartmentId.Equals(id)).Where(c => c.AssignedCourse.Equals(null));
+            List<CourseResponseDto> courseDtos = Mapping.Mapper.Map<List<CourseResponseDto>>(course);
+
+            var count = await CountCourseByDepartmentAsync(id);
+            PagedList<CourseResponseDto> courseResults = PagedList<CourseResponseDto>.ToPagedList(courseDtos, count, courseParam.PageNumber, courseParam.PageSize);
+
+            return courseResults;
         }
 
         public async Task<CourseResponseDto> GetCourseByIdAsync(Guid id)
@@ -96,53 +107,6 @@ namespace UniversityCourseAndResultManagementSystem.Service
         public async Task<int> CountCourseByDepartmentAsync(Guid id)
         {
             return await _unitOfWork.CourseRepository.CountByConditionAsync(c => c.DepartmentId.Equals(id));
-        }
-
-        public async Task<List<CourseResponseDto>> CreateCourseAsyncRange(List<CourseCreateDto> courses)
-        {
-            List<Course> courseModels = Mapping.Mapper.Map<List<Course>>(courses);
-
-            await _unitOfWork.CourseRepository.AddAsyncRange(courseModels);
-            await _unitOfWork.SaveAsync();
-
-            List<CourseResponseDto> courseResults = Mapping.Mapper.Map<List<CourseResponseDto>>(courseModels);
-
-            return courseResults;
-        }
-
-        public async Task<List<CourseResponseDto>> UpdateCourseAsyncRange(List<CourseUpdateDto> courses)
-        {
-            List<Guid> id = courses.Select(c => c.Id).ToList();
-
-            List<Course> courseEntity = await _unitOfWork.CourseRepository.GetByConditionNoTracking(c => id.Contains(c.Id)).ToListAsync();
-            if (courseEntity.Count() != id.Count())
-            {
-                return null;
-            }
-
-            Mapping.Mapper.Map(courses, courseEntity);
-
-            await _unitOfWork.CourseRepository.UpdateRange(courseEntity);
-            await _unitOfWork.SaveAsync();
-
-
-            List<CourseResponseDto> courseResults = Mapping.Mapper.Map<List<CourseResponseDto>>(courseEntity);
-
-            return courseResults;
-        }
-
-        public async Task<string> DeleteCourseAsyncRange(List<Guid> ids)
-        {
-            List<Course> course = await _unitOfWork.CourseRepository.GetByConditionNoTracking(c => ids.Contains(c.Id)).ToListAsync();
-            if (course.Count() != ids.Count())
-            {
-                return null;
-            }
-
-            await _unitOfWork.CourseRepository.DeleteRange(course);
-            await _unitOfWork.SaveAsync();
-
-            return String.Format(GlobalConstants.SUCCESSFULLY_DELETED, "Course");
         }
     }
 }

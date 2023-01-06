@@ -1,4 +1,4 @@
-.dept-container {
+.course-container {
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -6,9 +6,9 @@
     justify-content: center;
     align-items: center;
 }
-.dept-table-container {
+.course-sub_container {
     padding: 15px 5px;
-    max-width: 500px;
+    width: 500px;
     max-height: 500px;
     display: flex;
     flex-direction: column;
@@ -21,18 +21,11 @@
     -o-border-radius: 25px;
 }
 
-mat-toolbar {
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
-}
-
-table {
-    width: 100%;
-}
-
 .spacer {
     flex: 1 1 auto;
+}
+
+.course-table-container {
+    width: 100%;
+    overflow: auto;
 }

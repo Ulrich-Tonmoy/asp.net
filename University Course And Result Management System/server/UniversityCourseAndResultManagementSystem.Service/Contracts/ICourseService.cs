@@ -7,6 +7,7 @@ namespace UniversityCourseAndResultManagementSystem.Service.Contracts
     public interface ICourseService
     {
         Task<PagedList<CourseResponseDto>> GetAllCourseAsyncWithParam(CourseQueryParameters courseParam);
+        Task<PagedList<CourseResponseDto>> GetCourseByDeptAsync(Guid id, CourseQueryParameters courseParam);
         Task<CourseResponseDto> GetCourseByIdAsync(Guid id);
         Task<CourseResponseDto> CreateCourseAsync(CourseCreateDto course);
         Task<CourseResponseDto> UpdateCourseAsync(CourseUpdateDto course);

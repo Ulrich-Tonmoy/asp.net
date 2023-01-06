@@ -1,12 +1,12 @@
-<div class="student-container">
-    <div class="mat-elevation-z8 student-sub_container">
+<div class="course-container">
+    <div class="mat-elevation-z8 course-sub_container">
         <mat-toolbar color="primary">
             <mat-toolbar-row>
-                <span>All Students</span>
+                <span>All Courses</span>
                 <span class="spacer"></span>
                 <button
                     mat-mini-fab
-                    matTooltip="Register new Student"
+                    matTooltip="Create new Course"
                     color="accent"
                     (click)="openDialog()"
                 >
@@ -14,16 +14,17 @@
                 </button>
             </mat-toolbar-row>
         </mat-toolbar>
-
-        <div class="student-table-container">
+        <div class="course-table-container">
             <table mat-table [dataSource]="dataSource">
-                <ng-container matColumnDef="regiNo">
-                    <th mat-header-cell *matHeaderCellDef>Regi No</th>
+                <!-- Code Column -->
+                <ng-container matColumnDef="code">
+                    <th mat-header-cell *matHeaderCellDef>Code</th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.regiNo }}
+                        {{ element.code }}
                     </td>
                 </ng-container>
 
+                <!-- Name Column -->
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef>Name</th>
                     <td mat-cell *matCellDef="let element">
@@ -31,55 +32,35 @@
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="department">
-                    <th mat-header-cell *matHeaderCellDef>Department</th>
+                <ng-container matColumnDef="semester">
+                    <th mat-header-cell *matHeaderCellDef>Semester</th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.department.code }}
+                        {{ element.semester.name }}
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="email">
-                    <th mat-header-cell *matHeaderCellDef>Email</th>
+                <ng-container matColumnDef="assigned">
+                    <th mat-header-cell *matHeaderCellDef>Assigned To</th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.email }}
+                        {{ element.assignedCourse.teacher.name }}
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="address">
-                    <th mat-header-cell *matHeaderCellDef>Address</th>
-                    <td mat-cell *matCellDef="let element">
-                        {{ element.address }}
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="contactNo">
-                    <th mat-header-cell *matHeaderCellDef>Contact No</th>
-                    <td mat-cell *matCellDef="let element">
-                        {{ element.contactNo }}
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef>Date</th>
-                    <td mat-cell *matCellDef="let element">
-                        {{ element.date | date }}
-                    </td>
-                </ng-container>
-
+                <!-- Actions Column -->
                 <ng-container matColumnDef="actions">
                     <th mat-header-cell *matHeaderCellDef>Actions</th>
                     <td mat-cell *matCellDef="let element">
                         <button
                             mat-icon-button
                             color="primary"
-                            (click)="editStudent(element)"
+                            (click)="editCourse(element)"
                         >
                             <mat-icon>edit</mat-icon>
                         </button>
                         <button
                             mat-icon-button
                             color="warn"
-                            (click)="deleteStudent(element)"
+                            (click)="deleteCourse(element)"
                         >
                             <mat-icon>delete</mat-icon>
                         </button>

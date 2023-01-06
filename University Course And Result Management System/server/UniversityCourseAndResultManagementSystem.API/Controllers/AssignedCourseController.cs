@@ -2,6 +2,7 @@
 using UniversityCourseAndResultManagementSystem.Common;
 using UniversityCourseAndResultManagementSystem.Common.QueryParameters;
 using UniversityCourseAndResultManagementSystem.DTO.AssignedCourseDto;
+using UniversityCourseAndResultManagementSystem.Model;
 using UniversityCourseAndResultManagementSystem.Service.Contracts;
 
 namespace UniversityCourseAndResultManagementSystem.API.Controllers
@@ -123,7 +124,7 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
                     return NotFound();
                 }
 
-                return Ok(assignedCourse);
+                return Ok(new { response = assignedCourse });
             }
             catch (Exception ex)
             {

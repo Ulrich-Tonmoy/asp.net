@@ -29,6 +29,17 @@ namespace UniversityCourseAndResultManagementSystem.Service
             return teacherResults;
         }
 
+        public async Task<PagedList<TeacherResponseDto>> GetTeacherByDeptAsync(Guid id, TeacherQueryParameters teacherParam)
+        {
+            IQueryable<Teacher> teacher = _unitOfWork.TeacherRepository.GetByConditionNoTracking(t => t.DepartmentId.Equals(id));
+            List<TeacherResponseDto> teacherDtos = Mapping.Mapper.Map<List<TeacherResponseDto>>(teacher);
+
+            var count = await CountTeacherByDesignationAsync(id);
+            PagedList<TeacherResponseDto> teacherResults = PagedList<TeacherResponseDto>.ToPagedList(teacherDtos, count, teacherParam.PageNumber, teacherParam.PageSize);
+
+            return teacherResults;
+        }
+
         public async Task<TeacherResponseDto> GetTeacherByIdAsync(Guid id)
         {
             Teacher teacher = _unitOfWork.TeacherRepository.GetByConditionNoTracking(t => t.Id.Equals(id)).Include(t => t.Department).Include(t => t.Designation).FirstOrDefault();
@@ -99,53 +110,6 @@ namespace UniversityCourseAndResultManagementSystem.Service
         public async Task<int> CountTeacherByDesignationAsync(Guid id)
         {
             return await _unitOfWork.TeacherRepository.CountByConditionAsync(t => t.DesignationId.Equals(id));
-        }
-
-        public async Task<List<TeacherResponseDto>> CreateTeacherAsyncRange(List<TeacherCreateDto> teachers)
-        {
-            List<Teacher> teacherModels = Mapping.Mapper.Map<List<Teacher>>(teachers);
-
-            await _unitOfWork.TeacherRepository.AddAsyncRange(teacherModels);
-            await _unitOfWork.SaveAsync();
-
-            List<TeacherResponseDto> teacherResults = Mapping.Mapper.Map<List<TeacherResponseDto>>(teacherModels);
-
-            return teacherResults;
-        }
-
-        public async Task<List<TeacherResponseDto>> UpdateTeacherAsyncRange(List<TeacherUpdateDto> teachers)
-        {
-            List<Guid> id = teachers.Select(t => t.Id).ToList();
-
-            List<Teacher> teacherEntity = await _unitOfWork.TeacherRepository.GetByConditionNoTracking(t => id.Contains(t.Id)).ToListAsync();
-            if (teacherEntity.Count() != id.Count())
-            {
-                return null;
-            }
-
-            Mapping.Mapper.Map(teachers, teacherEntity);
-
-            await _unitOfWork.TeacherRepository.UpdateRange(teacherEntity);
-            await _unitOfWork.SaveAsync();
-
-
-            List<TeacherResponseDto> teacherResults = Mapping.Mapper.Map<List<TeacherResponseDto>>(teacherEntity);
-
-            return teacherResults;
-        }
-
-        public async Task<string> DeleteTeacherAsyncRange(List<Guid> ids)
-        {
-            List<Teacher> teacher = await _unitOfWork.TeacherRepository.GetByConditionNoTracking(t => ids.Contains(t.Id)).ToListAsync();
-            if (teacher.Count() != ids.Count())
-            {
-                return null;
-            }
-
-            await _unitOfWork.TeacherRepository.DeleteRange(teacher);
-            await _unitOfWork.SaveAsync();
-
-            return String.Format(GlobalConstants.SUCCESSFULLY_DELETED, "Teacher");
         }
     }
 }

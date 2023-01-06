@@ -1,0 +1,62 @@
+<div class="form-container">
+    <h1 mat-dialog-title>{{ formName }}</h1>
+    <form [formGroup]="courseAssignForm">
+        <mat-form-field appearance="fill">
+            <mat-label>Department</mat-label>
+            <mat-select
+                (ngModelChange)="getTeacher($event)"
+                disableRipple
+                formControlName="departmentId"
+            >
+                <mat-option *ngFor="let data of deptData" [value]="data.id">
+                    {{ data.code }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Teacher</mat-label>
+            <mat-select
+                (ngModelChange)="onChangeTeacher($event)"
+                disableRipple
+                formControlName="teacherId"
+            >
+                <mat-option *ngFor="let data of teacherData" [value]="data.id">
+                    {{ data.name }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Credit to be Taken</mat-label>
+            <input [value]="creditToBeTaken" readonly matInput />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Remaining Credit</mat-label>
+            <input [value]="remainingCredit" readonly matInput />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Course</mat-label>
+            <mat-select
+                (ngModelChange)="onChangeCourse($event)"
+                disableRipple
+                formControlName="courseId"
+            >
+                <mat-option *ngFor="let data of courseData" [value]="data.id">
+                    {{ data.code }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input [value]="name" readonly matInput />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Credit</mat-label>
+            <input [value]="credit" readonly matInput />
+        </mat-form-field>
+    </form>
+    <div mat-dialog-actions [align]="'end'">
+        <button mat-raised-button color="primary" (click)="assignCourse()">
+            {{ actionButton }}
+        </button>
+    </div>
+</div>

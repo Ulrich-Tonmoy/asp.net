@@ -1,0 +1,34 @@
+.main-container {
+    max-width: 100vw;
+    max-height: 100vh;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.nav-container {
+    width: 100%;
+    height: 50px;
+    background-color: #3f51b5;
+}
+
+ul {
+    display: flex;
+    flex-direction: row;
+}
+
+li {
+    list-style-type: none;
+    padding: 5px 10px;
+    margin: 5px 10px;
+}
+
+li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bolder;
+}
+
+.component-container {
+    height: calc(100vh - 50px);
+}

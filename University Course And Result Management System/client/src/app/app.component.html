@@ -1,4 +1,15 @@
-<!-- <app-department></app-department> -->
-<app-student></app-student>
-
-<router-outlet></router-outlet>
+<div class="main-container">
+    <div class="nav-container">
+        <ul>
+            <li><a routerLink="">Home</a></li>
+            <li><a routerLink="department">Department</a></li>
+            <li><a routerLink="student">Student</a></li>
+            <li><a routerLink="teacher">Teacher</a></li>
+            <li><a routerLink="course">Course</a></li>
+            <li><a routerLink="course-assign">Assign Course</a></li>
+        </ul>
+    </div>
+    <div class="component-container">
+        <router-outlet></router-outlet>
+    </div>
+</div>

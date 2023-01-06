@@ -1,4 +1,4 @@
-.dept-container {
+.teacher-container {
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -6,7 +6,7 @@
     justify-content: center;
     align-items: center;
 }
-.dept-table-container {
+.teacher-sub_container {
     padding: 15px 5px;
     max-width: 500px;
     max-height: 500px;
@@ -29,8 +29,13 @@ mat-toolbar {
     -o-border-radius: 10px;
 }
 
-table {
+.teacher-table-container {
     width: 100%;
+    overflow: auto;
+}
+
+table {
+    white-space: nowrap;
 }
 
 .spacer {

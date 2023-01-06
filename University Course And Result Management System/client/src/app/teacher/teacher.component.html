@@ -1,8 +1,8 @@
-<div class="student-container">
-    <div class="mat-elevation-z8 student-sub_container">
+<div class="teacher-container">
+    <div class="mat-elevation-z8 teacher-sub_container">
         <mat-toolbar color="primary">
             <mat-toolbar-row>
-                <span>All Students</span>
+                <span>All Teachers</span>
                 <span class="spacer"></span>
                 <button
                     mat-mini-fab
@@ -15,33 +15,12 @@
             </mat-toolbar-row>
         </mat-toolbar>
 
-        <div class="student-table-container">
+        <div class="teacher-table-container">
             <table mat-table [dataSource]="dataSource">
-                <ng-container matColumnDef="regiNo">
-                    <th mat-header-cell *matHeaderCellDef>Regi No</th>
-                    <td mat-cell *matCellDef="let element">
-                        {{ element.regiNo }}
-                    </td>
-                </ng-container>
-
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef>Name</th>
                     <td mat-cell *matCellDef="let element">
                         {{ element.name }}
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="department">
-                    <th mat-header-cell *matHeaderCellDef>Department</th>
-                    <td mat-cell *matCellDef="let element">
-                        {{ element.department.code }}
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="email">
-                    <th mat-header-cell *matHeaderCellDef>Email</th>
-                    <td mat-cell *matCellDef="let element">
-                        {{ element.email }}
                     </td>
                 </ng-container>
 
@@ -52,6 +31,13 @@
                     </td>
                 </ng-container>
 
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef>Email</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.email }}
+                    </td>
+                </ng-container>
+
                 <ng-container matColumnDef="contactNo">
                     <th mat-header-cell *matHeaderCellDef>Contact No</th>
                     <td mat-cell *matCellDef="let element">
@@ -59,10 +45,17 @@
                     </td>
                 </ng-container>
 
-                <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef>Date</th>
+                <ng-container matColumnDef="designation">
+                    <th mat-header-cell *matHeaderCellDef>Designation</th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.date | date }}
+                        {{ element.designation.name }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="department">
+                    <th mat-header-cell *matHeaderCellDef>Department</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.department.code }}
                     </td>
                 </ng-container>
 
@@ -72,14 +65,14 @@
                         <button
                             mat-icon-button
                             color="primary"
-                            (click)="editStudent(element)"
+                            (click)="editTeacher(element)"
                         >
                             <mat-icon>edit</mat-icon>
                         </button>
                         <button
                             mat-icon-button
                             color="warn"
-                            (click)="deleteStudent(element)"
+                            (click)="deleteTeacher(element)"
                         >
                             <mat-icon>delete</mat-icon>
                         </button>

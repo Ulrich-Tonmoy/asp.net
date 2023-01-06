@@ -1,0 +1,49 @@
+<h1 mat-dialog-title>{{ formName }}</h1>
+<div mat-dialog-content>
+    <form [formGroup]="courseForm">
+        <mat-form-field hintLabel="Min 5 characters" appearance="fill">
+            <mat-label>Code</mat-label>
+            <input formControlName="code" matInput minlength="5" />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Full name</mat-label>
+            <input formControlName="name" matInput />
+        </mat-form-field>
+        <mat-form-field hintLabel="Range between 0.5 and 5" appearance="fill">
+            <mat-label>Credit</mat-label>
+            <input
+                formControlName="credit"
+                matInput
+                type="number"
+                min=".5"
+                max="5"
+            />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Description</mat-label>
+            <textarea formControlName="description" matInput></textarea>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Department</mat-label>
+            <mat-select disableRipple formControlName="departmentId">
+                <mat-option *ngFor="let data of deptData" [value]="data.id">
+                    {{ data.code }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Semester</mat-label>
+            <mat-select disableRipple formControlName="semesterId">
+                <mat-option *ngFor="let data of semesterData" [value]="data.id">
+                    {{ data.name }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+    <div mat-dialog-actions [align]="'end'">
+        <button mat-raised-button color="warn" mat-dialog-close>Close</button>
+        <button mat-raised-button color="primary" (click)="formAction()">
+            {{ actionButton }}
+        </button>
+    </div>
+</div>

@@ -21,6 +21,11 @@ import { StudentFormComponent } from './student/form/form.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { CourseComponent } from './course/course.component';
+import { CourseFormComponent } from './course/form/form.component';
+import { TeacherComponent } from './teacher/teacher.component';
+import { TeacherFormComponent } from './teacher/form/form.component';
+import { CourseAssignComponent } from './course-assign/course-assign.component';
 
 @NgModule({
     declarations: [
@@ -29,6 +34,11 @@ import { MatSelectModule } from '@angular/material/select';
         StudentComponent,
         DeptFormComponent,
         StudentFormComponent,
+        CourseComponent,
+        CourseFormComponent,
+        TeacherComponent,
+        TeacherFormComponent,
+        CourseAssignComponent,
     ],
     imports: [
         BrowserModule,

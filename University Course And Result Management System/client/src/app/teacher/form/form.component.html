@@ -1,13 +1,17 @@
 <h1 mat-dialog-title>{{ formName }}</h1>
 <div mat-dialog-content>
-    <form [formGroup]="studentForm">
-        <mat-form-field>
-            <mat-label>Registration No</mat-label>
-            <input formControlName="regiNo" matInput />
-        </mat-form-field>
+    <form [formGroup]="teacherForm">
         <mat-form-field>
             <mat-label>Full name</mat-label>
             <input formControlName="name" matInput />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Address</mat-label>
+            <textarea
+                formControlName="address"
+                matInput
+                placeholder="Ex. 100 Main St"
+            ></textarea>
         </mat-form-field>
         <mat-form-field class="example-full-width">
             <mat-label>Email</mat-label>
@@ -40,26 +44,12 @@
             />
         </mat-form-field>
         <mat-form-field appearance="fill">
-            <mat-label>Date</mat-label>
-            <input
-                matInput
-                [matDatepicker]="date"
-                [formControl]="currentDate"
-            />
-            <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle
-                matIconSuffix
-                [for]="date"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #date></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Address</mat-label>
-            <textarea
-                formControlName="address"
-                matInput
-                placeholder="Ex. 100 Main St"
-            ></textarea>
+            <mat-label>Designation</mat-label>
+            <mat-select disableRipple formControlName="designationId">
+                <mat-option *ngFor="let data of desData" [value]="data.id">
+                    {{ data.name }}
+                </mat-option>
+            </mat-select>
         </mat-form-field>
         <mat-form-field appearance="fill">
             <mat-label>Department</mat-label>
@@ -68,6 +58,10 @@
                     {{ data.code }}
                 </mat-option>
             </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Credit To Be Taken</mat-label>
+            <input type="number" formControlName="creditToBeTaken" matInput />
         </mat-form-field>
     </form>
     <div mat-dialog-actions [align]="'end'">

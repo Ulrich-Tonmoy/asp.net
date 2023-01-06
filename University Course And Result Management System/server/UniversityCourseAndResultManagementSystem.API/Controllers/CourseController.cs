@@ -44,6 +44,33 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
             }
         }
 
+
+        [HttpGet("dept/{id}")]
+        public async Task<IActionResult> GetByDept([FromQuery] CourseQueryParameters courseParam, Guid id)
+        {
+            try
+            {
+                PagedList<CourseResponseDto> courseResults = await _courseService.GetCourseByDeptAsync(id, courseParam);
+
+                var courseResultstsData = new
+                {
+                    courseResults.TotalCount,
+                    courseResults.PageSize,
+                    courseResults.CurrentPage,
+                    courseResults.TotalPages,
+                    courseResults.HasNext,
+                    courseResults.HasPrevious,
+                    data = courseResults
+                };
+
+                return Ok(courseResultstsData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
+        }
+
         [HttpGet("{id}", Name = "CourseById")]
         public async Task<IActionResult> Get(Guid id)
         {
@@ -119,7 +146,7 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
                     return NotFound();
                 }
 
-                return Ok(course);
+                return Ok(new { response = course });
             }
             catch (Exception ex)
             {

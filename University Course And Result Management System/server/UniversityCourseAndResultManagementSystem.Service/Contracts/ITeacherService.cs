@@ -7,6 +7,7 @@ namespace UniversityCourseAndResultManagementSystem.Service.Contracts
     public interface ITeacherService
     {
         Task<PagedList<TeacherResponseDto>> GetAllTeacherAsyncWithParam(TeacherQueryParameters teacherParam);
+        Task<PagedList<TeacherResponseDto>> GetTeacherByDeptAsync(Guid id, TeacherQueryParameters teacherParam);
         Task<TeacherResponseDto> GetTeacherByIdAsync(Guid id);
         Task<TeacherResponseDto> CreateTeacherAsync(TeacherCreateDto teacher);
         Task<TeacherResponseDto> UpdateTeacherAsync(TeacherUpdateDto teacher);

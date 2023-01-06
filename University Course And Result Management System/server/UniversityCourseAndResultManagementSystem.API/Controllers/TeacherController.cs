@@ -48,6 +48,32 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
             }
         }
 
+        [HttpGet("dept/{id}")]
+        public async Task<IActionResult> GetByDept([FromQuery] TeacherQueryParameters teacherParam, Guid id)
+        {
+            try
+            {
+                PagedList<TeacherResponseDto> teacherResults = await _teacherService.GetTeacherByDeptAsync(id, teacherParam);
+
+                var teacherResultstsData = new
+                {
+                    teacherResults.TotalCount,
+                    teacherResults.PageSize,
+                    teacherResults.CurrentPage,
+                    teacherResults.TotalPages,
+                    teacherResults.HasNext,
+                    teacherResults.HasPrevious,
+                    data = teacherResults
+                };
+
+                return Ok(teacherResultstsData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
+        }
+
 
         [HttpGet("{id}", Name = "TeacherById")]
         public async Task<IActionResult> Get(Guid id)
@@ -127,7 +153,7 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
                     return NotFound();
                 }
 
-                return Ok(teacher);
+                return Ok(new { response = teacher });
             }
             catch (Exception ex)
             {
