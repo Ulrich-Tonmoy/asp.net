@@ -39,6 +39,18 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<StudentResponseDto> CreateStudentAsync(StudentCreateDto student)
         {
+            int year = Convert.ToDateTime(student.Date).Year;
+            string dept = _unitOfWork.DepartmentRepository.GetByConditionNoTracking(s => s.Id.Equals(student.DepartmentId)).FirstOrDefault().Code.Split("-")[0];
+            int count = await CountStudentByDepartmentAsync(student.DepartmentId);
+            count += 1;
+            int length = count.ToString().Count();
+            string newCount;
+            if (length == 1) newCount = "00" + count;
+            else if (length == 2) newCount = "0" + count;
+            else newCount = count.ToString();
+
+            student.RegiNo = dept + "-" + year + "-" + newCount;
+
             Student studentModel = Mapping.Mapper.Map<Student>(student);
             await _unitOfWork.StudentRepository.AddAsync(studentModel);
             await _unitOfWork.SaveAsync();
@@ -87,9 +99,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<int> CountAllStudentAsync()
         {
-            int totalStudents = await _unitOfWork.StudentRepository.CountAllAsync();
-
-            return totalStudents;
+            return await _unitOfWork.StudentRepository.CountAllAsync();
         }
 
         public async Task<int> CountStudentByDepartmentAsync(Guid id)

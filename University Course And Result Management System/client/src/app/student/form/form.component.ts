@@ -42,7 +42,7 @@ export class StudentFormComponent {
 
     ngOnInit(): void {
         this.studentForm = this.formBuilder.group({
-            regiNo: ['', Validators.required],
+            regiNo: [''],
             name: ['', Validators.required],
             contactNo: ['', Validators.required],
             address: ['', Validators.required],

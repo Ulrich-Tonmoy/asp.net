@@ -33,7 +33,9 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<PagedList<CourseResponseDto>> GetCourseByDeptAsync(Guid id, CourseQueryParameters courseParam)
         {
-            IQueryable<Course> course = _unitOfWork.CourseRepository.GetByConditionNoTracking(c => c.DepartmentId.Equals(id)).Where(c => c.AssignedCourse.Equals(null));
+            IQueryable<Course> course = _unitOfWork.CourseRepository.GetByConditionNoTracking(c => c.DepartmentId.Equals(id)).Include(c => c.SemesterCourse);
+            if (courseParam.IsAssignedCheck) course = _unitOfWork.CourseRepository.GetByConditionNoTracking(c => c.DepartmentId.Equals(id)).Where(c => c.AssignedCourse.Equals(null));
+
             List<CourseResponseDto> courseDtos = Mapping.Mapper.Map<List<CourseResponseDto>>(course);
 
             var count = await CountCourseByDepartmentAsync(id);
@@ -54,8 +56,15 @@ namespace UniversityCourseAndResultManagementSystem.Service
         {
             Course courseModel = Mapping.Mapper.Map<Course>(course);
             await _unitOfWork.CourseRepository.AddAsync(courseModel);
-            await _unitOfWork.SaveAsync();
 
+            SemesterCourse semesterCourse = new SemesterCourse
+            {
+                SemesterId = course.SemesterId,
+                CourseId = courseModel.Id
+            };
+            await _unitOfWork.SemesterCourseRepository.AddAsync(semesterCourse);
+
+            await _unitOfWork.SaveAsync();
             CourseResponseDto courseResult = Mapping.Mapper.Map<CourseResponseDto>(courseModel);
 
             return courseResult;
@@ -72,6 +81,13 @@ namespace UniversityCourseAndResultManagementSystem.Service
             Mapping.Mapper.Map(course, courseEntity);
 
             await _unitOfWork.CourseRepository.Update(courseEntity);
+            SemesterCourse semesterCourse = new SemesterCourse
+            {
+                SemesterId = course.SemesterId,
+                CourseId = course.Id
+            };
+            await _unitOfWork.SemesterCourseRepository.Update(semesterCourse);
+
             await _unitOfWork.SaveAsync();
 
 

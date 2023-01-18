@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { CourseFormComponent } from './form/form.component';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-course',
@@ -21,10 +22,33 @@ export class CourseComponent {
     dataSource!: MatTableDataSource<any>;
     @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-    constructor(private http: HttpClient, public dialog: MatDialog) {}
+    deptForm!: FormGroup;
+    deptData!: any;
+
+    constructor(
+        private http: HttpClient,
+        private formBuilder: FormBuilder,
+        public dialog: MatDialog
+    ) {}
 
     ngOnInit(): void {
+        this.deptForm = this.formBuilder.group({
+            departmentId: ['', Validators.required],
+        });
         this.getCourse();
+        this.getDepartment();
+    }
+
+    getDepartment() {
+        this.http.get('https://localhost:7026/api/department').subscribe({
+            next: (data) => {
+                const newData: any = data;
+                this.deptData = newData.data;
+            },
+            error: (err) => {
+                console.log(err.error);
+            },
+        });
     }
 
     openDialog() {
@@ -49,7 +73,6 @@ export class CourseComponent {
         this.http.get('https://localhost:7026/api/course').subscribe({
             next: (data) => {
                 const newData: any = data;
-                console.log(newData.data);
 
                 this.dataSource = new MatTableDataSource(newData.data);
                 this.dataSource.paginator = this.paginator;
@@ -59,11 +82,27 @@ export class CourseComponent {
             },
         });
     }
+    getCourseByDept(id: any) {
+        this.http
+            .get('https://localhost:7026/api/course/dept/' + id)
+            .subscribe({
+                next: (data) => {
+                    const newData: any = data;
+                    console.log(newData.data);
+
+                    this.dataSource = new MatTableDataSource(newData.data);
+                    this.dataSource.paginator = this.paginator;
+                },
+                error: (err) => {
+                    console.log(err.error);
+                },
+            });
+    }
 
     deleteCourse(element: any) {
         if (confirm(`Do you want to delete department "${element.code}"`)) {
             this.http
-                .delete('https://localhost:7026/api/department/' + element.id)
+                .delete('https://localhost:7026/api/course/' + element.id)
                 .subscribe({
                     next: (data) => {
                         this.getCourse();

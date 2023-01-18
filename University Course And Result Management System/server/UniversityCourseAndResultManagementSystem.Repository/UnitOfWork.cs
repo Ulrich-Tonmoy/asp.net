@@ -14,7 +14,9 @@ namespace UniversityCourseAndResultManagementSystem.Repository
         public IEnrolledCourseRepository EnrolledCourseRepository { get; set; }
         public IRoomRepository RoomRepository { get; set; }
         public IScheduleRepository ScheduleRepository { get; set; }
+        public ISemesterCourseRepository SemesterCourseRepository { get; set; }
         public ISemesterRepository SemesterRepository { get; set; }
+        public IStudentEnrolledCourseRepository StudentEnrolledCourseRepository { get; set; }
         public IStudentRepository StudentRepository { get; set; }
         public ITeacherRepository TeacherRepository { get; set; }
 
@@ -27,7 +29,9 @@ namespace UniversityCourseAndResultManagementSystem.Repository
             IEnrolledCourseRepository enrolledCourseRepository,
             IRoomRepository roomRepository,
             IScheduleRepository scheduleRepository,
+            ISemesterCourseRepository semesterCourseRepository,
             ISemesterRepository semesterRepository,
+            IStudentEnrolledCourseRepository studentEnrolledCourseRepository,
             IStudentRepository studentRepository,
             ITeacherRepository teacherRepository
             )
@@ -40,7 +44,9 @@ namespace UniversityCourseAndResultManagementSystem.Repository
             EnrolledCourseRepository = enrolledCourseRepository;
             RoomRepository = roomRepository;
             ScheduleRepository = scheduleRepository;
+            SemesterCourseRepository = semesterCourseRepository;
             SemesterRepository = semesterRepository;
+            StudentEnrolledCourseRepository = studentEnrolledCourseRepository;
             StudentRepository = studentRepository;
             TeacherRepository = teacherRepository;
         }

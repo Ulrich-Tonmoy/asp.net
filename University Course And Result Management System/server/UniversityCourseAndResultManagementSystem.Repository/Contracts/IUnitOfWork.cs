@@ -11,7 +11,9 @@ namespace UniversityCourseAndResultManagementSystem.Repository.Contracts
         IEnrolledCourseRepository EnrolledCourseRepository { get; set; }
         IRoomRepository RoomRepository { get; set; }
         IScheduleRepository ScheduleRepository { get; set; }
+        ISemesterCourseRepository SemesterCourseRepository { get; set; }
         ISemesterRepository SemesterRepository { get; set; }
+        IStudentEnrolledCourseRepository StudentEnrolledCourseRepository { get; set; }
         IStudentRepository StudentRepository { get; set; }
         ITeacherRepository TeacherRepository { get; set; }
 

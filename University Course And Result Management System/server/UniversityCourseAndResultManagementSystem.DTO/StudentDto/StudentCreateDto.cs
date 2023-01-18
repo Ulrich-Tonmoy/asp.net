@@ -2,7 +2,7 @@
 {
     public class StudentCreateDto
     {
-        public string RegiNo { get; set; }
+        public string? RegiNo { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string ContactNo { get; set; }

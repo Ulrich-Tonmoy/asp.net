@@ -11,7 +11,7 @@ namespace UniversityCourseAndResultManagementSystem.DTO.CourseDto
         public string Description { get; set; }
         public Department Department { get; set; }
         public Guid DepartmentId { get; set; }
-        public List<Semester> Semesters { get; set; }
+        public List<SemesterCourse> SemesterCourse { get; set; }
         public List<Schedule> Schedules { get; set; }
         public AssignedCourse AssignedCourse { get; set; }
         public EnrolledCourse EnrolledCourse { get; set; }

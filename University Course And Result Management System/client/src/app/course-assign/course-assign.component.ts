@@ -76,15 +76,19 @@ export class CourseAssignComponent {
         this.getCourse(this.departmentId);
     }
     getCourse(e: any) {
-        this.http.get('https://localhost:7026/api/course/dept/' + e).subscribe({
-            next: (data) => {
-                const newData: any = data;
-                this.courseData = newData.data;
-            },
-            error: (err) => {
-                console.log(err.error);
-            },
-        });
+        this.http
+            .get(
+                `https://localhost:7026/api/course/dept/${e}?isAssignedCheck=true`
+            )
+            .subscribe({
+                next: (data) => {
+                    const newData: any = data;
+                    this.courseData = newData.data;
+                },
+                error: (err) => {
+                    console.log(err.error);
+                },
+            });
     }
     onChangeCourse(e: any) {
         const newData = this.courseData.map((data: any) => {

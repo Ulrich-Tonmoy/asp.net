@@ -8,5 +8,6 @@
         public float Credit { get; set; }
         public string Description { get; set; }
         public Guid DepartmentId { get; set; }
+        public Guid SemesterId { get; set; }
     }
 }

@@ -1,0 +1,62 @@
+<div class="form-container">
+    <div class="form-sub_container">
+        <h1 mat-dialog-title>Allocate Classroom</h1>
+        <form [formGroup]="courseAssignForm">
+            <mat-form-field appearance="fill">
+                <mat-label>Department</mat-label>
+                <mat-select
+                    (ngModelChange)="getCourse($event)"
+                    disableRipple
+                    formControlName="departmentId"
+                >
+                    <mat-option *ngFor="let data of deptData" [value]="data.id">
+                        {{ data.code }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Course</mat-label>
+                <mat-select disableRipple formControlName="courseId">
+                    <mat-option
+                        *ngFor="let data of courseData"
+                        [value]="data.id"
+                    >
+                        {{ data.code }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Room No</mat-label>
+                <mat-select disableRipple formControlName="courseId">
+                    <mat-option
+                        *ngFor="let data of courseData"
+                        [value]="data.id"
+                    >
+                        {{ data.code }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Day</mat-label>
+                <mat-select disableRipple formControlName="dayId">
+                    <mat-option *ngFor="let data of dayData" [value]="data.id">
+                        {{ data.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>From</mat-label>
+                <input formControlName="from" matInput type="time" />
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>To</mat-label>
+                <input formControlName="to" matInput type="time" />
+            </mat-form-field>
+        </form>
+        <div mat-dialog-actions [align]="'end'">
+            <button mat-raised-button color="primary" (click)="allocateRoom()">
+                Allocate
+            </button>
+        </div>
+    </div>
+</div>
