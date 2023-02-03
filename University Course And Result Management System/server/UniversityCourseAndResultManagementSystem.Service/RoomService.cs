@@ -1,6 +1,7 @@
 ﻿using UniversityCourseAndResultManagementSystem.Common;
 using UniversityCourseAndResultManagementSystem.Common.QueryParameters;
 using UniversityCourseAndResultManagementSystem.DTO.RoomDto;
+using UniversityCourseAndResultManagementSystem.Model;
 using UniversityCourseAndResultManagementSystem.Repository.Contracts;
 using UniversityCourseAndResultManagementSystem.Service.Contracts;
 
@@ -15,54 +16,55 @@ namespace UniversityCourseAndResultManagementSystem.Service
             _unitOfWork = unitOfWork;
         }
 
-        public Task<PagedList<RoomResponseDto>> GetAllRoomAsyncWithParam(RoomQueryParameters roomParam)
+        public async Task<PagedList<RoomResponseDto>> GetAllRoomAsyncWithParam(RoomQueryParameters roomParam)
+        {
+            IQueryable<Room> rooms = _unitOfWork.RoomRepository.GetAllNoTrackingWithParam(roomParam, x => x.OrderBy(s => s.Id));
+
+            List<RoomResponseDto> roomDtos = Mapping.Mapper.Map<List<RoomResponseDto>>(rooms);
+
+            var count = await CountAllRoomAsync();
+            PagedList<RoomResponseDto> roomResults = PagedList<RoomResponseDto>.ToPagedList(roomDtos, count, roomParam.PageNumber, roomParam.PageSize);
+
+            return roomResults;
+        }
+
+        public async Task<RoomResponseDto> GetRoomByIdAsync(Guid id)
+        {
+            Room room = _unitOfWork.RoomRepository.GetByConditionNoTracking(c => c.Id.Equals(id)).FirstOrDefault();
+            RoomResponseDto roomResult = Mapping.Mapper.Map<RoomResponseDto>(room);
+
+            return roomResult;
+        }
+
+        public async Task<RoomResponseDto> CreateRoomAsync(RoomCreateDto room)
+        {
+            Room roomModel = Mapping.Mapper.Map<Room>(room);
+            await _unitOfWork.RoomRepository.AddAsync(roomModel);
+
+            await _unitOfWork.SaveAsync();
+            RoomResponseDto roomResult = Mapping.Mapper.Map<RoomResponseDto>(roomModel);
+
+            return roomResult;
+        }
+
+        public async Task<RoomResponseDto> UpdateRoomAsync(RoomUpdateDto room)
         {
             throw new NotImplementedException();
         }
 
-        public Task<RoomResponseDto> GetRoomByIdAsync(Guid id)
+        public async Task<string> DeleteRoomAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<RoomResponseDto> CreateRoomAsync(RoomCreateDto room)
+        public async Task<bool> AnyRoomAsync(string roomNo)
         {
             throw new NotImplementedException();
         }
 
-        public Task<RoomResponseDto> UpdateRoomAsync(RoomUpdateDto room)
+        public async Task<int> CountAllRoomAsync()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> DeleteRoomAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> AnyRoomAsync(string roomNo)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> CountAllRoomAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<RoomResponseDto>> CreateRoomAsyncRange(List<RoomCreateDto> room)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<RoomResponseDto>> UpdateRoomAsyncRange(List<RoomUpdateDto> room)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> DeleteRoomAsyncRange(List<Guid> id)
-        {
-            throw new NotImplementedException();
+            return await _unitOfWork.RoomRepository.CountAllAsync();
         }
     }
 }

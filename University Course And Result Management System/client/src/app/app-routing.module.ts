@@ -6,16 +6,18 @@ import { CourseComponent } from './course/course.component';
 import { DepartmentComponent } from './department/department.component';
 import { StudentComponent } from './student/student.component';
 import { TeacherComponent } from './teacher/teacher.component';
+import { ScheduleComponent } from './schedule/schedule.component';
 
 const routes: Routes = [
     // { path: '', component: TeacherComponent },
-    { path: '', redirectTo: 'allocate-room', pathMatch: 'full' },
+    { path: '', redirectTo: 'schedule', pathMatch: 'full' },
     { path: 'department', component: DepartmentComponent },
     { path: 'student', component: StudentComponent },
     { path: 'teacher', component: TeacherComponent },
     { path: 'course', component: CourseComponent },
     { path: 'course-assign', component: CourseAssignComponent },
     { path: 'allocate-room', component: AllocateRoomComponent },
+    { path: 'schedule', component: ScheduleComponent },
 ];
 
 @NgModule({

@@ -1,6 +1,8 @@
-﻿using UniversityCourseAndResultManagementSystem.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using UniversityCourseAndResultManagementSystem.Common;
 using UniversityCourseAndResultManagementSystem.Common.QueryParameters;
 using UniversityCourseAndResultManagementSystem.DTO.ScheduleDto;
+using UniversityCourseAndResultManagementSystem.Model;
 using UniversityCourseAndResultManagementSystem.Repository.Contracts;
 using UniversityCourseAndResultManagementSystem.Service.Contracts;
 
@@ -15,54 +17,55 @@ namespace UniversityCourseAndResultManagementSystem.Service
             _unitOfWork = unitOfWork;
         }
 
-        public Task<PagedList<ScheduleResponseDto>> GetAllScheduleAsyncWithParam(ScheduleQueryParameters scheduleParam)
+        public async Task<PagedList<ScheduleResponseDto>> GetAllScheduleAsyncWithParam(ScheduleQueryParameters scheduleParam)
+        {
+            IQueryable<Schedule> schedules = _unitOfWork.ScheduleRepository.GetAllNoTrackingWithParam(scheduleParam, x => x.OrderBy(s => s.Id));
+
+            List<ScheduleResponseDto> scheduleDtos = Mapping.Mapper.Map<List<ScheduleResponseDto>>(schedules);
+
+            var count = await CountAllScheduleAsync();
+            PagedList<ScheduleResponseDto> scheduleResults = PagedList<ScheduleResponseDto>.ToPagedList(scheduleDtos, count, scheduleParam.PageNumber, scheduleParam.PageSize);
+
+            return scheduleResults;
+        }
+
+        public async Task<ScheduleResponseDto> GetScheduleByIdAsync(Guid id)
+        {
+            Schedule schedule = _unitOfWork.ScheduleRepository.GetByConditionNoTracking(c => c.Id.Equals(id)).FirstOrDefault();
+            ScheduleResponseDto scheduleResult = Mapping.Mapper.Map<ScheduleResponseDto>(schedule);
+
+            return scheduleResult;
+        }
+
+        public async Task<ScheduleResponseDto> CreateScheduleAsync(ScheduleCreateDto schedule)
+        {
+            Schedule scheduleModel = Mapping.Mapper.Map<Schedule>(schedule);
+            await _unitOfWork.ScheduleRepository.AddAsync(scheduleModel);
+
+            await _unitOfWork.SaveAsync();
+            ScheduleResponseDto scheduleResult = Mapping.Mapper.Map<ScheduleResponseDto>(scheduleModel);
+
+            return scheduleResult;
+        }
+
+        public async Task<ScheduleResponseDto> UpdateScheduleAsync(ScheduleUpdateDto schedule)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ScheduleResponseDto> GetScheduleByIdAsync(Guid id)
+        public async Task<string> DeleteScheduleAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ScheduleResponseDto> CreateScheduleAsync(ScheduleCreateDto schedule)
+        public async Task<bool> AnyScheduleAsync(Guid courseId, Guid roomId, string day, string from)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ScheduleResponseDto> UpdateScheduleAsync(ScheduleUpdateDto schedule)
+        public async Task<int> CountAllScheduleAsync()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> DeleteScheduleAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> AnyScheduleAsync(Guid courseId, Guid roomId, string day, string from)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> CountAllScheduleAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<ScheduleResponseDto>> CreateScheduleAsyncRange(List<ScheduleCreateDto> schedule)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<ScheduleResponseDto>> UpdateScheduleAsyncRange(List<ScheduleUpdateDto> schedule)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> DeleteScheduleAsyncRange(List<Guid> id)
-        {
-            throw new NotImplementedException();
+            return await _unitOfWork.ScheduleRepository.CountAllAsync();
         }
     }
 }

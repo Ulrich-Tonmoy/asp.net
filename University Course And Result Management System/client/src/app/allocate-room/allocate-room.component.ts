@@ -43,6 +43,7 @@ export class AllocateRoomComponent {
     ];
     deptData!: any;
     courseData!: any;
+    roomData!: any;
     show!: any;
 
     constructor(
@@ -55,7 +56,8 @@ export class AllocateRoomComponent {
         this.courseAssignForm = this.formBuilder.group({
             departmentId: ['', Validators.required],
             courseId: ['', Validators.required],
-            dayId: ['', Validators.required],
+            roomId: ['', Validators.required],
+            day: ['', Validators.required],
             from: ['', Validators.required],
             to: ['', Validators.required],
         });
@@ -91,22 +93,33 @@ export class AllocateRoomComponent {
             });
     }
 
+    getRoom() {
+        this.http.get(`https://localhost:7026/api/room`).subscribe({
+            next: (data) => {
+                const newData: any = data;
+                this.roomData = newData.data;
+            },
+            error: (err) => {
+                console.log(err.error);
+            },
+        });
+    }
+
     allocateRoom() {
-        // if (this.courseAssignForm.valid) {
-        //     this.http
-        //         .post(
-        //             'https://localhost:7026/api/assignedcourse',
-        //             this.courseAssignForm.value
-        //         )
-        //         .subscribe({
-        //             next: (data) => {
-        //                 this.router.navigate([`student`]);
-        //             },
-        //             error: (err) => {
-        //                 console.log(err);
-        //             },
-        //         });
-        // }
-        console.log(this.courseAssignForm.value);
+        if (this.courseAssignForm.valid) {
+            this.http
+                .post(
+                    'https://localhost:7026/api/schedule',
+                    this.courseAssignForm.value
+                )
+                .subscribe({
+                    next: (data) => {
+                        this.router.navigate([`/`]);
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    },
+                });
+        }
     }
 }

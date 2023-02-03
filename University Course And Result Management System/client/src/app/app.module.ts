@@ -27,6 +27,7 @@ import { TeacherComponent } from './teacher/teacher.component';
 import { TeacherFormComponent } from './teacher/form/form.component';
 import { CourseAssignComponent } from './course-assign/course-assign.component';
 import { AllocateRoomComponent } from './allocate-room/allocate-room.component';
+import { ScheduleComponent } from './schedule/schedule.component';
 
 @NgModule({
     declarations: [
@@ -41,6 +42,7 @@ import { AllocateRoomComponent } from './allocate-room/allocate-room.component';
         TeacherFormComponent,
         CourseAssignComponent,
         AllocateRoomComponent,
+        ScheduleComponent,
     ],
     imports: [
         BrowserModule,

@@ -21,7 +21,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<PagedList<CourseResponseDto>> GetAllCourseAsyncWithParam(CourseQueryParameters courseParam)
         {
-            IQueryable<Course> courses = _unitOfWork.CourseRepository.GetAllNoTrackingWithParam(courseParam, x => x.OrderBy(c => c.Id)).Include(c => c.Department).Include(c => c.SemesterCourse).ThenInclude(s => s.Semester).Include(c => c.AssignedCourse).ThenInclude(t => t.Teacher);
+            IQueryable<Course> courses = _unitOfWork.CourseRepository.GetAllNoTrackingWithParam(courseParam, x => x.OrderBy(c => c.Id)).Include(c => c.Department).Include(c => c.SemesterCourse).ThenInclude(s => s.Semester).Include(c => c.AssignedCourse).ThenInclude(t => t.Teacher).Include(c => c.Schedules);
 
             List<CourseResponseDto> courseDtos = Mapping.Mapper.Map<List<CourseResponseDto>>(courses);
 

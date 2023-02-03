@@ -16,7 +16,11 @@
             </mat-form-field>
             <mat-form-field appearance="fill">
                 <mat-label>Course</mat-label>
-                <mat-select disableRipple formControlName="courseId">
+                <mat-select
+                    (ngModelChange)="getRoom()"
+                    disableRipple
+                    formControlName="courseId"
+                >
                     <mat-option
                         *ngFor="let data of courseData"
                         [value]="data.id"
@@ -27,18 +31,15 @@
             </mat-form-field>
             <mat-form-field appearance="fill">
                 <mat-label>Room No</mat-label>
-                <mat-select disableRipple formControlName="courseId">
-                    <mat-option
-                        *ngFor="let data of courseData"
-                        [value]="data.id"
-                    >
-                        {{ data.code }}
+                <mat-select disableRipple formControlName="roomId">
+                    <mat-option *ngFor="let data of roomData" [value]="data.id">
+                        {{ data.roomNo }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field appearance="fill">
                 <mat-label>Day</mat-label>
-                <mat-select disableRipple formControlName="dayId">
+                <mat-select disableRipple formControlName="day">
                     <mat-option *ngFor="let data of dayData" [value]="data.id">
                         {{ data.name }}
                     </mat-option>
