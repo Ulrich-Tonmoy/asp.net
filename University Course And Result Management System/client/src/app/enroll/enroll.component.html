@@ -1,0 +1,68 @@
+<div class="form-container">
+    <div class="form-sub_container">
+        <h1 mat-dialog-title>{{ formName }}</h1>
+        <form [formGroup]="courseEnrollForm">
+            <mat-form-field appearance="fill">
+                <mat-label>Student Regi No</mat-label>
+                <mat-select
+                    (ngModelChange)="onChangeStudent($event)"
+                    disableRipple
+                    formControlName="studentId"
+                >
+                    <mat-option
+                        *ngFor="let data of studentsData"
+                        [value]="data.id"
+                    >
+                        {{ data?.regiNo }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Name</mat-label>
+                <input [value]="studentData?.name" readonly matInput />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Email</mat-label>
+                <input [value]="studentData?.email" readonly matInput />
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Dept</mat-label>
+                <input
+                    [value]="studentData?.department?.name"
+                    readonly
+                    matInput
+                />
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Course</mat-label>
+                <mat-select disableRipple formControlName="courseId">
+                    <mat-option
+                        *ngFor="let data of courseData"
+                        [value]="data.id"
+                    >
+                        {{ data.name }}
+                    </mat-option>
+                </mat-select> </mat-form-field
+            ><mat-form-field appearance="fill">
+                <mat-label>Date</mat-label>
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <input
+                    matInput
+                    [matDatepicker]="date"
+                    formControlName="studentId"
+                    [formControl]="currentDate"
+                />
+                <mat-datepicker-toggle
+                    matIconSuffix
+                    [for]="date"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #date></mat-datepicker>
+            </mat-form-field>
+        </form>
+        <div mat-dialog-actions [align]="'end'">
+            <button mat-raised-button color="primary" (click)="enrollCourse()">
+                {{ actionButton }}
+            </button>
+        </div>
+    </div>
+</div>

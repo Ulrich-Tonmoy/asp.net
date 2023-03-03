@@ -1,0 +1,32 @@
+mat-form-field {
+    width: 100%;
+    padding: 1px 15px;
+}
+
+.form-container {
+    width: 100vw;
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-sub_container {
+    padding: 15px 5px;
+    width: 500px;
+    max-height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 25px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    -ms-border-radius: 25px;
+    -o-border-radius: 25px;
+}
+
+button {
+    margin: 5px 15px;
+}

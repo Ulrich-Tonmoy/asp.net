@@ -31,7 +31,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<StudentResponseDto> GetStudentByIdAsync(Guid id)
         {
-            Student student = _unitOfWork.StudentRepository.GetByConditionNoTracking(s => s.Id.Equals(id)).FirstOrDefault();
+            Student student = _unitOfWork.StudentRepository.GetByConditionNoTracking(s => s.Id.Equals(id)).Include(d=>d.Department).FirstOrDefault();
             StudentResponseDto studentResult = Mapping.Mapper.Map<StudentResponseDto>(student);
 
             return studentResult;

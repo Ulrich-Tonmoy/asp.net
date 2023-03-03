@@ -1,6 +1,8 @@
-﻿using UniversityCourseAndResultManagementSystem.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using UniversityCourseAndResultManagementSystem.Common;
 using UniversityCourseAndResultManagementSystem.Common.QueryParameters;
 using UniversityCourseAndResultManagementSystem.DTO.EnrolledCourseDto;
+using UniversityCourseAndResultManagementSystem.Model;
 using UniversityCourseAndResultManagementSystem.Repository.Contracts;
 using UniversityCourseAndResultManagementSystem.Service.Contracts;
 
@@ -15,54 +17,60 @@ namespace UniversityCourseAndResultManagementSystem.Service
             _unitOfWork = unitOfWork;
         }
 
-        public Task<PagedList<EnrolledCourseResponseDto>> GetAllEnrolledCourseAsyncWithParam(EnrolledCourseQueryParameters enrolledCourseParam)
+        public async Task<PagedList<EnrolledCourseResponseDto>> GetAllEnrolledCourseAsyncWithParam(EnrolledCourseQueryParameters enrolledCourseParam)
+        {
+            IQueryable<EnrolledCourse> enrolledCourses = _unitOfWork.EnrolledCourseRepository.GetAllNoTrackingWithParam(enrolledCourseParam, x => x.OrderBy(a => a.Id)).Include(c => c.Course);
+
+            List<EnrolledCourseResponseDto> enrolledCourseDtos = Mapping.Mapper.Map<List<EnrolledCourseResponseDto>>(enrolledCourses);
+
+            var count = await CountAllEnrolledCourseAsync();
+            PagedList<EnrolledCourseResponseDto> enrolledCourseResults = PagedList<EnrolledCourseResponseDto>.ToPagedList(enrolledCourseDtos, count, enrolledCourseParam.PageNumber, enrolledCourseParam.PageSize);
+
+            return enrolledCourseResults;
+        }
+
+        public async Task<EnrolledCourseResponseDto> GetEnrolledCourseByIdAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<EnrolledCourseResponseDto> GetEnrolledCourseByIdAsync(Guid id)
+        public async Task<EnrolledCourseResponseDto> CreateEnrolledCourseAsync(EnrolledCourseCreateDto enrolledCourse)
+        {
+            EnrolledCourse enrolledCourseModel = Mapping.Mapper.Map<EnrolledCourse>(enrolledCourse);
+            await _unitOfWork.EnrolledCourseRepository.AddAsync(enrolledCourseModel);
+
+            StudentEnrolledCourse _studentEnrolledCourse = new StudentEnrolledCourse
+            {
+                EnrolledCourseId = enrolledCourseModel.Id,
+                StudentId = enrolledCourse.StudentId
+            };
+            await _unitOfWork.StudentEnrolledCourseRepository.AddAsync(_studentEnrolledCourse);
+
+            await _unitOfWork.SaveAsync();
+
+            EnrolledCourseResponseDto enrolledCourseResult = Mapping.Mapper.Map<EnrolledCourseResponseDto>(enrolledCourseModel);
+
+            return enrolledCourseResult;
+        }
+
+        public async Task<EnrolledCourseResponseDto> UpdateEnrolledCourseAsync(EnrolledCourseUpdateDto enrolledCourse)
         {
             throw new NotImplementedException();
         }
 
-        public Task<EnrolledCourseResponseDto> CreateEnrolledCourseAsync(EnrolledCourseCreateDto enrolledCourse)
+        public async Task<string> DeleteEnrolledCourseAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<EnrolledCourseResponseDto> UpdateEnrolledCourseAsync(EnrolledCourseUpdateDto enrolledCourse)
+        public async Task<bool> AnyEnrolledCourseAsync(Guid courseId, Guid studentId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<string> DeleteEnrolledCourseAsync(Guid id)
+        public async Task<int> CountAllEnrolledCourseAsync()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> AnyEnrolledCourseAsync(Guid courseId, Guid studentId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> CountAllEnrolledCourseAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<EnrolledCourseResponseDto>> CreateEnrolledCourseAsyncRange(List<EnrolledCourseCreateDto> enrolledCourse)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<EnrolledCourseResponseDto>> UpdateEnrolledCourseAsyncRange(List<EnrolledCourseUpdateDto> enrolledCourse)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> DeleteEnrolledCourseAsyncRange(List<Guid> id)
-        {
-            throw new NotImplementedException();
+            return await _unitOfWork.EnrolledCourseRepository.CountAllAsync();
         }
     }
 }

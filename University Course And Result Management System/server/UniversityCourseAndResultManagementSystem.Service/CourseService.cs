@@ -33,7 +33,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<PagedList<CourseResponseDto>> GetCourseByDeptAsync(Guid id, CourseQueryParameters courseParam)
         {
-            IQueryable<Course> course = _unitOfWork.CourseRepository.GetByConditionNoTracking(c => c.DepartmentId.Equals(id)).Include(c => c.SemesterCourse);
+            IQueryable<Course> course = _unitOfWork.CourseRepository.GetByConditionNoTracking(c => c.DepartmentId.Equals(id)).Include(c => c.Department).Include(c => c.SemesterCourse).ThenInclude(s => s.Semester).Include(c => c.AssignedCourse).ThenInclude(t => t.Teacher).Include(c => c.Schedules).ThenInclude(r => r.Room);
             if (courseParam.IsAssignedCheck) course = _unitOfWork.CourseRepository.GetByConditionNoTracking(c => c.DepartmentId.Equals(id)).Where(c => c.AssignedCourse.Equals(null));
 
             List<CourseResponseDto> courseDtos = Mapping.Mapper.Map<List<CourseResponseDto>>(course);
