@@ -1,0 +1,31 @@
+.course-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.course-sub_container {
+    padding: 15px 5px;
+    width: 500px;
+    max-height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 25px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    -ms-border-radius: 25px;
+    -o-border-radius: 25px;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.course-table-container {
+    width: 100%;
+    overflow: auto;
+}

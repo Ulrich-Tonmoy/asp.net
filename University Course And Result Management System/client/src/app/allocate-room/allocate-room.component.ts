@@ -80,12 +80,13 @@ export class AllocateRoomComponent {
     getCourse(e: any) {
         this.http
             .get(
-                `https://localhost:7026/api/course/dept/${e}?isAssignedCheck=true`
+                `https://localhost:7026/api/course/dept/${e}?isAssignedCheck=false`
             )
             .subscribe({
                 next: (data) => {
                     const newData: any = data;
                     this.courseData = newData.data;
+                    console.log(data);
                 },
                 error: (err) => {
                     console.log(err.error);

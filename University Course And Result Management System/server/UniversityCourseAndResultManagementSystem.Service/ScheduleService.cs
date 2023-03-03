@@ -19,7 +19,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<PagedList<ScheduleResponseDto>> GetAllScheduleAsyncWithParam(ScheduleQueryParameters scheduleParam)
         {
-            IQueryable<Schedule> schedules = _unitOfWork.ScheduleRepository.GetAllNoTrackingWithParam(scheduleParam, x => x.OrderBy(s => s.Id));
+            IQueryable<Schedule> schedules = _unitOfWork.ScheduleRepository.GetAllNoTrackingWithParam(scheduleParam, x => x.OrderBy(s => s.Id)).Include(c=>c.Course).Include(r=>r.Room);
 
             List<ScheduleResponseDto> scheduleDtos = Mapping.Mapper.Map<List<ScheduleResponseDto>>(schedules);
 

@@ -1,1 +1,74 @@
-<p>schedule works!</p>
+<div class="course-container">
+    <div class="mat-elevation-z8 course-sub_container">
+        <mat-toolbar color="primary">
+            <mat-toolbar-row>
+                <span>All Schedule</span>
+                <span class="spacer"></span>
+            </mat-toolbar-row>
+        </mat-toolbar>
+        <form [formGroup]="deptForm">
+            <mat-form-field appearance="fill">
+                <mat-label>Department</mat-label>
+                <mat-select
+                    (ngModelChange)="getCourseByDept($event)"
+                    disableRipple
+                    formControlName="departmentId"
+                >
+                    <mat-option
+                        *ngFor="let data of deptData"
+                        [value]="data?.id"
+                    >
+                        {{ data?.code }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
+        <div class="course-table-container">
+            <table mat-table [dataSource]="dataSource">
+                <!-- Code Column -->
+                <ng-container matColumnDef="code">
+                    <th mat-header-cell *matHeaderCellDef>Course Code</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element?.code }}
+                    </td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>Name</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element?.name }}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="schedule">
+                    <th mat-header-cell *matHeaderCellDef>Schedule Info</th>
+                    <td mat-cell *matCellDef="let element">
+                        <p *ngIf="element?.schedules?.length > 0; else not">
+                            R. No: {{ element?.schedules[0]?.room?.roomNo }},
+                            {{ element?.schedules[0]?.day }},
+                            {{ tConv24(element?.schedules[0]?.from) }} -
+                            {{ tConv24(element?.schedules[0]?.to) }} <br />
+                            R. No: {{ element?.schedules[1]?.room?.roomNo }},
+                            {{ element?.schedules[1]?.day }},
+                            {{ tConv24(element?.schedules[1]?.from) }} -
+                            {{ tConv24(element?.schedules[1]?.to) }}
+                        </p>
+                        <ng-template #not> Not Scheduled Yet </ng-template>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumns"
+                ></tr>
+            </table>
+        </div>
+        <mat-paginator
+            [pageSizeOptions]="[5, 10, 20, 50, 100]"
+            showFirstLastButtons
+            aria-label="Select page of periodic elements"
+        >
+        </mat-paginator>
+    </div>
+</div>
