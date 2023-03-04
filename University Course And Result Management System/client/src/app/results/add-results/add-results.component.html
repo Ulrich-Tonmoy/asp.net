@@ -1,0 +1,55 @@
+<h1 mat-dialog-title>{{ formName }}</h1>
+<div mat-dialog-content>
+    <form [formGroup]="gradeForm">
+        <mat-form-field appearance="fill">
+            <mat-label>Student Regi No</mat-label>
+            <mat-select
+                (ngModelChange)="onChangeStudent($event)"
+                disableRipple
+                formControlName="studentId"
+            >
+                <mat-option *ngFor="let data of studentsData" [value]="data.id">
+                    {{ data?.regiNo }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input [value]="studentData?.name" readonly matInput />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input [value]="studentData?.email" readonly matInput />
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Dept</mat-label>
+            <input [value]="studentData?.department?.name" readonly matInput />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Course</mat-label>
+            <mat-select
+                (ngModelChange)="onCourseChange($event)"
+                disableRipple
+                formControlName="courseId"
+            >
+                <mat-option *ngFor="let data of course" [value]="data.id">
+                    {{ data?.code }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Grade</mat-label>
+            <mat-select disableRipple formControlName="grade">
+                <mat-option *ngFor="let data of grade" [value]="data">
+                    {{ data }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+    <div mat-dialog-actions [align]="'end'">
+        <button mat-raised-button color="warn" mat-dialog-close>Close</button>
+        <button mat-raised-button color="primary" (click)="updateCourse()">
+            {{ actionButton }}
+        </button>
+    </div>
+</div>

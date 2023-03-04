@@ -13,6 +13,6 @@ namespace UniversityCourseAndResultManagementSystem.DTO.StudentDto
         public string Address { get; set; }
         public Department Department { get; set; }
         public Guid DepartmentId { get; set; }
-        public List<EnrolledCourse> EnrolledCourses { get; set; }
+        public List<StudentEnrolledCourse> StudentEnrolledCourse { get; set; }
     }
 }

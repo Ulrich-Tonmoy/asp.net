@@ -29,6 +29,8 @@ import { CourseAssignComponent } from './course-assign/course-assign.component';
 import { AllocateRoomComponent } from './allocate-room/allocate-room.component';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { EnrollComponent } from './enroll/enroll.component';
+import { ResultsComponent } from './results/results.component';
+import { AddResultsComponent } from './results/add-results/add-results.component';
 
 @NgModule({
     declarations: [
@@ -45,6 +47,8 @@ import { EnrollComponent } from './enroll/enroll.component';
         AllocateRoomComponent,
         ScheduleComponent,
         EnrollComponent,
+        ResultsComponent,
+        AddResultsComponent,
     ],
     imports: [
         BrowserModule,

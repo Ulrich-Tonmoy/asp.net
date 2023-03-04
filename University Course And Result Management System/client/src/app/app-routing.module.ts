@@ -8,6 +8,7 @@ import { StudentComponent } from './student/student.component';
 import { TeacherComponent } from './teacher/teacher.component';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { EnrollComponent } from './enroll/enroll.component';
+import { ResultsComponent } from './results/results.component';
 
 const routes: Routes = [
     // { path: '', component: TeacherComponent },
@@ -20,6 +21,7 @@ const routes: Routes = [
     { path: 'allocate-room', component: AllocateRoomComponent },
     { path: 'schedule', component: ScheduleComponent },
     { path: 'enroll', component: EnrollComponent },
+    { path: 'results', component: ResultsComponent },
 ];
 
 @NgModule({

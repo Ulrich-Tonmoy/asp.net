@@ -1,0 +1,91 @@
+<div class="dept-container">
+    <div class="mat-elevation-z8 dept-table-container">
+        <mat-toolbar color="primary">
+            <mat-toolbar-row>
+                <span>Results</span>
+                <span class="spacer"></span>
+                <button
+                    mat-mini-fab
+                    matTooltip="Create new Department"
+                    color="accent"
+                    (click)="openDialog()"
+                >
+                    <mat-icon>add</mat-icon>
+                </button>
+            </mat-toolbar-row>
+        </mat-toolbar>
+        <div>
+            <form class="form-container" [formGroup]="stdForm">
+                <mat-form-field appearance="fill">
+                    <mat-label>Student Regi No</mat-label>
+                    <mat-select
+                        (ngModelChange)="onChangeStudent($event)"
+                        disableRipple
+                        formControlName="studentId"
+                    >
+                        <mat-option
+                            *ngFor="let data of studentsData"
+                            [value]="data.id"
+                        >
+                            {{ data?.regiNo }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input [value]="studentData?.name" readonly matInput />
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Email</mat-label>
+                    <input [value]="studentData?.email" readonly matInput />
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Dept</mat-label>
+                    <input
+                        [value]="studentData?.department?.name"
+                        readonly
+                        matInput
+                    />
+                </mat-form-field>
+            </form>
+        </div>
+        <table mat-table [dataSource]="dataSource">
+            <!-- Code Column -->
+            <ng-container matColumnDef="code">
+                <th mat-header-cell *matHeaderCellDef>Course Code</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.enrolledCourse.course.code }}
+                </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.enrolledCourse.course.name }}
+                </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="grade">
+                <th mat-header-cell *matHeaderCellDef>Grade</th>
+                <td mat-cell *matCellDef="let element">
+                    <p *ngIf="element?.enrolledCourse?.grade; else not">
+                        {{ element.enrolledCourse.grade }}
+                    </p>
+                    <ng-template #not> Not Graded Yet </ng-template>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <mat-paginator
+            [pageSizeOptions]="[5, 10, 20, 50, 100]"
+            showFirstLastButtons
+            aria-label="Select page of periodic elements"
+        >
+        </mat-paginator>
+    </div>
+</div>

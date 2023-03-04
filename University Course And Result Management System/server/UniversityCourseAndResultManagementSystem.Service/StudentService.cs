@@ -19,7 +19,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<PagedList<StudentResponseDto>> GetAllStudentAsyncWithParam(StudentQueryParameters studentParam)
         {
-            IQueryable<Student> students = _unitOfWork.StudentRepository.GetAllNoTrackingWithParam(studentParam, x => x.OrderBy(s => s.Id)).Include(s => s.Department);
+            IQueryable<Student> students = _unitOfWork.StudentRepository.GetAllNoTrackingWithParam(studentParam, x => x.OrderBy(s => s.Id)).Include(s => s.Department).Include(e => e.StudentEnrolledCourse).ThenInclude(e => e.EnrolledCourse).ThenInclude(c=>c.Course);
 
             List<StudentResponseDto> studentDtos = Mapping.Mapper.Map<List<StudentResponseDto>>(students);
 
@@ -31,7 +31,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<StudentResponseDto> GetStudentByIdAsync(Guid id)
         {
-            Student student = _unitOfWork.StudentRepository.GetByConditionNoTracking(s => s.Id.Equals(id)).Include(d=>d.Department).FirstOrDefault();
+            Student student = _unitOfWork.StudentRepository.GetByConditionNoTracking(s => s.Id.Equals(id)).Include(d=>d.Department).Include(e=>e.StudentEnrolledCourse).ThenInclude(e=>e.EnrolledCourse).ThenInclude(c => c.Course).FirstOrDefault();
             StudentResponseDto studentResult = Mapping.Mapper.Map<StudentResponseDto>(student);
 
             return studentResult;

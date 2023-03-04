@@ -2,6 +2,7 @@
 using UniversityCourseAndResultManagementSystem.Common;
 using UniversityCourseAndResultManagementSystem.Common.QueryParameters;
 using UniversityCourseAndResultManagementSystem.DTO.EnrolledCourseDto;
+using UniversityCourseAndResultManagementSystem.DTO.StudentDto;
 using UniversityCourseAndResultManagementSystem.Model;
 using UniversityCourseAndResultManagementSystem.Repository.Contracts;
 using UniversityCourseAndResultManagementSystem.Service.Contracts;
@@ -55,7 +56,20 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<EnrolledCourseResponseDto> UpdateEnrolledCourseAsync(EnrolledCourseUpdateDto enrolledCourse)
         {
-            throw new NotImplementedException();
+            EnrolledCourse enrolledCourseEntity = _unitOfWork.EnrolledCourseRepository.GetByConditionNoTracking(s => s.Id.Equals(enrolledCourse.Id)).FirstOrDefault();
+            if (enrolledCourseEntity == null)
+            {
+                return null;
+            }
+
+            Mapping.Mapper.Map(enrolledCourse, enrolledCourseEntity);
+
+            await _unitOfWork.EnrolledCourseRepository.Update(enrolledCourseEntity);
+            await _unitOfWork.SaveAsync();
+
+            EnrolledCourseResponseDto enrolledCourseResult = Mapping.Mapper.Map<EnrolledCourseResponseDto>(enrolledCourseEntity);
+
+            return enrolledCourseResult;
         }
 
         public async Task<string> DeleteEnrolledCourseAsync(Guid id)

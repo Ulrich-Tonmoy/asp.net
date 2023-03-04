@@ -9,7 +9,6 @@ namespace UniversityCourseAndResultManagementSystem.Common.Validators
         {
             RuleFor(e => e.CourseId).NotEmpty();
             RuleFor(e => e.Date).NotEmpty();
-            RuleFor(e => e.Grade).Null();
         }
     }
 }
