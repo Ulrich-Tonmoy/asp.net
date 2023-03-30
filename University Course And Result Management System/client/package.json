@@ -20,6 +20,9 @@
     "@angular/platform-browser": "^15.0.0",
     "@angular/platform-browser-dynamic": "^15.0.0",
     "@angular/router": "^15.0.0",
+    "html-to-pdfmake": "^2.4.16",
+    "jspdf": "^2.5.1",
+    "pdfmake": "^0.2.7",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
@@ -28,6 +31,7 @@
     "@angular-devkit/build-angular": "^15.0.3",
     "@angular/cli": "~15.0.3",
     "@angular/compiler-cli": "^15.0.0",
+    "@types/html-to-pdfmake": "^2.4.0",
     "@types/jasmine": "~4.3.0",
     "jasmine-core": "~4.5.0",
     "karma": "~6.4.0",
