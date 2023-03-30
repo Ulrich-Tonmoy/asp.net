@@ -1,4 +1,4 @@
-<div class="dept-container">
+<div class="dept-container" id="pdfTable" #pdfTable="">
     <div class="mat-elevation-z8 dept-table-container">
         <mat-toolbar color="primary">
             <mat-toolbar-row>
@@ -49,6 +49,7 @@
                 </mat-form-field>
             </form>
         </div>
+        <button (click)="exportPDF()">Make PDF</button>
         <table mat-table [dataSource]="dataSource">
             <!-- Code Column -->
             <ng-container matColumnDef="code">
