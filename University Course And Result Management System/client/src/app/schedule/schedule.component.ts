@@ -76,11 +76,11 @@ export class ScheduleComponent {
 
     tConv24(time24: any) {
         let ts = time24;
-        let H = +ts.substr(0, 2);
+        let H = +ts?.substr(0, 2);
         let h = H % 12 || 12;
         h = Number(h < 10 ? '0' + h : h); // leading 0 at the left for 1 digit hours
         let ampm = H < 12 ? ' AM' : ' PM';
-        ts = h + ts.substr(2, 3) + ampm;
+        ts = h + ts?.substr(2, 3) + ampm;
         return ts;
     }
 }

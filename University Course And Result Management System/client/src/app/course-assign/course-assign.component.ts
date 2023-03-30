@@ -66,12 +66,13 @@ export class CourseAssignComponent {
             });
     }
     onChangeTeacher(e: any) {
-        const tData = this.teacherData.map((t: any) => {
-            if (t.id === e) return t;
+        let tData: any;
+        this.teacherData.map((t: any) => {
+            if (t.id === e) tData = t;
         });
 
-        this.creditToBeTaken = tData[0].creditToBeTaken;
-        this.remainingCredit = tData[0].creditToBeTaken - tData[0].creditTaken;
+        this.creditToBeTaken = tData.creditToBeTaken;
+        this.remainingCredit = tData.creditToBeTaken - tData.creditTaken;
 
         this.getCourse(this.departmentId);
     }
