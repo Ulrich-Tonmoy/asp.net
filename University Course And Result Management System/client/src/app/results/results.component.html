@@ -34,10 +34,12 @@
                 <mat-form-field>
                     <mat-label>Name</mat-label>
                     <input [value]="studentData?.name" readonly matInput />
+                    <h5>{{ studentData?.name }}</h5>
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>Email</mat-label>
                     <input [value]="studentData?.email" readonly matInput />
+                    <h5>{{ studentData?.email }}</h5>
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>Dept</mat-label>
@@ -46,6 +48,7 @@
                         readonly
                         matInput
                     />
+                    <h5>{{ studentData?.department?.name }}</h5>
                 </mat-form-field>
             </form>
         </div>
@@ -71,8 +74,8 @@
             <ng-container matColumnDef="grade">
                 <th mat-header-cell *matHeaderCellDef>Grade</th>
                 <td mat-cell *matCellDef="let element">
-                    <p *ngIf="element?.enrolledCourse?.grade; else not">
-                        {{ element.enrolledCourse.grade }}
+                    <p *ngIf="element?.grade; else not">
+                        {{ element.grade }}
                     </p>
                     <ng-template #not> Not Graded Yet </ng-template>
                 </td>
