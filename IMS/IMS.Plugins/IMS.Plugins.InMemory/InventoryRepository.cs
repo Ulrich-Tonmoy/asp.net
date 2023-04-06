@@ -1,5 +1,5 @@
-﻿using IMS.CoreBusiness;
-using IMS.UseCases.Contracts;
+﻿using IMS.Data;
+using IMS.Service.Contracts;
 
 namespace IMS.Plugins.InMemory
 {

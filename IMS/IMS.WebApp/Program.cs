@@ -1,18 +1,16 @@
 using IMS.Plugins.InMemory;
-using IMS.UseCases.Contracts;
-using IMS.UseCases.Inventories;
-using IMS.UseCases.Inventories.Contracts;
-using IMS.WebApp.Data;
+using IMS.Service.Contracts;
+using IMS.Service.Inventories;
+using IMS.Service.Inventories.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
 
 builder.Services.AddSingleton<IInventoryRepository, InventoryRepository>();
-builder.Services.AddTransient<IViewInventoriesByNameUseCase, ViewInventoriesByNameUseCase>();
+builder.Services.AddTransient<IViewInventoriesByNameUseCase, ViewInventoriesByNameService>();
 
 var app = builder.Build();
 

@@ -1,6 +1,6 @@
-﻿using IMS.CoreBusiness;
+﻿using IMS.Data;
 
-namespace IMS.UseCases.Inventories.Contracts
+namespace IMS.Service.Inventories.Contracts
 {
     public interface IViewInventoriesByNameUseCase
     {

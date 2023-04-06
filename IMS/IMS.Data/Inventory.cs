@@ -1,4 +1,4 @@
-﻿namespace IMS.CoreBusiness
+﻿namespace IMS.Data
 {
     public class Inventory
     {

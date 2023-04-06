@@ -1,14 +1,14 @@
-﻿using IMS.CoreBusiness;
-using IMS.UseCases.Contracts;
-using IMS.UseCases.Inventories.Contracts;
+﻿using IMS.Data;
+using IMS.Service.Contracts;
+using IMS.Service.Inventories.Contracts;
 
-namespace IMS.UseCases.Inventories
+namespace IMS.Service.Inventories
 {
-    public class ViewInventoriesByNameUseCase : IViewInventoriesByNameUseCase
+    public class ViewInventoriesByNameService : IViewInventoriesByNameUseCase
     {
         private readonly IInventoryRepository inventoryRepository;
 
-        public ViewInventoriesByNameUseCase(IInventoryRepository inventoryRepository)
+        public ViewInventoriesByNameService(IInventoryRepository inventoryRepository)
         {
             this.inventoryRepository = inventoryRepository;
         }

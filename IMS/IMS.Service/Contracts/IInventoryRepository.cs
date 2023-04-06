@@ -1,6 +1,6 @@
-﻿using IMS.CoreBusiness;
+﻿using IMS.Data;
 
-namespace IMS.UseCases.Contracts
+namespace IMS.Service.Contracts
 {
     public interface IInventoryRepository
     {
