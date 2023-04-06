@@ -10,7 +10,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
 builder.Services.AddSingleton<IInventoryRepository, InventoryRepository>();
-builder.Services.AddTransient<IViewInventoriesByNameUseCase, ViewInventoriesByNameService>();
+builder.Services.AddTransient<IInventoryService, InventoryService>();
 
 var app = builder.Build();
 

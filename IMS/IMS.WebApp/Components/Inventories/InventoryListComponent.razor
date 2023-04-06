@@ -1,4 +1,4 @@
-﻿@inject IViewInventoriesByNameUseCase ViewInventoriesByNameUseCase
+﻿@inject IInventoryService InventoryeService
 
 <table class="table">
     <thead>
@@ -21,6 +21,6 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        inventories = (await ViewInventoriesByNameUseCase.ExecuteAsync(SearchTerm)).ToList();
+        inventories = (await InventoryeService.GetInventoryByNameAsync(SearchTerm)).ToList();
     }
 }

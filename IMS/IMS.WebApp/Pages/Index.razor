@@ -1,22 +1,28 @@
 ﻿@page "/"
 
-@inject IViewInventoriesByNameUseCase ViewInventoriesByNameUseCase
+@inject IInventoryService InventoryService
 
 <PageTitle>Test Page</PageTitle>
 
 <ul>
-    @foreach(var inv in _inventories)
+    @foreach (var inv in _inventories)
     {
-    <li>
-        @inv.InventoryName
-    </li>
+        <li>
+            @inv.InventoryName
+        </li>
+        <li>
+            @inv.Quantity
+        </li>
     }
 </ul>
 
-@code{
+@code {
     private List<Inventory> _inventories = new List<Inventory>();
     protected override async Task OnInitializedAsync()
     {
-        _inventories = (await ViewInventoriesByNameUseCase.ExecuteAsync("car")).ToList();
+        _inventories = (await InventoryService.GetInventoryByNameAsync()).ToList();
+        Inventory inventory = new Inventory { InventoryId = 1, InventoryName = "Bike", Quantity = 101, Price = 1 };
+        await InventoryService.EditEnventoryAsync(inventory);
+        _inventories = (await InventoryService.GetInventoryByNameAsync()).ToList();
     }
 }
