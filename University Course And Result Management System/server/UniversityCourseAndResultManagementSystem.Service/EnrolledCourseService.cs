@@ -2,7 +2,6 @@
 using UniversityCourseAndResultManagementSystem.Common;
 using UniversityCourseAndResultManagementSystem.Common.QueryParameters;
 using UniversityCourseAndResultManagementSystem.DTO.EnrolledCourseDto;
-using UniversityCourseAndResultManagementSystem.DTO.StudentDto;
 using UniversityCourseAndResultManagementSystem.Model;
 using UniversityCourseAndResultManagementSystem.Repository.Contracts;
 using UniversityCourseAndResultManagementSystem.Service.Contracts;
@@ -39,6 +38,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
         {
             EnrolledCourse enrolledCourseModel = Mapping.Mapper.Map<EnrolledCourse>(enrolledCourse);
             await _unitOfWork.EnrolledCourseRepository.AddAsync(enrolledCourseModel);
+            await _unitOfWork.SaveAsync();
 
             StudentEnrolledCourse _studentEnrolledCourse = new StudentEnrolledCourse
             {
@@ -46,7 +46,6 @@ namespace UniversityCourseAndResultManagementSystem.Service
                 StudentId = enrolledCourse.StudentId
             };
             await _unitOfWork.StudentEnrolledCourseRepository.AddAsync(_studentEnrolledCourse);
-
             await _unitOfWork.SaveAsync();
 
             EnrolledCourseResponseDto enrolledCourseResult = Mapping.Mapper.Map<EnrolledCourseResponseDto>(enrolledCourseModel);
@@ -64,12 +63,12 @@ namespace UniversityCourseAndResultManagementSystem.Service
                 return null;
             }
 
-            Mapping.Mapper.Map(enrolledCourse, studentEnrolledCourse);
+            studentEnrolledCourse.Grade = enrolledCourse.Grade;
 
             await _unitOfWork.StudentEnrolledCourseRepository.Update(studentEnrolledCourse);
             await _unitOfWork.SaveAsync();
 
-            EnrolledCourseResponseDto enrolledCourseResult = Mapping.Mapper.Map<EnrolledCourseResponseDto>(studentEnrolledCourse);
+            EnrolledCourseResponseDto enrolledCourseResult = Mapping.Mapper.Map<EnrolledCourseResponseDto>(enrolledCourseEntity);
 
             return enrolledCourseResult;
         }

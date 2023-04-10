@@ -54,9 +54,6 @@ namespace UniversityCourseAndResultManagementSystem.Common
             CreateMap<EnrolledCourseUpdateDto, EnrolledCourse>();
             CreateMap<EnrolledCourse, EnrolledCourseResponseDto>();
 
-            CreateMap<EnrolledCourseUpdateDto, StudentEnrolledCourse>();
-            CreateMap<StudentEnrolledCourse, EnrolledCourseUpdateDto>();
-
             CreateMap<RoomCreateDto, Room>();
             CreateMap<RoomUpdateDto, Room>();
             CreateMap<Room, RoomResponseDto>();

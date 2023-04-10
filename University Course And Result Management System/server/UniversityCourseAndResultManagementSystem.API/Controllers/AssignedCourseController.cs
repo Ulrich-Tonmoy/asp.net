@@ -2,7 +2,6 @@
 using UniversityCourseAndResultManagementSystem.Common;
 using UniversityCourseAndResultManagementSystem.Common.QueryParameters;
 using UniversityCourseAndResultManagementSystem.DTO.AssignedCourseDto;
-using UniversityCourseAndResultManagementSystem.Model;
 using UniversityCourseAndResultManagementSystem.Service.Contracts;
 
 namespace UniversityCourseAndResultManagementSystem.API.Controllers
@@ -38,6 +37,26 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
                 };
 
                 return Ok(assignedCourseResultsData);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
+        }
+
+        [HttpGet("/unassign")]
+        public async Task<IActionResult> UnAssignAllCourse([FromQuery] AssignedCourseQueryParameters assignedCourseParam)
+        {
+            try
+            {
+                string assignedCourseResultsData = await _assignedCourseService.UnAssignAllCourseAsync(assignedCourseParam);
+                if (assignedCourseResultsData == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(new { response = assignedCourseResultsData });
             }
             catch (Exception ex)
             {

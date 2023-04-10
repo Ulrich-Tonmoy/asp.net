@@ -7,5 +7,6 @@
         public Guid TeacherId { get; set; }
         public Course Course { get; set; }
         public Guid CourseId { get; set; }
+        public bool? IsDeleted { get; set; }
     }
 }

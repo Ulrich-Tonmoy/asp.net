@@ -2,7 +2,6 @@
 using UniversityCourseAndResultManagementSystem.Common;
 using UniversityCourseAndResultManagementSystem.Common.QueryParameters;
 using UniversityCourseAndResultManagementSystem.DTO.AssignedCourseDto;
-using UniversityCourseAndResultManagementSystem.DTO.CourseDto;
 using UniversityCourseAndResultManagementSystem.Model;
 using UniversityCourseAndResultManagementSystem.Repository.Contracts;
 using UniversityCourseAndResultManagementSystem.Service.Contracts;
@@ -82,6 +81,18 @@ namespace UniversityCourseAndResultManagementSystem.Service
         public async Task<int> CountAllAssignedCourseAsync()
         {
             return await _unitOfWork.AssignedCourseRepository.CountAllAsync();
+        }
+
+        public async Task<string> UnAssignAllCourseAsync(AssignedCourseQueryParameters assignedCourseParam)
+        {
+            IQueryable<AssignedCourse> assignedCourses = _unitOfWork.AssignedCourseRepository.GetAllNoTrackingWithParam(assignedCourseParam, x => x.OrderBy(a => a.Id));
+            foreach (var course in assignedCourses)
+            {
+                course.IsDeleted = true;
+            }
+            await _unitOfWork.AssignedCourseRepository.UpdateRange(assignedCourses);
+            await _unitOfWork.SaveAsync();
+            return String.Format(GlobalConstants.SUCCESSFULLY_UPDATED, "AssignedCourse");
         }
     }
 }

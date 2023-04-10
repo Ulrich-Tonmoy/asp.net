@@ -31,6 +31,7 @@ import { ScheduleComponent } from './schedule/schedule.component';
 import { EnrollComponent } from './enroll/enroll.component';
 import { ResultsComponent } from './results/results.component';
 import { AddResultsComponent } from './results/add-results/add-results.component';
+import { UnassignComponent } from './unassign/unassign.component';
 
 @NgModule({
     declarations: [
@@ -49,6 +50,7 @@ import { AddResultsComponent } from './results/add-results/add-results.component
         EnrollComponent,
         ResultsComponent,
         AddResultsComponent,
+        UnassignComponent,
     ],
     imports: [
         BrowserModule,
