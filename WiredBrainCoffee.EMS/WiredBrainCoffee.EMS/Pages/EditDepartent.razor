@@ -1,0 +1,78 @@
+﻿@page "/departments/edit/{departmentId:int}"
+@inject IDbContextFactory<EMSDbContext> ContextFactory
+@inject NavigationManager NavigationManager
+@inject StateContainer StateContainer
+
+<PageTitle>Edit Department</PageTitle>
+<h3>Edit Department</h3>
+
+@if (Department is null && !IsBusy)
+{
+    <div class="alert alert-danger">Department With Id @DepartmentId is not found!</div>
+}
+else
+{
+    <DepartmentForm Department="@Department"  IsBusy="@IsBusy" IsEdit OnSubmit="@HandleSubmit" OnCancel="@NavigateToView" />
+}
+@if(ErrorMessage is not null)
+{
+    <br />
+    <div class="alert alert-danger">@ErrorMessage</div>
+}
+
+@code {
+    [Parameter]
+    public int DepartmentId { get; set; }
+
+    private Department? Department { get; set; }
+    private bool IsBusy { get; set; }
+    private string? ErrorMessage{ get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        IsBusy = true;
+        try
+        {
+            using var context = ContextFactory.CreateDbContext();
+            Department = await context.Departments.AsNoTracking().FirstOrDefaultAsync(x => x.Id.Equals(DepartmentId));
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private async Task HandleSubmit(bool isValid)
+    {
+        if (Department is null || IsBusy || !isValid)
+        {
+            ErrorMessage = null;
+            return;
+        }
+        IsBusy = true;
+        try
+        {
+            using var context = ContextFactory.CreateDbContext();
+            context.Departments.Update(Department);
+            await context.SaveChangesAsync();
+            NavigateToView();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            ErrorMessage = $"The Department was modified by another User. Please reload this page.";
+        }
+        catch  (Exception ex)
+        {
+            ErrorMessage = $"Error while saving Department: {ex.Message}";
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private void NavigateToView()
+    {
+        NavigationManager.NavigateTo($"/departments/{StateContainer.DepartmentViewPage}");
+    }
+}

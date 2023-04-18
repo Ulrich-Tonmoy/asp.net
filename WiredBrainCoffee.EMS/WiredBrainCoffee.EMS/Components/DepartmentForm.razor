@@ -1,0 +1,61 @@
+﻿@if (Department is not null)
+{
+    <EditForm Model="@Department" OnValidSubmit="@HandleSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <InputText id="name" class="form-control" @bind-Value="Department.Name" />
+            <ValidationMessage For="()=>Department.Name" />
+        </div>
+        @if (IsEdit)
+        {
+            <button type="button" class="btn btn-secondary" onclick="@HandleCancel" disabled="@IsBusy">
+                Cancel
+            </button>
+            <button type="submit" class="btn btn-primary" disabled="@IsBusy">Update</button>
+        }
+        else
+        {
+            <button type="button" class="btn btn-secondary" onclick="@HandleCancel" disabled="@IsBusy">
+                Cancel
+            </button>
+            <button type="submit" class="btn btn-primary" disabled="@IsBusy">Add</button>
+        }
+
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public Department? Department { get; set; }
+    [Parameter]
+    public bool IsBusy { get; set; }
+    [Parameter]
+    public bool IsEdit { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnCancel{ get; set; }
+    [Parameter]
+    public EventCallback<bool> OnSubmit { get; set; }
+
+    public async Task HandleSubmit()
+    {
+        if (OnSubmit.HasDelegate)
+        {
+            await OnSubmit.InvokeAsync(true);
+        }
+    }
+    public async Task HandleInvalidSubmit()
+    {
+        if (OnSubmit.HasDelegate)
+        {
+            await OnSubmit.InvokeAsync(false);
+        }
+    }
+    private async Task HandleCancel()
+    {
+        if (OnCancel.HasDelegate)
+        {
+            await OnCancel.InvokeAsync();
+        }
+    }
+}

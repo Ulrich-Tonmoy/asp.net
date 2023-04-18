@@ -1,0 +1,139 @@
+﻿@page "/departments/{currentPage:int?}"
+@inject IDbContextFactory<EMSDbContext> ContextFacory
+@inject NavigationManager NavigationManager
+@inject StateContainer StateContainer
+@inject IJSRuntime JS
+
+<PageTitle>Departments</PageTitle>
+
+<h1>Departments</h1>
+
+@if (Departments is null)
+{
+    <div>Loading...</div>
+}
+else
+{
+    <ul class="pagination justify-content-end">
+        <li class="page-item @(CurrentPage == 1?"disabled":"")">
+            <a class="page-link" href="departments/@(CurrentPage-1)">Prev</a>
+        </li>
+        @for (int i = 1; i <= TotalPages; i++)
+        {
+            <li class="page-item @(CurrentPage == i?"active":"")">
+                <a class="page-link" href="departments/@i">@i</a>
+            </li>
+        }
+        <li class="page-item @(CurrentPage == TotalPages?"disabled":"")">
+            <a class="page-link" href="departments/@(CurrentPage+1)">Next</a>
+        </li>
+    </ul>
+    <a class="btn btn-primary" href="departments/add">
+        <span class="oi oi-plus" aria-hidden="true"></span> Add Department
+    </a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>FullName</th>
+                <th>Employees</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var dept in Departments)
+            {
+                <tr>
+                    <td>@dept.Name</td>
+                    <td>
+                        @foreach (var emp in dept.Employees)
+                        {
+                            <a href="/employees/edit/@emp.Id" class="btn">
+                                @emp.FullName
+                            </a>
+                        }
+                    </td>
+                    <td class="btn-group-sm">
+                        <a href="/departments/edit/@dept.Id" class="btn btn-outline-primary">Edit</a>
+                        <bytton class="btn btn-outline-danger" @onclick="()=>HandleDelete(dept)">
+                            Delete
+                        </bytton>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <ul class="pagination justify-content-end">
+        <li class="page-item @(CurrentPage == 1?"disabled":"")">
+            <a class="page-link" href="departments/@(CurrentPage-1)">Prev</a>
+        </li>
+        @for (int i = 1; i <= TotalPages; i++)
+        {
+            <li class="page-item @(CurrentPage == i?"active":"")">
+                <a class="page-link" href="departments/@i">@i</a>
+            </li>
+        }
+        <li class="page-item @(CurrentPage == TotalPages?"disabled":"")">
+            <a class="page-link" href="departments/@(CurrentPage+1)">Next</a>
+        </li>
+    </ul>
+}
+
+@code {
+    [Parameter]
+    public int? CurrentPage { get; set; }
+
+    private Department[]? Departments { get; set; }
+    private int TotalPages { get; set; }
+    private int ItemsPerPage = 4;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        if (CurrentPage is null or < 1)
+        {
+            NavigationManager.NavigateTo("/Departments/1");
+            return;
+        }
+
+        using var dbContext = ContextFacory.CreateDbContext();
+
+        int itemsToSkip = (CurrentPage.Value - 1) * ItemsPerPage;
+        int deptCount = await dbContext.Departments.CountAsync();
+        TotalPages = deptCount == 0 ? 1 : (int)Math.Ceiling((double)deptCount / ItemsPerPage);
+
+        if (CurrentPage > TotalPages)
+        {
+            NavigationManager.NavigateTo($"/Departments/{TotalPages}");
+            return;
+        }
+
+        StateContainer.DepartmentViewPage = CurrentPage.Value;
+
+        Departments = await dbContext.Departments.Include(x => x.Employees).OrderBy(x => x.Name).Skip(itemsToSkip).Take(ItemsPerPage).ToArrayAsync();
+    }
+
+    private async Task HandleDelete(Department dept)
+    {
+        var isConfrimed = await JS.InvokeAsync<bool>("confirm", $"Delete Department {dept.Name}?");
+
+        if (isConfrimed)
+        {
+            try
+            {
+                using var context = ContextFacory.CreateDbContext();
+                context.Departments.Remove(dept);
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                // If this exception is triggered that means that the Data is already deleted just before this user tried to delete.
+            }
+
+            await LoadData();
+        }
+    }
+}

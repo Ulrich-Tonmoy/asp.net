@@ -1,0 +1,87 @@
+﻿@page "/departments/add"
+@inject IDbContextFactory<EMSDbContext> ContextFactory
+@inject NavigationManager NavigationManager
+@inject StateContainer StateContainer
+
+<PageTitle>Add Department</PageTitle>
+<h1>Add Department</h1>
+
+<DepartmentForm Department="@Department" IsBusy="@IsBusy" OnSubmit="@HandleSubmit" OnCancel="@NavigateToView" />
+@if (SuccessMessage is not null)
+{
+    <br />
+    <div class="alert alert-success">@SuccessMessage</div>
+    <br />
+}
+@if (ErrorMessage is not null)
+{
+    <br />
+    <div class="alert alert-danger">@ErrorMessage</div>
+    <br />
+}
+
+@code {
+    private Department? Department { get; set; }
+    private bool IsBusy { get; set; }
+    private string? SuccessMessage { get; set; }
+    private string? ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Department = new Department();
+    }
+
+    private async Task HandleSubmit(bool isValid)
+    {
+        if (isValid)
+        {
+            await HandleValidSubmit();
+        }
+        else
+        {
+            HandleInvalidSubmit();
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (IsBusy)
+        {
+            return;
+        }
+        IsBusy = true;
+        try
+        {
+            if (Department is not null)
+            {
+                using var context = ContextFactory.CreateDbContext();
+                await context.Departments.AddAsync(Department);
+                await context.SaveChangesAsync();
+
+                SuccessMessage = $"Department {Department.Name} is added successfully.";
+                ErrorMessage = null;
+                Department = new Department();
+            }
+        }
+        catch (Exception ex)
+        {
+            SuccessMessage = null;
+            ErrorMessage = $"Error while adding Department: {ex.Message}";
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private void HandleInvalidSubmit()
+    {
+        SuccessMessage = null;
+        ErrorMessage = null;
+    }
+
+    private void NavigateToView()
+    {
+        NavigationManager.NavigateTo($"/departments/{StateContainer.DepartmentViewPage}");
+    }
+}

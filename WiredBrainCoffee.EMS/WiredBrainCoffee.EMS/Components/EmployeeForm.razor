@@ -1,0 +1,81 @@
+﻿@if (Employee is not null)
+{
+    <EditForm Model="@Employee" OnValidSubmit="@HandleSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <div class="mb-3">
+            <label for="fullName" class="form-label">Full Name</label>
+            <InputText id="fullName" class="form-control" @bind-Value="Employee.FullName" />
+            <ValidationMessage For="()=>Employee.FullName" />
+        </div>
+        <div class="mb-3">
+            <label for="department" class="form-label">Department</label>
+            <InputSelect id="department" class="form-select" @bind-Value="Employee.DepartmentId">
+                @if (Departments is not null)
+                {
+                    foreach (var dept in Departments)
+                    {
+                        <option value="@dept.Id">@dept.Name</option>
+                    }
+                }
+            </InputSelect>
+            <ValidationMessage For="()=>Employee.DepartmentId" />
+        </div>
+        <div class="mb-3">
+            <label for="isDeveloper" class="form-label">Is Developer</label>
+            <InputCheckbox id="isDeveloper" class="form-check-input" @bind-Value="Employee.IsDeveloper" />
+            <ValidationMessage For="()=>Employee.IsDeveloper" />
+        </div>
+        @if (IsEdit)
+        {
+            <button type="button" class="btn btn-secondary" onclick="@HandleCancel" disabled="@IsBusy">
+                Cancel
+            </button>
+            <button type="submit" class="btn btn-primary" disabled="@IsBusy">Update</button>
+        }
+        else
+        {
+            <button type="button" class="btn btn-secondary" onclick="@HandleCancel" disabled="@IsBusy">
+                Cancel
+            </button>
+            <button type="submit" class="btn btn-primary" disabled="@IsBusy">Add</button>
+        }
+
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public Employee? Employee { get; set; }
+    [Parameter]
+    public Department[]? Departments { get; set; }
+    [Parameter]
+    public bool IsBusy { get; set; }
+    [Parameter]
+    public bool IsEdit { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnCancel{ get; set; }
+    [Parameter]
+    public EventCallback<bool> OnSubmit { get; set; }
+
+    public async Task HandleSubmit()
+    {
+        if (OnSubmit.HasDelegate)
+        {
+            await OnSubmit.InvokeAsync(true);
+        }
+    }
+    public async Task HandleInvalidSubmit()
+    {
+        if (OnSubmit.HasDelegate)
+        {
+            await OnSubmit.InvokeAsync(false);
+        }
+    }
+    private async Task HandleCancel()
+    {
+        if (OnCancel.HasDelegate)
+        {
+            await OnCancel.InvokeAsync();
+        }
+    }
+}
