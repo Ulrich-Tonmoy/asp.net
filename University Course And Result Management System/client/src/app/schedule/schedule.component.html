@@ -48,7 +48,14 @@
                             R. No: {{ element?.schedules[0]?.room?.roomNo }},
                             {{ element?.schedules[0]?.day }},
                             {{ tConv24(element?.schedules[0]?.from) }} -
-                            {{ tConv24(element?.schedules[0]?.to) }} <br />
+                            {{ tConv24(element?.schedules[0]?.to) }}
+                            <!-- R. No: {{ element?.schedules[1]?.room?.roomNo }},
+                            {{ element?.schedules[1]?.day }},
+                            {{ tConv24(element?.schedules[1]?.from) }} -
+                            {{ tConv24(element?.schedules[1]?.to) }} -->
+                        </p>
+                        <br />
+                        <p *ngIf="element?.schedules?.length > 1; else not">
                             R. No: {{ element?.schedules[1]?.room?.roomNo }},
                             {{ element?.schedules[1]?.day }},
                             {{ tConv24(element?.schedules[1]?.from) }} -

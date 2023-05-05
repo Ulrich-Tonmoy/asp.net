@@ -36,19 +36,25 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<EnrolledCourseResponseDto> CreateEnrolledCourseAsync(EnrolledCourseCreateDto enrolledCourse)
         {
-            EnrolledCourse enrolledCourseModel = Mapping.Mapper.Map<EnrolledCourse>(enrolledCourse);
-            await _unitOfWork.EnrolledCourseRepository.AddAsync(enrolledCourseModel);
-            await _unitOfWork.SaveAsync();
+            EnrolledCourse enrolledCourseEntity;
 
+            enrolledCourseEntity = _unitOfWork.EnrolledCourseRepository.GetByConditionNoTracking(s => s.CourseId.Equals(enrolledCourse.CourseId)).FirstOrDefault();
+            if (enrolledCourseEntity == null)
+            {
+                enrolledCourseEntity = Mapping.Mapper.Map<EnrolledCourse>(enrolledCourse);
+                await _unitOfWork.EnrolledCourseRepository.AddAsync(enrolledCourseEntity);
+                await _unitOfWork.SaveAsync();
+            }
             StudentEnrolledCourse _studentEnrolledCourse = new StudentEnrolledCourse
             {
-                EnrolledCourseId = enrolledCourseModel.Id,
-                StudentId = enrolledCourse.StudentId
+                EnrolledCourseId = enrolledCourseEntity.Id,
+                StudentId = enrolledCourse.StudentId,
+                Date = enrolledCourse.Date
             };
             await _unitOfWork.StudentEnrolledCourseRepository.AddAsync(_studentEnrolledCourse);
             await _unitOfWork.SaveAsync();
 
-            EnrolledCourseResponseDto enrolledCourseResult = Mapping.Mapper.Map<EnrolledCourseResponseDto>(enrolledCourseModel);
+            EnrolledCourseResponseDto enrolledCourseResult = Mapping.Mapper.Map<EnrolledCourseResponseDto>(enrolledCourseEntity);
 
             return enrolledCourseResult;
         }

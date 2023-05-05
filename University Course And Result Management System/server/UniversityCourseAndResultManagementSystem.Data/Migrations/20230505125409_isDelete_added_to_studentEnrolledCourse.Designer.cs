@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniversityCourseAndResultManagementSystem.Data;
 
@@ -11,9 +12,11 @@ using UniversityCourseAndResultManagementSystem.Data;
 namespace UniversityCourseAndResultManagementSystem.Data.Migrations
 {
     [DbContext(typeof(UniversityCourseAndResultManagementSystemContext))]
-    partial class UniversityCourseAndResultManagementSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20230505125409_isDelete_added_to_studentEnrolledCourse")]
+    partial class isDeleteaddedtostudentEnrolledCourse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

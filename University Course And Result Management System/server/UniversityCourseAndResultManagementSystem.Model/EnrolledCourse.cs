@@ -6,6 +6,5 @@
         public List<StudentEnrolledCourse> StudentEnrolledCourse { get; set; }
         public Course Course { get; set; }
         public Guid CourseId { get; set; }
-        public DateTime Date { get; set; }
     }
 }

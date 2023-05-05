@@ -8,7 +8,7 @@
 }
 .course-sub_container {
     padding: 15px 5px;
-    width: 500px;
+    width: 700px;
     max-height: 500px;
     display: flex;
     flex-direction: column;
@@ -28,4 +28,8 @@
 .course-table-container {
     width: 100%;
     overflow: auto;
+}
+
+td > p:first-child {
+    margin-bottom: -15px;
 }

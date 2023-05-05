@@ -7,7 +7,7 @@ namespace UniversityCourseAndResultManagementSystem.Common.Validators
     {
         public TeacherValidator()
         {
-            RuleFor(t => t.Name).NotEmpty().MinimumLength(3).MaximumLength(15);
+            RuleFor(t => t.Name).NotEmpty().MinimumLength(2).MaximumLength(15);
             RuleFor(t => t.Address).NotEmpty().MinimumLength(5).MaximumLength(20);
             RuleFor(t => t.Email).NotEmpty().EmailAddress();
             RuleFor(t => t.ContactNo).NotEmpty().MinimumLength(11).MaximumLength(11);
