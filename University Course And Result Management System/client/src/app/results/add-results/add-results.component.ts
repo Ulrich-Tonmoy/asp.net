@@ -46,10 +46,9 @@ export class AddResultsComponent {
 
     ngOnInit(): void {
         this.gradeForm = this.formBuilder.group({
+            id: ['', Validators.required],
             studentId: ['', Validators.required],
             courseId: ['', Validators.required],
-            id: ['', Validators.required],
-            date: ['', Validators.required],
             grade: ['', Validators.required],
         });
         this.getStudents();
@@ -88,21 +87,19 @@ export class AddResultsComponent {
     }
 
     updateCourse() {
-        // this.gradeForm.value.date = this.selectedCourse[0].date.toString();
-        // this.gradeForm.value.id = this.selectedCourse[0].enrolledCourseId;
-        // this.http
-        //     .put('https://localhost:7026/api/enrolledcourse', {
-        //         ...this.gradeForm.value,
-        //     })
-        //     .subscribe({
-        //         next: (data) => {
-        //             this.gradeForm.reset();
-        //             this.dialogRef.close('save');
-        //         },
-        //         error: (err) => {
-        //             console.log(err.error);
-        //         },
-        //     });
-        console.log(this.gradeForm.value);
+        this.gradeForm.value.id = this.selectedCourse[0].enrolledCourseId;
+        this.http
+            .put('https://localhost:7026/api/enrolledcourse', {
+                ...this.gradeForm.value,
+            })
+            .subscribe({
+                next: (data) => {
+                    this.gradeForm.reset();
+                    this.dialogRef.close('save');
+                },
+                error: (err) => {
+                    console.log(err.error);
+                },
+            });
     }
 }
