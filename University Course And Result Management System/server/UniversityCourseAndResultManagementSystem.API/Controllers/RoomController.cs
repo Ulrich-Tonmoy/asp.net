@@ -83,6 +83,20 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
             }
         }
 
+        [HttpPatch("unallocate")]
+        public async Task<IActionResult> UnAllocate()
+        {
+            try
+            {
+                string room = await _roomService.UnAllocateRoomAsync();
+                return Ok(room);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
+        }
+
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] RoomUpdateDto room)
         {

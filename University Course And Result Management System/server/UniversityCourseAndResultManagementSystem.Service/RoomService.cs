@@ -47,6 +47,18 @@ namespace UniversityCourseAndResultManagementSystem.Service
             return roomResult;
         }
 
+        public async Task<string> UnAllocateRoomAsync()
+        {
+            IQueryable<Schedule> schedules = _unitOfWork.ScheduleRepository.GetAllNoTracking();
+            foreach (var schedule in schedules)
+            {
+                schedule.IsDeleted = true;
+                await _unitOfWork.ScheduleRepository.Update(schedule);
+            }
+            await _unitOfWork.SaveAsync();
+            return String.Format(GlobalConstants.SUCCESSFULLY_DELETED, "Room"); ;
+        }
+
         public async Task<RoomResponseDto> UpdateRoomAsync(RoomUpdateDto room)
         {
             throw new NotImplementedException();

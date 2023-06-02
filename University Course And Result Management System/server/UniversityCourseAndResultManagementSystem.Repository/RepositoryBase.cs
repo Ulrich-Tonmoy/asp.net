@@ -14,6 +14,11 @@ namespace UniversityCourseAndResultManagementSystem.Repository
             _dbSet = universityCourseAndResultManagementSystemContext.Set<T>();
         }
 
+        public IQueryable<T> GetAllNoTracking()
+        {
+            return _dbSet.AsNoTracking();
+        }
+
         public IQueryable<T> GetAllNoTrackingWithParam(QueryParametersBase param, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy)
         {
             return orderBy(_dbSet
