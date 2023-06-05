@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using UniversityCourseAndResultManagementSystem.Common;
 using UniversityCourseAndResultManagementSystem.Common.QueryParameters;
-using UniversityCourseAndResultManagementSystem.DTO.CourseDto;
 using UniversityCourseAndResultManagementSystem.DTO.CourseDto;
 using UniversityCourseAndResultManagementSystem.Model;
 using UniversityCourseAndResultManagementSystem.Repository.Contracts;
@@ -21,7 +19,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<PagedList<CourseResponseDto>> GetAllCourseAsyncWithParam(CourseQueryParameters courseParam)
         {
-            IQueryable<Course> courses = _unitOfWork.CourseRepository.GetAllNoTrackingWithParam(courseParam, x => x.OrderBy(c => c.Id)).Include(c => c.Department).Include(c => c.SemesterCourse).ThenInclude(s => s.Semester).Include(c => c.AssignedCourse).ThenInclude(t => t.Teacher).Include(c => c.Schedules).ThenInclude(r => r.Room);
+            IQueryable<Course> courses = _unitOfWork.CourseRepository.GetAllNoTrackingWithParam(courseParam, x => x.OrderBy(c => c.Id)).Include(c => c.Department).Include(c => c.SemesterCourse).ThenInclude(s => s.Semester).Include(c => c.AssignedCourse).ThenInclude(t => t.Teacher).Include(c => c.Schedules.Where(x => x.IsDeleted == null || x.IsDeleted != true)).ThenInclude(r => r.Room);
 
             List<CourseResponseDto> courseDtos = Mapping.Mapper.Map<List<CourseResponseDto>>(courses);
 
@@ -33,7 +31,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<PagedList<CourseResponseDto>> GetCourseByDeptAsync(Guid id, CourseQueryParameters courseParam)
         {
-            IQueryable<Course> course = _unitOfWork.CourseRepository.GetByConditionNoTracking(c => c.DepartmentId.Equals(id)).Include(c => c.Department).Include(c => c.SemesterCourse).ThenInclude(s => s.Semester).Include(c => c.AssignedCourse).ThenInclude(t => t.Teacher).Include(c => c.Schedules).ThenInclude(r => r.Room);
+            IQueryable<Course> course = _unitOfWork.CourseRepository.GetByConditionNoTracking(c => c.DepartmentId.Equals(id)).Include(c => c.Department).Include(c => c.SemesterCourse).ThenInclude(s => s.Semester).Include(c => c.AssignedCourse).ThenInclude(t => t.Teacher).Include(c => c.Schedules.Where(x => x.IsDeleted == null || x.IsDeleted != true)).ThenInclude(r => r.Room);
             if (courseParam.IsAssignedCheck) course = _unitOfWork.CourseRepository.GetByConditionNoTracking(c => c.DepartmentId.Equals(id)).Where(c => c.AssignedCourse.Equals(null));
 
             List<CourseResponseDto> courseDtos = Mapping.Mapper.Map<List<CourseResponseDto>>(course);
