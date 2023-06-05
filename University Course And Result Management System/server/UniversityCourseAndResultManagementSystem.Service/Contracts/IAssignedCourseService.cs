@@ -9,6 +9,7 @@ namespace UniversityCourseAndResultManagementSystem.Service.Contracts
         Task<PagedList<AssignedCourseResponseDto>> GetAllAssignedCourseAsyncWithParam(AssignedCourseQueryParameters assignedCourseParam);
         Task<AssignedCourseResponseDto> GetAssignedCourseByIdAsync(Guid id);
         Task<AssignedCourseResponseDto> CreateAssignedCourseAsync(AssignedCourseCreateDto assignedCourse);
+        Task<string> UnAssignCourseAsync();
         Task<AssignedCourseResponseDto> UpdateAssignedCourseAsync(AssignedCourseUpdateDto assignedCourse);
         Task<string> UnAssignAllCourseAsync(AssignedCourseQueryParameters assignedCourseParam);
         Task<string> DeleteAssignedCourseAsync(Guid id);

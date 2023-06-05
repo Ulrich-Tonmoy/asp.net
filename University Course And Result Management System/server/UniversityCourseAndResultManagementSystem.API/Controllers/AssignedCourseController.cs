@@ -107,6 +107,20 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
             }
         }
 
+        [HttpPatch("unassign")]
+        public async Task<IActionResult> UnAssign()
+        {
+            try
+            {
+                string course = await _assignedCourseService.UnAssignCourseAsync();
+                return Ok(course);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
+            }
+        }
+
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] AssignedCourseUpdateDto assignedCourse)
         {

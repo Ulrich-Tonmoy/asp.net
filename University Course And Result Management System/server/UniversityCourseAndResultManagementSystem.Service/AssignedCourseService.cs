@@ -19,7 +19,7 @@ namespace UniversityCourseAndResultManagementSystem.Service
 
         public async Task<PagedList<AssignedCourseResponseDto>> GetAllAssignedCourseAsyncWithParam(AssignedCourseQueryParameters assignedCourseParam)
         {
-            IQueryable<AssignedCourse> assignedCourses = _unitOfWork.AssignedCourseRepository.GetAllNoTrackingWithParam(assignedCourseParam, x => x.OrderBy(a => a.Id)).Include(c => c.Course).Include(a => a.Teacher);
+            IQueryable<AssignedCourse> assignedCourses = _unitOfWork.AssignedCourseRepository.GetAllNoTrackingWithParam(assignedCourseParam, x => x.OrderBy(a => a.Id)).Where(x => x.IsDeleted == null || x.IsDeleted != true).Include(c => c.Course).Include(a => a.Teacher);
 
             List<AssignedCourseResponseDto> assignedCourseDtos = Mapping.Mapper.Map<List<AssignedCourseResponseDto>>(assignedCourses);
 
@@ -52,6 +52,18 @@ namespace UniversityCourseAndResultManagementSystem.Service
             AssignedCourseResponseDto courseResult = Mapping.Mapper.Map<AssignedCourseResponseDto>(assignedCourseModel);
 
             return courseResult;
+        }
+
+        public async Task<string> UnAssignCourseAsync()
+        {
+            IQueryable<AssignedCourse> courses = _unitOfWork.AssignedCourseRepository.GetAllNoTracking();
+            foreach (var course in courses)
+            {
+                course.IsDeleted = true;
+                await _unitOfWork.AssignedCourseRepository.Update(course);
+            }
+            await _unitOfWork.SaveAsync();
+            return String.Format(GlobalConstants.SUCCESSFULLY_DELETED, "Course"); ;
         }
 
         public async Task<AssignedCourseResponseDto> UpdateAssignedCourseAsync(AssignedCourseUpdateDto assignedCourse)

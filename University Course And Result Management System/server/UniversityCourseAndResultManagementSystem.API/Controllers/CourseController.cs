@@ -111,19 +111,6 @@ namespace UniversityCourseAndResultManagementSystem.API.Controllers
             }
         }
 
-        [HttpPatch("unassginall")]
-        public async Task<IActionResult> UnAssignAll()
-        {
-            try
-            {
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, GlobalConstants.SERVER_ERROR + ex);
-            }
-        }
-
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] CourseUpdateDto course)
         {

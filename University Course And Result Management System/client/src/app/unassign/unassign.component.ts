@@ -13,7 +13,7 @@ export class UnassignComponent {
     unassignCourses() {
         if (confirm('Are you sure to unassign all courses?')) {
             this.http
-                .get('https://localhost:7026/api/enrolledcourse')
+                .patch('https://localhost:7026/api/assignedcourse/unassign', {})
                 .subscribe({
                     next: (data: any) => {
                         this.router.navigate([`course`]);
@@ -27,16 +27,16 @@ export class UnassignComponent {
 
     unallocateRooms() {
         if (confirm('Are you sure to unallocate all classrooms info?')) {
-            // this.http
-            //     .patch('https://localhost:7026/api/room/unallocate', {})
-            //     .subscribe({
-            //         next: (data: any) => {
-            //             this.router.navigate([`schedule`]);
-            //         },
-            //         error: (err: any) => {
-            //             console.log(err);
-            //         },
-            //     });
+            this.http
+                .patch('https://localhost:7026/api/room/unallocate', {})
+                .subscribe({
+                    next: (data: any) => {
+                        this.router.navigate([`schedule`]);
+                    },
+                    error: (err: any) => {
+                        console.log(err);
+                    },
+                });
         }
     }
 }
