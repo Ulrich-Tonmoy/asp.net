@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Sub } from 'src/app/models/sub';
-import { SubService } from 'src/app/services/sub.service';
+import { Sub } from 'src/app/core/models/sub';
+import { SubService } from 'src/app/core/services/sub.service';
 
 @Component({
   selector: 'app-subscribers',
