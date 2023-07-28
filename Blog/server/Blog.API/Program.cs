@@ -1,4 +1,7 @@
 using Blog.Data;
+using Blog.Repository;
+using Blog.Repository.Repositories;
+using Blog.Repository.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<BlogContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("BlogDbConnection")));
 builder.Services.AddScoped<DbContext, BlogContext>();
+
+// Add repositories to the container.
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Add services to the container.
 
