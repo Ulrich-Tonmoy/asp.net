@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-9">
+      <div class="card shadow">
+        <img
+          src="{{ post.heroImg }}"
+          alt="post card image"
+          class="card-img-top img-fluid"
+        />
+        <div class="card-body">
+          <small class="bg-light text-danger text-center">{{
+            post.category.name
+          }}</small>
+          <small class="bg-light text-success text-center mx-2">{{
+            post.isFeatured ? "Featured" : ""
+          }}</small>
+          <small class="bg-light text-info text-center"
+            >Views - {{ post.views }}</small
+          >
+          <small class="bg-light text-warning text-center mx-2">
+            Last Updated - {{ post.createdAt | date }}
+          </small>
+
+          <h1 class="mt-3 mb-3">{{ post.title }}</h1>
+          <p [innerHTML]="post.content">{{ post.content }}</p>
+        </div>
+      </div>
+      <app-comment-form></app-comment-form>
+      <app-comment-list></app-comment-list>
+    </div>
+    <div class="col-md-3">
+      <div *ngFor="let post of similarPost" class="my-4">
+        <app-post-card [postData]="post"></app-post-card>
+      </div>
+    </div>
+  </div>
+</div>

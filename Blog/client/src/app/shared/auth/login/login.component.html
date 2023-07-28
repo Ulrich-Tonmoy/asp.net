@@ -1,0 +1,72 @@
+<app-header></app-header>
+
+<div class="app-body">
+  <div class="container">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <div class="card p-5 shadow bg-theme-secondary">
+          <div class="card-body">
+            <div class="text-center">
+              <h3 class="text-theme-primary">Login</h3>
+              <p>Please login to manage posts and categories.</p>
+            </div>
+            <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm.value)">
+              <div class="form-group">
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Email"
+                  name="email"
+                  #Email="ngModel"
+                  ngModel
+                  required
+                  email
+                  [ngClass]="{ 'is-invalid': Email.touched && Email.invalid }"
+                />
+                <div
+                  class="alert alert-danger"
+                  *ngIf="Email.touched && Email.invalid"
+                >
+                  <div *ngIf="Email.errors && Email.errors['required']">
+                    Email cannot be Empty.
+                  </div>
+                  <div *ngIf="Email.errors && Email.errors['email']">
+                    Invalid Email.
+                  </div>
+                </div>
+              </div>
+              <div class="form-group my-3">
+                <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Password"
+                  name="password"
+                  #Password="ngModel"
+                  ngModel
+                  required
+                  [ngClass]="{
+                    'is-invalid': Password.touched && Password.invalid
+                  }"
+                />
+                <div
+                  class="alert alert-danger"
+                  *ngIf="Password.touched && Password.invalid"
+                >
+                  Password cannot be Empty.
+                </div>
+              </div>
+              <button
+                class="btn btn-info w-100 btn-theme"
+                [disabled]="loginForm.invalid"
+              >
+                Login
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

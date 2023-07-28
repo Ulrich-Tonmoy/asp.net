@@ -1,0 +1,88 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 bg-theme-secondary p-5 shadow">
+      <div class="d-flex justify-content-center align-items-center flex-column">
+        <h3 class="text-center text-theme-primary">
+          {{ editingId ? "Update" : "New" }} Category
+        </h3>
+        <p class="text-center">You can add new categories form here...</p>
+        <button class="btn btn-warning mx-2 my-4 w-25" routerLink="/dashboard">
+          Back to Dashboard
+        </button>
+      </div>
+
+      <form
+        class="form-inline text-center"
+        #catForm="ngForm"
+        (ngSubmit)="onSubmit(catForm)"
+      >
+        <div class="form-group col-md-10">
+          <input
+            type="text"
+            name="category"
+            class="form-control shadow"
+            placeholder="Add New Categories..."
+            #newCategory="ngModel"
+            [(ngModel)]="categoryForm"
+            required
+            [ngClass]="{
+              'is-invalid': newCategory.touched && newCategory.invalid
+            }"
+          />
+          <div
+            class="alert alert-danger"
+            *ngIf="newCategory.touched && newCategory.invalid"
+          >
+            Category field is required.
+          </div>
+        </div>
+        <div class="col-md-2">
+          <button
+            class="btn btn-block btn-info mb-2 btn-theme"
+            [disabled]="catForm.invalid"
+          >
+            {{ editingId ? "Update" : "Create" }} Category
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row mt-5 mb-5 d-flex justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-body">
+          <table class="table row-border hover">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Category</th>
+                <th class="d-flex justify-content-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let cat of categories; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ cat.name }}</td>
+                <td class="d-flex gap-3 justify-content-end">
+                  <button
+                    class="btn btn-sm btn-warning w-25"
+                    (click)="onEdit(cat)"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    class="btn btn-sm btn-danger w-25"
+                    (click)="onDelete(cat)"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

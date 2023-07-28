@@ -1,0 +1,16 @@
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <div class="collapse navbar-collapse justify-content-center">
+      <ul class="navbar-nav" *ngFor="let cat of categories">
+        <li class="nav-item ml-3">
+          <a
+            href=""
+            class="nav-link"
+            [routerLink]="['/category', cat.name, cat.id]"
+            >{{ cat.name }}</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,81 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card shadow bg-theme-secondary">
+        <div class="card-body text-center">
+          <h3 class="text-theme-primary">All Blog Posts</h3>
+          <p>From here you can manage your posts</p>
+
+          <button class="btn btn-info bg-theme text-white" routerLink="new">
+            Add New Post
+          </button>
+          <button class="btn btn-warning mx-2" routerLink="/dashboard">
+            Back to Dashboard
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card shadow">
+        <div class="card-body">
+          <table class="table row-border hover">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Excerpt</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let post of posts; let i = index">
+                <td>{{ post.id }}</td>
+                <td>
+                  <img src="{{ post.heroImg }}" class="img" alt="hero image" />
+                </td>
+                <td style="max-width: 200px">{{ post.title }}</td>
+                <td style="max-width: 300px">{{ post.excerpt }}</td>
+                <td>{{ post.category.name }}</td>
+                <td>{{ post.createdAt | date }}</td>
+                <td>
+                  <button
+                    class="btn btn-sm btn-warning mx-1 my-1"
+                    routerLink="new"
+                    [queryParams]="{ id: post.id }"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    class="btn btn-sm btn-danger mx-1 my-1"
+                    (click)="onDelete(post.id, post.title)"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    *ngIf="!post.isFeatured"
+                    class="btn btn-sm btn-success mx-1 my-1"
+                    (click)="onFeatured(post.id, true)"
+                  >
+                    Mark Featured
+                  </button>
+                  <button
+                    *ngIf="post.isFeatured"
+                    class="btn btn-sm btn-info mx-1 my-1"
+                    (click)="onFeatured(post.id, false)"
+                  >
+                    Remove Featured
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
