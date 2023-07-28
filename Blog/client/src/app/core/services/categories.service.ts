@@ -3,15 +3,18 @@ import { Injectable } from '@angular/core';
 import { Category } from '../models/category';
 import { ToastrService } from 'ngx-toastr';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoriesService {
+  baseUrl: string = environment.apiUrl;
+
   constructor(private http: HttpClient, private toastr: ToastrService) {}
 
   createCategory = (category: Category) => {
-    this.http.post('http://localhost:3000/categories', category).subscribe(
+    this.http.post(`${this.baseUrl}/category`, category).subscribe(
       (response: any) => {
         console.log(response);
         this.toastr.success(`Category ${category.name} added successfully!`);
@@ -25,27 +28,25 @@ export class CategoriesService {
 
   getCategories = () => {
     return this.http
-      .get('http://localhost:3000/categories')
+      .get(`${this.baseUrl}/category`)
       .pipe(map((actions: any) => actions));
   };
 
   updateCategory = (id: string, name: string) => {
-    this.http
-      .patch(`http://localhost:3000/categories/${id}`, { name })
-      .subscribe(
-        (response: any) => {
-          console.log(response);
-          this.toastr.success(`Category ${name} updated successfully!`);
-        },
-        (error: any) => {
-          this.toastr.error('Error occurred updating category!');
-          this.toastr.error(error);
-        }
-      );
+    this.http.patch(`${this.baseUrl}/category`, { id, name }).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.toastr.success(`Category ${name} updated successfully!`);
+      },
+      (error: any) => {
+        this.toastr.error('Error occurred updating category!');
+        this.toastr.error(error);
+      }
+    );
   };
 
   deleteCategory = (id: string, name: string) => {
-    this.http.delete(`http://localhost:3000/categories/${id}`).subscribe(
+    this.http.delete(`${this.baseUrl}/category/${id}`).subscribe(
       (response: any) => {
         console.log(response);
         this.toastr.warning(`Category ${name} deleted successfully!`);
