@@ -6,4 +6,15 @@ nav {
 
 .nav-link {
   text-transform: uppercase;
+  color: white;
+  transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+  -moz-transition: all 0.4s ease-in-out;
+  -ms-transition: all 0.4s ease-in-out;
+  -o-transition: all 0.4s ease-in-out;
+}
+
+.nav-link:hover {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
 }
