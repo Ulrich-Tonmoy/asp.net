@@ -18,15 +18,10 @@ export class CategoriesComponent implements OnInit {
     this.getCategories();
   }
 
-  onSubmit = (formData: any) => {
+  onSubmit = async (formData: any) => {
     let name = formData.value.category;
     if (!this.editingId) {
-      let category: Category = {
-        id: crypto.randomUUID(),
-        name,
-      };
-
-      this.catService.createCategory(category);
+      this.catService.createCategory(name);
     } else {
       this.catService.updateCategory(this.editingId, name);
       this.editingId = '';
@@ -45,6 +40,10 @@ export class CategoriesComponent implements OnInit {
       this.catService.deleteCategory(cat.id, cat.name);
       this.getCategories();
     }
+  }
+
+  ngAfterViewInit() {
+    this.getCategories();
   }
 
   private getCategories() {

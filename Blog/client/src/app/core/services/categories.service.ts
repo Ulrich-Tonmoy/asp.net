@@ -14,11 +14,11 @@ export class CategoriesService {
 
   constructor(private http: HttpClient, private toastr: ToastrService) {}
 
-  createCategory = (category: Category) => {
-    this.http.post(`${this.baseUrl}/category`, category).subscribe(
+  createCategory = (name: string) => {
+    this.http.post(`${this.baseUrl}/category`, { name }).subscribe(
       (response: any) => {
         console.log(response);
-        this.toastr.success(`Category ${category.name} added successfully!`);
+        this.toastr.success(`Category ${name} added successfully!`);
       },
       (error: any) => {
         this.toastr.error('Error occurred creating category!');
