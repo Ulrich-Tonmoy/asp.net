@@ -6,7 +6,7 @@ namespace Blog.Repository
     public interface IRepositoryBase<T>
     {
         IQueryable<T> GetAllNoTracking();
-        IQueryable<T> GetAllNoTrackingWithParam(QueryParametersBase param, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy);
+        IQueryable<T> GetAllNoTrackingWithParam(BaseQueryParameters param, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy);
         IQueryable<T> GetByConditionNoTracking(Expression<Func<T, bool>> expression);
         Task AddAsync(T entity);
         Task AddAsyncRange(IEnumerable<T> entity);

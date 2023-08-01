@@ -1,0 +1,47 @@
+﻿namespace Blog.Common.QueryParameters
+{
+    public class PostQueryParameters : BaseQueryParameters
+    {
+        private string _sortBy = "createdAt";
+        public string SortBy
+        {
+            get => _sortBy;
+            set { _sortBy = value; }
+        }
+
+        private string _orderBy = "desc";
+        public string OrderBy
+        {
+            get => _orderBy;
+            set { _orderBy = value; }
+        }
+
+        private bool _isFeatured = false;
+        public bool IsFeatured
+        {
+            get => _isFeatured;
+            set { _isFeatured = value; }
+        }
+
+        private Guid _idNotEqual;
+        public Guid IdNotEqual
+        {
+            get => _idNotEqual;
+            set { _idNotEqual = value; }
+        }
+
+        private Guid _categoryId;
+        public Guid CategoryId
+        {
+            get => _categoryId;
+            set { _categoryId = value; }
+        }
+
+        private int _limit = 5;
+        public int Limit
+        {
+            get => _limit;
+            set { _limit = value; }
+        }
+    }
+}

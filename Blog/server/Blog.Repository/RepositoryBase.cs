@@ -18,7 +18,7 @@ namespace Blog.Repository
             return _dbSet.AsNoTracking();
         }
 
-        public IQueryable<T> GetAllNoTrackingWithParam(QueryParametersBase param, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy)
+        public IQueryable<T> GetAllNoTrackingWithParam(BaseQueryParameters param, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy)
         {
             return orderBy(_dbSet
                 .Skip((param.PageNumber - 1) * param.PageSize)
