@@ -24,7 +24,7 @@ namespace Blog.API.Controllers
             {
                 List<CategoryResponseDTO> categoriesResult = await _categoryService.GetAllCategoryAsync();
 
-                return Ok(new { res = categoriesResult });
+                return Ok(new { data = categoriesResult });
             }
             catch (Exception ex)
             {
@@ -41,7 +41,7 @@ namespace Blog.API.Controllers
 
                 if (categoryResult == null) return NotFound();
 
-                return Ok(new { res = categoryResult });
+                return Ok(new { data = categoryResult });
             }
             catch (Exception ex)
             {
@@ -71,7 +71,7 @@ namespace Blog.API.Controllers
         }
 
         [HttpPatch]
-        public async Task<IActionResult> UpdateCategory(CategoryUpdateDTO category)
+        public async Task<IActionResult> UpdateCategory([FromBody] CategoryUpdateDTO category)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace Blog.API.Controllers
                 CategoryResponseDTO categoryEntity = await _categoryService.UpdateCategoryAsync(category);
                 if (categoryEntity == null) return NotFound();
 
-                return Ok(new { res = categoryEntity });
+                return Ok(new { data = categoryEntity });
             }
             catch (Exception ex)
             {
@@ -96,7 +96,7 @@ namespace Blog.API.Controllers
                 string category = await _categoryService.DeleteCategoryAsync(id);
                 if (category == null) return NotFound();
 
-                return Ok(new { res = category });
+                return Ok(new { data = category });
             }
             catch (Exception ex)
             {
@@ -111,7 +111,7 @@ namespace Blog.API.Controllers
             {
                 var catExist = await _categoryService.AnyCategoryAsync(categoryName);
 
-                return Ok(new { res = catExist });
+                return Ok(new { data = catExist });
             }
             catch (Exception ex)
             {
@@ -126,7 +126,7 @@ namespace Blog.API.Controllers
             {
                 var categoryCount = await _categoryService.CountAllCategoryAsync();
 
-                return Ok(new { res = categoryCount });
+                return Ok(new { data = categoryCount });
             }
             catch (Exception ex)
             {

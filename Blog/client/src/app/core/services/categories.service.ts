@@ -4,6 +4,7 @@ import { Category } from '../models/category';
 import { ToastrService } from 'ngx-toastr';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -29,13 +30,13 @@ export class CategoriesService {
   getCategories = () => {
     return this.http
       .get(`${this.baseUrl}/category`)
-      .pipe(map((actions: any) => actions));
+      .pipe(map((actions: any) => actions.data));
   };
 
   updateCategory = (id: string, name: string) => {
     this.http.patch(`${this.baseUrl}/category`, { id, name }).subscribe(
       (response: any) => {
-        console.log(response);
+        console.log(response.data);
         this.toastr.success(`Category ${name} updated successfully!`);
       },
       (error: any) => {
