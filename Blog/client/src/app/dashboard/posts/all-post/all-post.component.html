@@ -34,7 +34,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let post of posts; let i = index">
-                <td>{{ post.id }}</td>
+                <td>{{ i + 1 }}</td>
                 <td>
                   <img src="{{ post.heroImg }}" class="img" alt="hero image" />
                 </td>
@@ -59,14 +59,14 @@
                   <button
                     *ngIf="!post.isFeatured"
                     class="btn btn-sm btn-success mx-1 my-1"
-                    (click)="onFeatured(post.id, true)"
+                    (click)="onFeatured(post, true)"
                   >
                     Mark Featured
                   </button>
                   <button
                     *ngIf="post.isFeatured"
                     class="btn btn-sm btn-info mx-1 my-1"
-                    (click)="onFeatured(post.id, false)"
+                    (click)="onFeatured(post, false)"
                   >
                     Remove Featured
                   </button>

@@ -1,7 +1,8 @@
 export interface Post {
-  id?: number;
+  id?: string;
   title: string;
   permaLink: string;
+  categoryId?: string;
   category: {
     id: string;
     name: string;

@@ -21,7 +21,8 @@ namespace Blog.Service
         {
             IQueryable<Post> query = _unitOfWork.PostRepository.GetAllNoTracking().Include(c => c.Category);
 
-            query = query.Where(post => post.IsFeatured == queryParams.IsFeatured);
+            if (queryParams.IsFeatured != null)
+                query = query.Where(post => post.IsFeatured == queryParams.IsFeatured);
 
             if (queryParams.IdNotEqual != Guid.Empty)
                 query = query.Where(post => post.Id != queryParams.IdNotEqual);

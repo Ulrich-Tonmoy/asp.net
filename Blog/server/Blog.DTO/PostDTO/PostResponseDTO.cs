@@ -7,6 +7,7 @@ namespace Blog.DTO.PostDTO
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string PermaLink { get; set; }
+        public Guid CategoryId { get; set; }
         public Category Category { get; set; }
         public string HeroImg { get; set; }
         public string Excerpt { get; set; }

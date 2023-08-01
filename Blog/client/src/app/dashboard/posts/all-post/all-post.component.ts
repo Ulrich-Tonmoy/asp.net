@@ -29,8 +29,8 @@ export class AllPostComponent implements OnInit {
     });
   }
 
-  onFeatured(id: any, isFeatured: boolean) {
-    this.postService.markFeatured(id, isFeatured);
+  onFeatured(post: any, isFeatured: boolean) {
+    this.postService.markFeatured(post, isFeatured);
     this.getAllPosts();
   }
 }

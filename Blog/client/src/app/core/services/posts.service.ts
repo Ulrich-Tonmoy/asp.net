@@ -4,11 +4,14 @@ import { ToastrService } from 'ngx-toastr';
 import { Post } from '../models/post';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostsService {
+  baseUrl: string = environment.apiUrl;
+
   constructor(
     private http: HttpClient,
     private toastr: ToastrService,
@@ -16,47 +19,55 @@ export class PostsService {
   ) {}
 
   createPost = (post: Post) => {
-    this.http.post('http://localhost:3000/posts', post).subscribe(
-      (response: any) => {
-        console.log(response);
-        this.toastr.success(`Post ${post.title} added successfully!`);
-        this.router.navigate(['dashboard/posts']);
-      },
-      (error: any) => {
-        this.toastr.error('Error occurred creating post!');
-        this.toastr.error(error);
-      }
-    );
+    this.http
+      .post(`${this.baseUrl}/post`, { ...post, categoryId: post.category.id })
+      .subscribe(
+        (response: any) => {
+          console.log(response);
+          this.toastr.success(`Post ${post.title} added successfully!`);
+          this.router.navigate(['dashboard/posts']);
+        },
+        (error: any) => {
+          this.toastr.error('Error occurred creating post!');
+          this.toastr.error(error);
+        }
+      );
   };
 
   getPosts = () => {
     return this.http
-      .get('http://localhost:3000/posts')
-      .pipe(map((actions: any) => actions));
+      .get(`${this.baseUrl}/post`)
+      .pipe(map((actions: any) => actions.data));
   };
 
   getPostById = (id: string) => {
     return this.http
-      .get(`http://localhost:3000/posts/${id}`)
-      .pipe(map((actions: any) => actions));
+      .get(`${this.baseUrl}/post/${id}`)
+      .pipe(map((actions: any) => actions.data));
   };
 
   updatePost = (id: string, post: Post) => {
-    this.http.put(`http://localhost:3000/posts/${id}`, { ...post }).subscribe(
-      (response: any) => {
-        console.log(response);
-        this.toastr.success(`Post ${post.title} updated successfully!`);
-        this.router.navigate(['dashboard/posts']);
-      },
-      (error: any) => {
-        this.toastr.error('Error occurred updating post!');
-        this.toastr.error(error);
-      }
-    );
+    this.http
+      .patch(`${this.baseUrl}/post`, {
+        ...post,
+        categoryId: post.category.id,
+        id,
+      })
+      .subscribe(
+        (response: any) => {
+          console.log(response.data);
+          this.toastr.success(`Post ${post.title} updated successfully!`);
+          this.router.navigate(['dashboard/posts']);
+        },
+        (error: any) => {
+          this.toastr.error('Error occurred updating post!');
+          this.toastr.error(error);
+        }
+      );
   };
 
   deletePost = (id: string, title: string) => {
-    this.http.delete(`http://localhost:3000/posts/${id}`).subscribe(
+    this.http.delete(`${this.baseUrl}/post/${id}`).subscribe(
       (response: any) => {
         console.log(response);
         this.toastr.warning(`Post '${title}' deleted successfully!`);
@@ -68,54 +79,52 @@ export class PostsService {
     );
   };
 
-  markFeatured = (id: string, isFeatured: boolean) => {
-    this.http
-      .patch(`http://localhost:3000/posts/${id}`, { isFeatured })
-      .subscribe(
-        (response: any) => {
-          console.log(response);
-          this.toastr.success(
-            `Post ${isFeatured ? 'is now Featured' : 'Featured removed'}!`
-          );
-          this.router.navigate(['dashboard/posts']);
-        },
-        (error: any) => {
-          this.toastr.error('Error occurred updating post!');
-          this.toastr.error(error);
-        }
-      );
+  markFeatured = (post: any, isFeatured: boolean) => {
+    this.http.patch(`${this.baseUrl}/post`, { ...post, isFeatured }).subscribe(
+      (response: any) => {
+        console.log(response.data);
+        this.toastr.success(
+          `Post ${isFeatured ? 'is now Featured' : 'Featured removed'}!`
+        );
+        this.router.navigate(['dashboard/posts']);
+      },
+      (error: any) => {
+        this.toastr.error('Error occurred updating post!');
+        this.toastr.error(error);
+      }
+    );
   };
 
   getFeaturedPost = () => {
     return this.http
       .get(
-        `http://localhost:3000/posts?_sort=createdAt&_order=desc&isFeatured=true&_limit=4`
+        `${this.baseUrl}/post?sortBy=createdAt&orderBy=desc&isFeatured=true&limit=4`
       )
-      .pipe(map((actions: any) => actions));
+      .pipe(map((actions: any) => actions.data));
   };
 
   getLatestPost = () => {
     return this.http
-      .get(`http://localhost:3000/posts?_sort=createdAt&_order=desc&_limit=6`)
-      .pipe(map((actions: any) => actions));
+      .get(`${this.baseUrl}/post?sortBy=createdAt&orderBy=desc&limit=6`)
+      .pipe(map((actions: any) => actions.data));
   };
 
   getSimilarPost = (catId: string, postId: string, limit: number = 4) => {
     return this.http
       .get(
-        `http://localhost:3000/posts?id_ne=${postId}&category.id=${catId}&_limit=${limit}`
+        `${this.baseUrl}/post?idNotEqual=${postId}&categoryId=${catId}&limit=${limit}`
       )
-      .pipe(map((actions: any) => actions));
+      .pipe(map((actions: any) => actions.data));
   };
 
   getPostByCategory = (cat: string) => {
     return this.http
-      .get(`http://localhost:3000/posts?category.id=${cat}`)
-      .pipe(map((actions: any) => actions));
+      .get(`${this.baseUrl}/post?categoryId=${cat}`)
+      .pipe(map((actions: any) => actions.data));
   };
 
-  viewPost = (id: string, views: number) => {
-    this.http.patch(`http://localhost:3000/posts/${id}`, { views }).subscribe(
+  viewPost = (post: any, views: number) => {
+    this.http.patch(`${this.baseUrl}/post`, { ...post, views }).subscribe(
       (response: any) => {
         console.log(response);
         this.toastr.success(`Post Vew count updated!`);

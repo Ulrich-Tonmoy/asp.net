@@ -89,7 +89,7 @@ export class NewPostComponent implements OnInit {
 
   onSubmit() {
     const postData: Post = {
-      id: Number(this.id),
+      id: this.id,
       title: this.postForm.value.title,
       permaLink: this.permaLink,
       category: {

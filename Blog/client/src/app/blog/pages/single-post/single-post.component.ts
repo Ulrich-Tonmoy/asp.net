@@ -20,7 +20,7 @@ export class SinglePostComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((params: any) => {
       this.postService.getPostById(params.id).subscribe((data) => {
-        this.postService.viewPost(data.id, data.views + 1);
+        this.postService.viewPost(data, data.views + 1);
         this.post = data;
         this.post.views = data.views + 1;
 

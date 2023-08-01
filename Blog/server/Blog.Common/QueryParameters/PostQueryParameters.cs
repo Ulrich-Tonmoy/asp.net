@@ -16,11 +16,14 @@
             set { _orderBy = value; }
         }
 
-        private bool _isFeatured = false;
-        public bool IsFeatured
+        private bool? _isFeatured;
+        public bool? IsFeatured
         {
             get => _isFeatured;
-            set { _isFeatured = value; }
+            set
+            {
+                if (value != null) _isFeatured = value;
+            }
         }
 
         private Guid _idNotEqual;
