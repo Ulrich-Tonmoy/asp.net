@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Blog.DTO.Category;
+using Blog.DTO.CategoryDTO;
+using Blog.DTO.PostDTO;
 using Blog.Model;
 
 namespace Blog.Common
@@ -28,6 +29,10 @@ namespace Blog.Common
             CreateMap<CategoryCreateDTO, Category>();
             CreateMap<CategoryUpdateDTO, Category>();
             CreateMap<Category, CategoryResponseDTO>();
+
+            CreateMap<PostCreateDTO, Post>();
+            CreateMap<PostUpdateDTO, Post>();
+            CreateMap<Post, PostResponseDTO>();
         }
     }
 }

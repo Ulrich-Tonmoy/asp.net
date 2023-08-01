@@ -5,6 +5,7 @@ namespace Blog.Repository
     public interface IUnitOfWork
     {
         ICategoryRepository CategoryRepository { get; set; }
+        IPostRepository PostRepository { get; set; }
 
         Task<int> SaveAsync();
     }
