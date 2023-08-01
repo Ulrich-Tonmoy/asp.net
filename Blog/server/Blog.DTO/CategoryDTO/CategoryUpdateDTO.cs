@@ -1,4 +1,4 @@
-﻿namespace Blog.DTO.Category
+﻿namespace Blog.DTO.CategoryDTO
 {
     public class CategoryUpdateDTO
     {

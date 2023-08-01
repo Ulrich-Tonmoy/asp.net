@@ -2,7 +2,5 @@
 
 namespace Blog.Repository.Repositories.Contracts
 {
-    public interface ICategoryRepository : IRepositoryBase<Category>
-    {
-    }
+    public interface ICategoryRepository : IRepositoryBase<Category> { }
 }

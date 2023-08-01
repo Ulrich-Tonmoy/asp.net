@@ -1,4 +1,4 @@
-﻿using Blog.DTO.Category;
+﻿using Blog.DTO.CategoryDTO;
 
 namespace Blog.Service.Contracts
 {

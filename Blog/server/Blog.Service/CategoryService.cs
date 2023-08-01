@@ -1,5 +1,5 @@
 ﻿using Blog.Common;
-using Blog.DTO.Category;
+using Blog.DTO.CategoryDTO;
 using Blog.Model;
 using Blog.Repository;
 using Blog.Service.Contracts;
