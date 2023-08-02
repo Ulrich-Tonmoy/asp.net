@@ -17,11 +17,13 @@ builder.Services.AddScoped<DbContext, BlogContext>();
 // Add repositories to the container.
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Add services to the container.
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 
 builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

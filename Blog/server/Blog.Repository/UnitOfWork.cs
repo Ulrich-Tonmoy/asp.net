@@ -9,16 +9,19 @@ namespace Blog.Repository
 
         public ICategoryRepository CategoryRepository { get; set; }
         public IPostRepository PostRepository { get; set; }
+        public ISubscriptionRepository SubscriptionRepository { get; set; }
 
         public UnitOfWork(
             DbContext blogContext,
             ICategoryRepository categoryRepository,
-            IPostRepository postRepository
+            IPostRepository postRepository,
+            ISubscriptionRepository subscriptionRepository
             )
         {
             _blogContext = blogContext;
             CategoryRepository = categoryRepository;
             PostRepository = postRepository;
+            SubscriptionRepository = subscriptionRepository;
         }
 
         public async Task<int> SaveAsync()
