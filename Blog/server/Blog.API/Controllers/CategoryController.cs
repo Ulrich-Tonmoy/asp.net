@@ -1,6 +1,7 @@
 ﻿using Blog.Common;
 using Blog.DTO.CategoryDTO;
 using Blog.Service.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -49,7 +50,7 @@ namespace Blog.API.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<IActionResult> CreateCategory([FromBody] CategoryCreateDTO category)
         {
             try
@@ -70,7 +71,7 @@ namespace Blog.API.Controllers
             }
         }
 
-        [HttpPatch]
+        [HttpPatch, Authorize]
         public async Task<IActionResult> UpdateCategory([FromBody] CategoryUpdateDTO category)
         {
             try
@@ -88,7 +89,7 @@ namespace Blog.API.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> DeleteCategory(Guid id)
         {
             try

@@ -2,6 +2,7 @@
 using Blog.Common.QueryParameters;
 using Blog.DTO.PostDTO;
 using Blog.Service.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.API.Controllers
@@ -49,7 +50,7 @@ namespace Blog.API.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<IActionResult> CreatePost([FromBody] PostCreateDTO post)
         {
             try
@@ -69,7 +70,7 @@ namespace Blog.API.Controllers
             }
         }
 
-        [HttpPatch]
+        [HttpPatch, Authorize]
         public async Task<IActionResult> UpdatePost([FromBody] PostUpdateDTO post)
         {
             try
@@ -87,7 +88,7 @@ namespace Blog.API.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
             try

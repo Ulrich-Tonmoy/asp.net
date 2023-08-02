@@ -2,6 +2,7 @@
 using Blog.DTO.CategoryDTO;
 using Blog.DTO.PostDTO;
 using Blog.DTO.SubscriptionDTO;
+using Blog.DTO.UserDTO;
 using Blog.Model;
 
 namespace Blog.Common
@@ -38,6 +39,11 @@ namespace Blog.Common
             CreateMap<SubscriptionCreateDTO, Subscription>();
             CreateMap<SubscriptionUpdateDTO, Subscription>();
             CreateMap<Subscription, SubscriptionResponseDTO>();
+
+            CreateMap<UserRegistrationDTO, User>();
+            CreateMap<UserLoginDTO, User>();
+            CreateMap<UserUpdateDTO, User>();
+            CreateMap<User, UserResponseDTO>();
         }
     }
 }

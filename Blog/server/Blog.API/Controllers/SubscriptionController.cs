@@ -1,6 +1,7 @@
 ﻿using Blog.Common;
 using Blog.DTO.SubscriptionDTO;
 using Blog.Service.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -88,7 +89,7 @@ namespace Blog.API.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> DeleteSubscription(Guid id)
         {
             try

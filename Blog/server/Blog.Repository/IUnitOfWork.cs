@@ -7,6 +7,7 @@ namespace Blog.Repository
         ICategoryRepository CategoryRepository { get; set; }
         IPostRepository PostRepository { get; set; }
         public ISubscriptionRepository SubscriptionRepository { get; set; }
+        public IUserRepository UserRepository { get; set; }
 
         Task<int> SaveAsync();
     }
