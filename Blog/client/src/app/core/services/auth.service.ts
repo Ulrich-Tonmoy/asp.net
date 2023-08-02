@@ -3,11 +3,14 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { map } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  baseUrl: string = environment.apiUrl;
+
   constructor(
     private http: HttpClient,
     private toastr: ToastrService,
@@ -16,21 +19,18 @@ export class AuthService {
 
   login(email: string, password: string) {
     this.http
-      .get(`http://localhost:3000/users?email=${email}`)
+      .post(`${this.baseUrl}/user/login`, { email, password })
       .pipe(map((actions: any) => actions))
-      .subscribe((user: Array<any>) => {
-        if (user.length > 0) {
-          if (user[0].password === password) {
-            this.toastr.success('Successfully Logged In.');
-            localStorage.setItem('user', JSON.stringify(user[0]));
-            this.router.navigate(['/dashboard']);
-          } else {
-            this.toastr.warning('Wrong password.');
-          }
-        } else {
-          this.toastr.error(`User with email: '${email}' not found.`);
+      .subscribe(
+        (response: any) => {
+          this.toastr.success('Successfully Logged In.');
+          localStorage.setItem('user', JSON.stringify(response.data));
+          this.router.navigate(['/dashboard']);
+        },
+        (error: any) => {
+          this.toastr.error(error.error);
         }
-      });
+      );
   }
 
   logout() {

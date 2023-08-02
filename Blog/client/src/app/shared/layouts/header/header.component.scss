@@ -6,3 +6,15 @@ header {
   font-size: 1.5em;
   text-decoration: none;
 }
+
+.name {
+  cursor: default;
+}
+
+.email {
+  display: none;
+}
+
+.info-container:hover .email {
+  display: block;
+}

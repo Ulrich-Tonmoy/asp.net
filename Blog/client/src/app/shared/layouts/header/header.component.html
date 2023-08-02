@@ -4,12 +4,24 @@
   </div>
 
   <div class="container justify-content-center" *ngIf="isLogged">
-    <a href="#" class="mx-3">{{ email }}</a>
+    <div class="d-flex flex-column align-items-center info-container">
+      <span class="mx-3 text-capitalize name">{{ user.name }}</span>
+      <a href="#" class="mx-3 email">{{ user.email }}</a>
+    </div>
     <button
       class="btn btn-sm btn-info bg-theme-secondary text-theme-primary"
       (click)="onLogout()"
     >
       Logout
+    </button>
+  </div>
+
+  <div class="container justify-content-center" *ngIf="!isLogged">
+    <button
+      class="btn btn-sm btn-info bg-theme-secondary text-theme-primary"
+      (click)="onLogin()"
+    >
+      Login
     </button>
   </div>
 </header>
