@@ -3,17 +3,20 @@ import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Sub } from '../models/sub';
 import { map } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SubService {
+  baseUrl: string = environment.apiUrl;
+
   constructor(private http: HttpClient, private toastr: ToastrService) {}
 
   addSub = (sub: Sub) => {
     this.checkSubscription(sub.email).subscribe((data) => {
-      if (data.length === 0) {
-        this.http.post('http://localhost:3000/subs', sub).subscribe(
+      if (!data) {
+        this.http.post(`${this.baseUrl}/subscription`, sub).subscribe(
           (response: any) => {
             console.log(response);
             this.toastr
@@ -33,18 +36,18 @@ export class SubService {
 
   checkSubscription = (email: string) => {
     return this.http
-      .get(`http://localhost:3000/subs?email=${email}`)
-      .pipe(map((actions: any) => actions));
+      .get(`${this.baseUrl}/subscription/any?email=${email}`)
+      .pipe(map((actions: any) => actions.data));
   };
 
   getSubs = () => {
     return this.http
-      .get('http://localhost:3000/subs')
-      .pipe(map((actions: any) => actions));
+      .get(`${this.baseUrl}/subscription`)
+      .pipe(map((actions: any) => actions.data));
   };
 
   deleteSub = (id: string, email: string) => {
-    this.http.delete(`http://localhost:3000/subs/${id}`).subscribe(
+    this.http.delete(`${this.baseUrl}/subscription/${id}`).subscribe(
       (response: any) => {
         console.log(response);
         this.toastr.warning(`Subscriber with '${email}' deleted successfully!`);
