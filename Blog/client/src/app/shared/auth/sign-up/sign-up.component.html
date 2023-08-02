@@ -7,10 +7,31 @@
         <div class="card p-5 shadow bg-theme-secondary">
           <div class="card-body">
             <div class="text-center">
-              <h3 class="text-theme-primary">Login</h3>
-              <p>Please login to manage posts and categories.</p>
+              <h3 class="text-theme-primary">Sign Up</h3>
+              <p>Please create an account to login.</p>
             </div>
-            <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm.value)">
+            <form #signupForm="ngForm" (ngSubmit)="onSubmit(signupForm.value)">
+              <div class="form-group">
+                <input
+                  type="text"
+                  class="form-control my-3"
+                  placeholder="Full Name"
+                  name="name"
+                  #Name="ngModel"
+                  ngModel
+                  required
+                  name
+                  [ngClass]="{ 'is-invalid': Name.touched && Name.invalid }"
+                />
+                <div
+                  class="alert alert-danger"
+                  *ngIf="Name.touched && Name.invalid"
+                >
+                  <div *ngIf="Name.errors && Name.errors['required']">
+                    Name cannot be Empty.
+                  </div>
+                </div>
+              </div>
               <div class="form-group">
                 <input
                   type="email"
@@ -57,16 +78,16 @@
               </div>
               <button
                 class="btn btn-info w-100 btn-theme"
-                [disabled]="loginForm.invalid"
+                [disabled]="signupForm.invalid"
               >
-                Login
+                Signup
               </button>
             </form>
             <p class="my-2">
-              Don't have an account?<span
+              Already have an account?<span
                 class="mx-0.5 link"
-                routerLink="/signup"
-                >Sign up</span
+                routerLink="/login"
+                >Login</span
               >
             </p>
           </div>
