@@ -53,7 +53,7 @@ namespace Blog.API.Controllers
             }
         }
 
-        [HttpPost("regiser")]
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationDTO user)
         {
             try

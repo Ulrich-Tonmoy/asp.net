@@ -10,6 +10,10 @@ export class SignUpComponent {
   constructor(private authService: AuthService) {}
 
   onSubmit(formValue: any) {
-    this.authService.login(formValue.email, formValue.password);
+    this.authService.signup(
+      formValue.name,
+      formValue.email,
+      formValue.password
+    );
   }
 }

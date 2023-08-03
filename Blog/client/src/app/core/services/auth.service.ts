@@ -33,6 +33,21 @@ export class AuthService {
       );
   }
 
+  signup(name: string, email: string, password: string) {
+    this.http
+      .post(`${this.baseUrl}/user/register`, { name, email, password })
+      .pipe(map((actions: any) => actions))
+      .subscribe(
+        (response: any) => {
+          this.toastr.success('User Successfully Registered.');
+          this.router.navigate(['/login']);
+        },
+        (error: any) => {
+          this.toastr.error(error.error);
+        }
+      );
+  }
+
   logout() {
     this.toastr.success('Successfully Logged Out.');
     localStorage.clear();
