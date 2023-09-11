@@ -1,6 +1,7 @@
-﻿using LeaveManagement.Domain;
+﻿using LeaveManagement.Application.IRepository.Generic;
+using LeaveManagement.Domain;
 
-namespace LeaveManagement.Application.Persistence.Contracts
+namespace LeaveManagement.Application.IRepository
 {
     public interface ILeaveRequestRepository : IGenericRepository<LeaveRequest>
     {

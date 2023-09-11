@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using LeaveManagement.Application.Persistence.Contracts;
+using LeaveManagement.Application.IRepository;
 using LeaveManagement.Domain;
 using MediatR;
 
