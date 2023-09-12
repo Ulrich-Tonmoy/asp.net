@@ -7,5 +7,6 @@
         Task<T> Create(T entity);
         Task<T> Update(T entity);
         Task<T> Delete(Guid id);
+        Task<bool> Exists(Guid id);
     }
 }

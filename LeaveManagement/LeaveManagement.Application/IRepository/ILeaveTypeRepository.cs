@@ -5,5 +5,6 @@ namespace LeaveManagement.Application.IRepository
 {
     public interface ILeaveTypeRepository : IGenericRepository<LeaveType>
     {
+
     }
 }
