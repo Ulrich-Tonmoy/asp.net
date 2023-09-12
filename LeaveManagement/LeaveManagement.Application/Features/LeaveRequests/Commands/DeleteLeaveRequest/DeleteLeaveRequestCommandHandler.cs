@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LeaveManagement.Application.IRepository;
+using LeaveManagement.Domain;
 using MediatR;
 
 namespace LeaveManagement.Application.Features.LeaveRequests.Commands.DeleteLeaveRequest
@@ -17,7 +18,8 @@ namespace LeaveManagement.Application.Features.LeaveRequests.Commands.DeleteLeav
 
         public async Task<Unit> Handle(DeleteLeaveRequestCommand request, CancellationToken cancellationToken)
         {
-            await _leaveRequestRepository.Delete(request.Id);
+            LeaveRequest leaveRequest = await _leaveRequestRepository.Get(request.Id);
+            await _leaveRequestRepository.Delete(leaveRequest);
 
             return Unit.Value;
         }

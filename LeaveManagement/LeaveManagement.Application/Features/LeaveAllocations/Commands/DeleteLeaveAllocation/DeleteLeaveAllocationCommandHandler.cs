@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LeaveManagement.Application.IRepository;
+using LeaveManagement.Domain;
 using MediatR;
 
 namespace LeaveManagement.Application.Features.LeaveAllocations.Commands.DeleteLeaveAllocation
@@ -17,7 +18,8 @@ namespace LeaveManagement.Application.Features.LeaveAllocations.Commands.DeleteL
 
         public async Task<Unit> Handle(DeleteLeaveAllocationCommand request, CancellationToken cancellationToken)
         {
-            await _leaveAllocationRepository.Delete(request.Id);
+            LeaveAllocation leaveAllocation = await _leaveAllocationRepository.Get(request.Id);
+            await _leaveAllocationRepository.Delete(leaveAllocation);
 
             return Unit.Value;
         }
