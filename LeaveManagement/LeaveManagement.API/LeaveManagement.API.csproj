@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\LeaveManagement.Repository\LeaveManagement.Repository.csproj" />
   </ItemGroup>
 
 </Project>
