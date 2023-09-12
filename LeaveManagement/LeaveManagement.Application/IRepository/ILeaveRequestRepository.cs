@@ -7,5 +7,6 @@ namespace LeaveManagement.Application.IRepository
     {
         Task<LeaveRequest> GetLeaveRequestDetails(Guid id);
         Task<List<LeaveRequest>> GetAllLeaveRequestDetails();
+        Task ChangeApprovalStatus(LeaveRequest leaveRequest, bool? approved);
     }
 }

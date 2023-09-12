@@ -5,6 +5,6 @@ namespace LeaveManagement.Application.Features.LeaveTypes.Commands.CreateLeaveTy
 {
     public class CreateLeaveTypeCommand : IRequest<Guid>
     {
-        public LeaveTypeDto LeaveTypeDto { get; set; }
+        public CreateLeaveTypeDto CreateLeaveTypeDto { get; set; }
     }
 }
