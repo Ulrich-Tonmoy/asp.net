@@ -43,18 +43,18 @@ namespace LeaveManagement.API.Controllers
             return Ok(response);
         }
 
-        [HttpPut]
-        public async Task<ActionResult> Put([FromBody] UpdateLeaveRequestDto updateLeaveRequestDto)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Put(Guid id, [FromBody] UpdateLeaveRequestDto updateLeaveRequestDto)
         {
-            var command = new UpdateLeaveRequestCommand { UpdateLeaveRequestDto = updateLeaveRequestDto };
+            var command = new UpdateLeaveRequestCommand { Id = id, UpdateLeaveRequestDto = updateLeaveRequestDto };
             Unit response = await _mediator.Send(command);
             return Ok(response);
         }
 
-        [HttpPut("change-approval")]
-        public async Task<ActionResult> ChangeApproval([FromBody] ChangeLeaveRequestApprovalDto changeLeaveRequestApprovalDto)
+        [HttpPut("change-approval/{id}")]
+        public async Task<ActionResult> ChangeApproval(Guid id, [FromBody] ChangeLeaveRequestApprovalDto changeLeaveRequestApprovalDto)
         {
-            var command = new UpdateLeaveRequestCommand { ChangeLeaveRequestApprovalDto = changeLeaveRequestApprovalDto };
+            var command = new UpdateLeaveRequestCommand { Id = id, ChangeLeaveRequestApprovalDto = changeLeaveRequestApprovalDto };
             Unit response = await _mediator.Send(command);
             return Ok(response);
         }
