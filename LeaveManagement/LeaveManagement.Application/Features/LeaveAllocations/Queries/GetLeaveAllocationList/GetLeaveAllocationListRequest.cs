@@ -3,8 +3,8 @@ using MediatR;
 
 namespace LeaveManagement.Application.Features.LeaveAllocations.Queries.GetLeaveAllocationList
 {
-    public class GetLeaveAllocationListRequest : IRequest<LeaveAllocationDto>
+    public class GetLeaveAllocationListRequest : IRequest<List<LeaveAllocationDto>>
     {
-        public Guid Id { get; set; }
+
     }
 }

@@ -43,8 +43,8 @@ namespace LeaveManagement.API.Controllers
             return Ok(response);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Put(Guid id, [FromBody] LeaveTypeDto leaveType)
+        [HttpPut]
+        public async Task<ActionResult> Put([FromBody] LeaveTypeDto leaveType)
         {
             var command = new UpdateLeaveTypeCommand { LeaveTypeDto = leaveType };
             await _mediator.Send(command);
