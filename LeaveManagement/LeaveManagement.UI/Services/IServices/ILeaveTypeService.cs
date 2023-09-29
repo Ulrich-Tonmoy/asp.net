@@ -6,8 +6,8 @@ namespace LeaveManagement.UI.Services.IServices
     {
         Task<List<LeaveTypeDto>> GetAllLeaveType();
         Task<LeaveTypeDto> GetLeaveTypeById(Guid id);
-        Task<LeaveTypeDto> CreateLeaveType(CreateLeaveTypeDto leaveType);
-        Task<bool> DeleteLeaveType(int id);
-        Task<LeaveTypeDto> UpdateLeaveType(LeaveTypeDto leaveType);
+        Task CreateLeaveType(CreateLeaveTypeDto leaveType);
+        Task<bool> DeleteLeaveType(Guid id);
+        Task UpdateLeaveType(LeaveTypeDto leaveType);
     }
 }

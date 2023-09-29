@@ -55,19 +55,21 @@
 
     private async Task CreateItem(GridCommandEventArgs args)
     {
+        var leaveType = (LeaveTypeDto)args.Item;
+        await LeaveTypeService.CreateLeaveType(new CreateLeaveTypeDto{Name=leaveType.Name,DefaultDays=leaveType.DefaultDays});
         await GetAllLeaveType();
-        Console.WriteLine("Create");
     }
 
     private async Task DeleteItem(GridCommandEventArgs args)
     {
+        var leaveType = (LeaveTypeDto)args.Item;
+        await LeaveTypeService.DeleteLeaveType(leaveType.Id);
         await GetAllLeaveType();
-        Console.WriteLine("Delete");
     }
 
     private async Task UpdateItem(GridCommandEventArgs args)
     {
+        await LeaveTypeService.UpdateLeaveType((LeaveTypeDto)args.Item);
         await GetAllLeaveType();
-        Console.WriteLine("Update");
     }
 }

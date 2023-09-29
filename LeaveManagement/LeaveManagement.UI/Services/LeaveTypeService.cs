@@ -20,21 +20,6 @@ namespace LeaveManagement.UI.Services
             try
             {
                 return await _httpClient.GetFromJsonAsync<List<LeaveTypeDto>>("api/LeaveTypes");
-                var response = await _httpClient.GetAsync($"api/LeaveTypes");
-                if (response.IsSuccessStatusCode)
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
-                    {
-                        return Enumerable.Empty<LeaveTypeDto>().ToList();
-                    }
-                    return await response.Content.ReadFromJsonAsync<List<LeaveTypeDto>>();
-                }
-                else
-                {
-                    var message = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"Http status code: {response.StatusCode} Message: {message}");
-                }
-
             }
             catch (Exception er)
             {
@@ -48,19 +33,52 @@ namespace LeaveManagement.UI.Services
             throw new NotImplementedException();
         }
 
-        public Task<LeaveTypeDto> CreateLeaveType(CreateLeaveTypeDto leaveType)
+        public async Task CreateLeaveType(CreateLeaveTypeDto leaveType)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _httpClient.PostAsJsonAsync("api/LeaveTypes", leaveType);
+            }
+            catch (Exception er)
+            {
+                Console.WriteLine(er.Message);
+                throw;
+            }
         }
 
-        public Task<LeaveTypeDto> UpdateLeaveType(LeaveTypeDto leaveType)
+        public async Task UpdateLeaveType(LeaveTypeDto leaveType)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _httpClient.PutAsJsonAsync("api/LeaveTypes", leaveType);
+            }
+            catch (Exception er)
+            {
+                Console.WriteLine(er.Message);
+                throw;
+            }
         }
 
-        public Task<bool> DeleteLeaveType(int id)
+        public async Task<bool> DeleteLeaveType(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"api/LeaveTypes/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    var message = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Http status code: {response.StatusCode} Message: {message}");
+                }
+            }
+            catch (Exception er)
+            {
+                Console.WriteLine(er.Message);
+                throw;
+            }
         }
     }
 }
