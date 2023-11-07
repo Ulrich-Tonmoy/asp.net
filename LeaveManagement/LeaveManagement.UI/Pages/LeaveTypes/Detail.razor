@@ -1,0 +1,20 @@
+﻿@page "/leavetypes/details/{id:int}"
+
+<h3>Details</h3>
+
+<FormComponent LeaveType="leaveType" Disabled="true" />
+
+@code {
+    [Inject]
+    ILeaveTypeService _client { get; set; }
+
+    [Parameter]
+    public Guid id { get; set; }
+
+    LeaveTypeDto leaveType = new LeaveTypeDto();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        // leaveType = await _client.GetLeaveTypeById(id);
+    }
+}

@@ -1,3 +1,5 @@
+using Blazored.LocalStorage;
+using Blazored.Toast;
 using LeaveManagement.UI;
 using LeaveManagement.UI.Services;
 using LeaveManagement.UI.Services.IServices;
@@ -9,6 +11,9 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7145/") });
+builder.Services.AddBlazoredToast();
+builder.Services.AddBlazoredLocalStorage();
+
 builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
 
 await builder.Build().RunAsync();
