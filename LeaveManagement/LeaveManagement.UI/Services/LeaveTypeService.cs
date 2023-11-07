@@ -28,9 +28,17 @@ namespace LeaveManagement.UI.Services
             }
         }
 
-        public Task<LeaveTypeDto> GetLeaveTypeById(Guid id)
+        public async Task<LeaveTypeDto> GetLeaveTypeById(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<LeaveTypeDto>($"api/LeaveTypes/{id}");
+            }
+            catch (Exception er)
+            {
+                Console.WriteLine(er.Message);
+                throw;
+            }
         }
 
         public async Task<Response<Guid>> CreateLeaveType(LeaveTypeDto leaveType)

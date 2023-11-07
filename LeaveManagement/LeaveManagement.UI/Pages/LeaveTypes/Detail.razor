@@ -1,4 +1,4 @@
-﻿@page "/leavetypes/details/{id:int}"
+﻿@page "/leavetypes/details/{id}"
 
 <h3>Details</h3>
 
@@ -9,12 +9,12 @@
     ILeaveTypeService _client { get; set; }
 
     [Parameter]
-    public Guid id { get; set; }
+    public string id { get; set; }
 
     LeaveTypeDto leaveType = new LeaveTypeDto();
 
     protected async override Task OnParametersSetAsync()
     {
-        // leaveType = await _client.GetLeaveTypeById(id);
+        leaveType = await _client.GetLeaveTypeById(new Guid(id));
     }
 }
