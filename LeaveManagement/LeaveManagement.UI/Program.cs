@@ -11,5 +11,4 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7145/") });
 builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
 
-builder.Services.AddTelerikBlazor();
 await builder.Build().RunAsync();

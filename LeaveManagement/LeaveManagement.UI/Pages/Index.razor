@@ -2,26 +2,15 @@
 
 <h4>Basic Button</h4>
 
-<TelerikButton OnClick="@MyClickHandler">Click me!</TelerikButton>
 @thankYouString
 
 <h4>Styled Buttons</h4>
 
-<TelerikButton ThemeColor="@(ThemeConstants.Button.ThemeColor.Primary)">Primary Button</TelerikButton>
 
-<TelerikButton Class="red-text">Red Text Button</TelerikButton>
 
 <h4>Buttons with icons and images</h4>
-<TelerikButton Icon="@SvgIcon.Filter">Icon</TelerikButton>
-<TelerikButton>
-    <span class="netherlands-flag"></span>Image
-</TelerikButton>
-<TelerikButton Class="snowboarding">
-    <img src="https://demos.telerik.com/kendo-ui/content/shared/icons/sports/snowboarding.png" />Image
-</TelerikButton>
 
 <h4>Disabled Button</h4>
-<TelerikButton Enabled="false">Disabled Button</TelerikButton>
 
 @code {
     string thankYouString;
@@ -39,7 +28,6 @@
     }
 
     .netherlands-flag {
-        background-image: url("https://demos.telerik.com/kendo-ui/content/shared/styles/flags.png");
         background-position: 0 -64px;
         vertical-align: middle;
         height: 16px;

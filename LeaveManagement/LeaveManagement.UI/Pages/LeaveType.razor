@@ -3,38 +3,6 @@
 
 <PageTitle>Leave Type</PageTitle>
 
-<TelerikGrid Data=@LeaveTypeList
-             EditMode="@GridEditMode.Inline"
-             Height="500px"
-             Resizable="true"
-             Pageable="true"
-             PageSize="@PageSize"
-             ConfirmDelete="true"
-             OnUpdate="@UpdateItem"
-             OnDelete="@DeleteItem"
-             OnCreate="@CreateItem">
-    <GridToolBarTemplate>
-        <GridCommandButton Command="Add" Icon="@SvgIcon.Plus">Add Type</GridCommandButton>
-    </GridToolBarTemplate>
-    <GridColumns>
-        <GridColumn Field=@nameof(LeaveTypeDto.Id) Width="200px" Title="ID" Editable="false" />
-        <GridColumn Field=@nameof(LeaveTypeDto.Name) Width="80px" Title="Leave Type" />
-        <GridColumn Field=@nameof(LeaveTypeDto.DefaultDays) Width="140px" Title="Number of days of Leave" />
-        <GridCommandColumn Width="250px" Title="Actions">
-            <GridCommandButton Command="Edit" Icon="@SvgIcon.Pencil" ThemeColor="@ThemeConstants.Button.ThemeColor.Warning">
-                Edit
-            </GridCommandButton>
-            <GridCommandButton Command="Delete" Icon="@SvgIcon.Trash" ThemeColor="@ThemeConstants.Button.ThemeColor.Error">Delete</GridCommandButton>
-            <GridCommandButton Command="Save" Icon="@SvgIcon.Save" ThemeColor="@ThemeConstants.Button.ThemeColor.Success" ShowInEdit="true">
-                Update
-            </GridCommandButton>
-            <GridCommandButton Command="Cancel" Icon="@SvgIcon.Cancel" ThemeColor="@ThemeConstants.Button.ThemeColor.Secondary" ShowInEdit="true">
-                Cancel
-            </GridCommandButton>
-        </GridCommandColumn>
-    </GridColumns>
-</TelerikGrid>
-
 
 
 @code {
@@ -53,23 +21,23 @@
         LeaveTypeList = await LeaveTypeService.GetAllLeaveType();
     }
 
-    private async Task CreateItem(GridCommandEventArgs args)
-    {
-        var leaveType = (LeaveTypeDto)args.Item;
-        await LeaveTypeService.CreateLeaveType(new CreateLeaveTypeDto{Name=leaveType.Name,DefaultDays=leaveType.DefaultDays});
-        await GetAllLeaveType();
-    }
+    // private async Task CreateItem(GridCommandEventArgs args)
+    // {
+    //     var leaveType = (LeaveTypeDto)args.Item;
+    //     await LeaveTypeService.CreateLeaveType(new CreateLeaveTypeDto{Name=leaveType.Name,DefaultDays=leaveType.DefaultDays});
+    //     await GetAllLeaveType();
+    // }
 
-    private async Task DeleteItem(GridCommandEventArgs args)
-    {
-        var leaveType = (LeaveTypeDto)args.Item;
-        await LeaveTypeService.DeleteLeaveType(leaveType.Id);
-        await GetAllLeaveType();
-    }
+    // private async Task DeleteItem(GridCommandEventArgs args)
+    // {
+    //     var leaveType = (LeaveTypeDto)args.Item;
+    //     await LeaveTypeService.DeleteLeaveType(leaveType.Id);
+    //     await GetAllLeaveType();
+    // }
 
-    private async Task UpdateItem(GridCommandEventArgs args)
-    {
-        await LeaveTypeService.UpdateLeaveType((LeaveTypeDto)args.Item);
-        await GetAllLeaveType();
-    }
+    // private async Task UpdateItem(GridCommandEventArgs args)
+    // {
+    //     await LeaveTypeService.UpdateLeaveType((LeaveTypeDto)args.Item);
+    //     await GetAllLeaveType();
+    // }
 }
