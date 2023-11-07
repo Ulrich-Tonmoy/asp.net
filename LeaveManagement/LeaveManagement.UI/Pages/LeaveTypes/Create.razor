@@ -23,13 +23,13 @@
     LeaveTypeDto leaveType = new LeaveTypeDto();
     async Task CreateLeaveType()
     {
-        // var response = await _client.CreateLeaveType(leaveType);
-        // if (response.Success)
-        // {
-        //     toastService.ShowSuccess("Leave Type created Successfully");
-        //     toastService.ShowToast(ToastLevel.Info, "Test");
-        //     _navManager.NavigateTo("/leavetypes/");
-        // }
-        // Message = response.Message;
+        var response = await _client.CreateLeaveType(leaveType);
+        if (response.Success)
+        {
+            toastService.ShowSuccess("Leave Type created Successfully");
+            toastService.ShowToast(ToastLevel.Info, "Test");
+            _navManager.NavigateTo("/leavetypes/");
+        }
+        Message = response.Message;
     }
 }

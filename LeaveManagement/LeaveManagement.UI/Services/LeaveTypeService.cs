@@ -33,51 +33,66 @@ namespace LeaveManagement.UI.Services
             throw new NotImplementedException();
         }
 
-        public async Task CreateLeaveType(CreateLeaveTypeDto leaveType)
+        public async Task<Response<Guid>> CreateLeaveType(LeaveTypeDto leaveType)
         {
             try
             {
-                await _httpClient.PostAsJsonAsync("api/LeaveTypes", leaveType);
+                var response = await _httpClient.PostAsJsonAsync("api/LeaveTypes", leaveType);
+                if (response.IsSuccessStatusCode)
+                {
+                    return new Response<Guid>() { Success = true };
+                }
+                else
+                {
+                    var message = await response.Content.ReadAsStringAsync();
+                    return new Response<Guid>() { Success = false, Message = message };
+                }
             }
-            catch (Exception er)
+            catch (Exception ex)
             {
-                Console.WriteLine(er.Message);
-                throw;
+                return new Response<Guid>() { Success = false, Message = ex.Message };
             }
         }
 
-        public async Task UpdateLeaveType(LeaveTypeDto leaveType)
+        public async Task<Response<Guid>> UpdateLeaveType(LeaveTypeDto leaveType)
         {
             try
             {
-                await _httpClient.PutAsJsonAsync("api/LeaveTypes", leaveType);
+                var response = await _httpClient.PutAsJsonAsync("api/LeaveTypes", leaveType);
+                if (response.IsSuccessStatusCode)
+                {
+                    return new Response<Guid>() { Success = true };
+                }
+                else
+                {
+                    var message = await response.Content.ReadAsStringAsync();
+                    return new Response<Guid>() { Success = false, Message = message };
+                }
             }
-            catch (Exception er)
+            catch (Exception ex)
             {
-                Console.WriteLine(er.Message);
-                throw;
+                return new Response<Guid>() { Success = false, Message = ex.Message };
             }
         }
 
-        public async Task<bool> DeleteLeaveType(Guid id)
+        public async Task<Response<Guid>> DeleteLeaveType(Guid id)
         {
             try
             {
                 var response = await _httpClient.DeleteAsync($"api/LeaveTypes/{id}");
                 if (response.IsSuccessStatusCode)
                 {
-                    return true;
+                    return new Response<Guid>() { Success = true };
                 }
                 else
                 {
                     var message = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"Http status code: {response.StatusCode} Message: {message}");
+                    return new Response<Guid>() { Success = false, Message = message };
                 }
             }
-            catch (Exception er)
+            catch (Exception ex)
             {
-                Console.WriteLine(er.Message);
-                throw;
+                return new Response<Guid>() { Success = false, Message = ex.Message };
             }
         }
     }
