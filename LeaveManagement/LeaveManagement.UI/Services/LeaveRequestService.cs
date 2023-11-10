@@ -66,7 +66,7 @@ namespace LeaveManagement.UI.Services
         {
             try
             {
-                var response = await _httpClient.PutAsJsonAsync("api/LeaveRequests", leaverequest);
+                var response = await _httpClient.PutAsJsonAsync($"api/LeaveRequests/{leaverequest.Id}", leaverequest);
                 if (response.IsSuccessStatusCode)
                 {
                     return new Response<Guid>() { Success = true };

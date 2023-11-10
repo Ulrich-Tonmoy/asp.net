@@ -1,0 +1,57 @@
+﻿@page "/leaverequests/create/"
+<h3>Apply for leave</h3>
+
+
+<EditForm Model="@LeaveRequest" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label for="startDate">Start Date</label>
+        <InputDate class="form-control" id="startDate" @bind-Value="LeaveRequest.StartDate" />
+        <ValidationMessage For="@(() => LeaveRequest.StartDate)" />
+    </div>
+    <div class="form-group">
+        <label for="endDate">End Date</label>
+            <InputDate class="form-control" id="endDate" @bind-Value="LeaveRequest.EndDate" />
+        <ValidationMessage For="@(() => LeaveRequest.EndDate)" />
+    </div>
+    <div class="form-group">
+        <label for="leaveType">Leave Type</label>
+        <InputSelect class="form-control" id="leaveType" @bind-Value="LeaveRequest.LeaveTypeId">
+            <option>Select Leave Type</option>
+            @foreach (var leaveType in leaveType)
+            {
+                <option value="@leaveType.Id">@leaveType.Name</option>
+            }
+            </InputSelect>
+        <ValidationMessage For="@(() => LeaveRequest.LeaveTypeId)" />
+    </div>
+    <div class="form-group">
+        <label for="comments">Comments</label>
+        <InputTextArea class="form-control" id="comments" @bind-Value="LeaveRequest.RequestComments" MaxLength="300" />
+        <ValidationMessage For="@(() => LeaveRequest.RequestComments)" />
+    </div>
+
+    <button class="btn btn-success my-2" type="submit">Submit Request</button>
+
+</EditForm>
+
+@code {
+    [Inject] ILeaveTypeService leaveTypeService { get; set; }
+    [Inject] ILeaveRequestService leaveRequestService { get; set; }
+    [Inject] NavigationManager NavigationManager { get; set; }
+    LeaveRequestDto LeaveRequest { get; set; } = new LeaveRequestDto();
+    List<LeaveTypeDto> leaveType { get; set; } = new List<LeaveTypeDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        leaveType = await leaveTypeService.GetAllLeaveType();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        // Perform form submission here
+        await leaveRequestService.CreateLeaveRequest(LeaveRequest);
+        NavigationManager.NavigateTo("/leaverequests/");
+    }
+}

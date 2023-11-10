@@ -15,5 +15,6 @@ builder.Services.AddBlazoredToast();
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddScoped<ILeaveTypeService, LeaveTypeService>();
+builder.Services.AddScoped<ILeaveRequestService, LeaveRequestService>();
 
 await builder.Build().RunAsync();
