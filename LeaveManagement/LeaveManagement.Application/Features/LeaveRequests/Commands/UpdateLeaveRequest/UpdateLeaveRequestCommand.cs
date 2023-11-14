@@ -7,6 +7,5 @@ namespace LeaveManagement.Application.Features.LeaveRequests.Commands.UpdateLeav
     {
         public Guid Id { get; set; }
         public UpdateLeaveRequestDto UpdateLeaveRequestDto { get; set; }
-        public ChangeLeaveRequestApprovalDto ChangeLeaveRequestApprovalDto { get; set; }
     }
 }

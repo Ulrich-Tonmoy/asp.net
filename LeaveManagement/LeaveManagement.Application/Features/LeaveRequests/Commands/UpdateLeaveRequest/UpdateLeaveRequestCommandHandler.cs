@@ -19,16 +19,8 @@ namespace LeaveManagement.Application.Features.LeaveRequests.Commands.UpdateLeav
         public async Task<Unit> Handle(UpdateLeaveRequestCommand request, CancellationToken cancellationToken)
         {
             LeaveRequest leaveRequest = await _leaveRequestRepository.GetLeaveRequestDetails(request.Id);
-
-            if (request.UpdateLeaveRequestDto != null)
-            {
-                _mapper.Map(request.UpdateLeaveRequestDto, leaveRequest);
-                await _leaveRequestRepository.Update(leaveRequest);
-            }
-            else if (request.ChangeLeaveRequestApprovalDto != null)
-            {
-                await _leaveRequestRepository.ChangeApprovalStatus(leaveRequest, request.ChangeLeaveRequestApprovalDto.Approved);
-            }
+            _mapper.Map(request.UpdateLeaveRequestDto, leaveRequest);
+            await _leaveRequestRepository.Update(leaveRequest);
 
             return Unit.Value;
         }
