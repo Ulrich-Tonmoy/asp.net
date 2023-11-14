@@ -20,6 +20,7 @@ namespace LeaveManagement.Application.Features.LeaveRequests.Commands.UpdateLeav
         {
             LeaveRequest leaveRequest = await _leaveRequestRepository.GetLeaveRequestDetails(request.Id);
             _mapper.Map(request.UpdateLeaveRequestDto, leaveRequest);
+            leaveRequest.LastModifiedDate = DateTime.UtcNow;
             await _leaveRequestRepository.Update(leaveRequest);
 
             return Unit.Value;

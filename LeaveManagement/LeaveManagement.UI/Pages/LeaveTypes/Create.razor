@@ -27,7 +27,6 @@
         if (response.Success)
         {
             toastService.ShowSuccess("Leave Type created Successfully");
-            toastService.ShowToast(ToastLevel.Info, "Test");
             _navManager.NavigateTo("/leavetypes/");
         }
         Message = response.Message;

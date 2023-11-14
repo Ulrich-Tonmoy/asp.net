@@ -19,6 +19,7 @@ namespace LeaveManagement.Application.Features.LeaveRequests.Commands.CreateLeav
         public async Task<Guid> Handle(CreateLeaveRequestCommand request, CancellationToken cancellationToken)
         {
             LeaveRequest leaveRequest = _mapper.Map<LeaveRequest>(request.CreateLeaveRequestDto);
+            leaveRequest.DateCreated = DateTime.Now;
             leaveRequest = await _leaveRequestRepository.Create(leaveRequest);
 
             return leaveRequest.Id;

@@ -43,14 +43,14 @@ else
                     <td>@leaveType.Name </td>
                     <td>@leaveType.DefaultDays </td>
                     <td>
-                        @* <AuthorizeView Roles="Administrator">
+                        @* <AuthorizeView Roles="Administrator"> *@
                             <button @onclick=@(() => AllocateLeaveType(leaveType.Id))
                                     class="btn btn-dark">
                                 Allocate Leave
                             </button>
                             <button @onclick="@(() => EditLeaveType(leaveType.Id))" class="btn btn-warning">Edit</button>
                             <button @onclick="@(() => DeleteLeaveType(leaveType.Id))" class="btn btn-danger">Delete</button>
-                        </AuthorizeView> *@
+                        @* </AuthorizeView> *@
                         <button @onclick="@(() => DetailsLeaveType(leaveType.Id))" class="btn btn-info">Details</button>
                     </td>
                 </tr>
@@ -96,16 +96,16 @@ else
 
     protected async Task DeleteLeaveType(Guid id)
     {
-        // var response = await LeaveTypeService.DeleteLeaveType(id);
-        // if (response.Success)
-        // {
-        //     toastService.ShowSuccess("Leave Type deleted Successfully");
-        //     await OnInitializedAsync();
-        // }
-        // else
-        // {
-        //     Message = response.Message;
-        // }
+        var response = await LeaveTypeService.DeleteLeaveType(id);
+        if (response.Success)
+        {
+            toastService.ShowSuccess("Leave Type deleted Successfully");
+            await OnInitializedAsync();
+        }
+        else
+        {
+            Message = response.Message;
+        }
     }
 
     protected override async Task OnInitializedAsync()

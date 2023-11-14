@@ -84,16 +84,16 @@
                     @* @item.Employee.Firstname @item.Employee.Lastname *@
                 </td>
                 <td>
-                    @item.StartDate.ToString("yyyy-MM-dd")
+                    @item.StartDate.ToString("d")
                 </td>
                 <td>
-                    @item.EndDate.ToString("yyyy-MM-dd")
+                    @item.EndDate.ToString("d")
                 </td>
                 <td>
                     @item.LeaveType.Name
                 </td>
                 <td>
-                    @item.DateRequested.ToString("yyyy-MM-dd")
+                    @item.DateCreated.ToString("d")
                 </td>
                 <td>
                     @if (item.Cancelled)
