@@ -9,7 +9,7 @@
     </p>
     <hr />
     <p>
-        Date Requested - @Model.DateRequested
+        Date Requested - @Model?.DateRequested
     </p>
 </div>
 
@@ -34,13 +34,13 @@
             Leave Type
         </dt>
         <dd class="col-sm-10">
-            @Model.LeaveType.Name
+            @Model?.LeaveType?.Name
         </dd>
         <dt class="col-sm-2">
             Request Comments
         </dt>
         <dd class="col-sm-10">
-            @Model.RequestComments
+            @Model?.RequestComments
         </dd>
     </dl>
 </div>
@@ -72,10 +72,7 @@
     protected override async Task OnParametersSetAsync()
     {
         Model = await leaveRequestService.GetLeaveRequestById(new Guid(id));
-    }
 
-    protected override async Task OnInitializedAsync()
-    {
         if (Model.Approved == null)
         {
             ClassName = "warning";
@@ -91,6 +88,11 @@
             ClassName = "danger";
             HeadingText = "Rejected";
         }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        
     }
 
     async Task ChangeApproval(bool approvalStatus)
