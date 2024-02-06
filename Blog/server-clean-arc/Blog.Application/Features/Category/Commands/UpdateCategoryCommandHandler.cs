@@ -8,7 +8,6 @@ namespace Blog.Application.Features.CategoryCommands
 {
     public class UpdateLeaveRequestCommand : IRequest<UpdateCategoryResponseDto>
     {
-        public Guid Id { get; set; }
         public UpdateCategoryDto UpdateCategoryDto { get; set; }
     }
 
@@ -25,7 +24,7 @@ namespace Blog.Application.Features.CategoryCommands
 
         public async Task<UpdateCategoryResponseDto> Handle(UpdateLeaveRequestCommand request, CancellationToken cancellationToken)
         {
-            Category category = _categoryRepository.GetByCondition(c => c.Id.Equals(request.Id)).FirstOrDefault();
+            Category category = _categoryRepository.GetByCondition(c => c.Id.Equals(request.UpdateCategoryDto.Id)).FirstOrDefault();
             _mapper.Map(request.UpdateCategoryDto, category);
             category.LastModifiedDate = DateTime.UtcNow;
             await _categoryRepository.Update(category);
