@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Infrastructure
 {
-    internal class BlogDbContext : DbContext
+    public class BlogDbContext : DbContext
     {
         public BlogDbContext(DbContextOptions<BlogDbContext> options) : base(options) { }
 
