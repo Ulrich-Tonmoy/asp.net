@@ -11,18 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Post\Commands\" />
-    <Folder Include="Features\Post\Queries\" />
-    <Folder Include="Features\Subscription\Commands\" />
-    <Folder Include="Features\Subscription\Queries\" />
-    <Folder Include="Features\User\Commands\" />
-    <Folder Include="Features\User\Queries\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0" />
     <PackageReference Include="Magic.AutoMapper.Extensions.Microsoft.DependencyInjection" Version="1.2.0" />
     <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.3.1" />
   </ItemGroup>
 
 </Project>
