@@ -35,7 +35,7 @@ export class AuthService {
 
   signup(name: string, email: string, password: string) {
     this.http
-      .post(`${this.baseUrl}/user/register`, { name, email, password })
+      .post(`${this.baseUrl}/user/registration`, { name, email, password })
       .pipe(map((actions: any) => actions))
       .subscribe(
         (response: any) => {
