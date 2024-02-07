@@ -1,11 +1,12 @@
-﻿using System.Linq.Expressions;
+﻿using Blog.Application.QueryParams;
+using System.Linq.Expressions;
 
 namespace Blog.Application.IRepository.Common
 {
     public interface IBaseRepository<T> where T : class
     {
         Task<IReadOnlyList<T>> GetAll();
-        //IQueryable<T> GetAllWithParam(BaseQueryParameters param, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy);
+        IQueryable<T> GetAllWithParam(BaseQueryParameters param, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy);
         IQueryable<T> GetByCondition(Expression<Func<T, bool>> expression);
         Task<T> Create(T entity);
         Task CreateRange(IEnumerable<T> entity);

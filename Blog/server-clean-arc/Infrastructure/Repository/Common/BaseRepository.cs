@@ -1,4 +1,5 @@
 ﻿using Blog.Application.IRepository.Common;
+using Blog.Application.QueryParams;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -25,13 +26,13 @@ namespace Blog.Infrastructure.Repository.Common
             return _dbSet.Where(expression).AsNoTracking();
         }
 
-        //public IQueryable<T> GetAllWithParam(BaseQueryParameters param, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy)
-        //{
-        //    return orderBy(_dbSet
-        //        .Skip((param.PageNumber - 1) * param.PageSize)
-        //        .Take(param.PageSize)
-        //        .AsNoTracking());
-        //}
+        public IQueryable<T> GetAllWithParam(BaseQueryParameters param, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy)
+        {
+            return orderBy(_dbSet
+                .Skip((param.PageNumber - 1) * param.PageSize)
+                .Take(param.PageSize)
+                .AsNoTracking());
+        }
 
         public async Task<T> Create(T entity)
         {

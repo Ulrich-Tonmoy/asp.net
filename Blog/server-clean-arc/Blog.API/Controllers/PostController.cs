@@ -1,6 +1,7 @@
 ﻿using Blog.Application.DTOs;
 using Blog.Application.Features.PostCommands;
 using Blog.Application.Features.PostQueries;
+using Blog.Application.QueryParams;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +20,9 @@ namespace Blog.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllPosts()
+        public async Task<IActionResult> GetAllPosts([FromQuery] PostQueryParameters postParams)
         {
-            List<GetPostResponseDto> response = await _mediator.Send(new GetPostListRequest());
+            List<GetPostResponseDto> response = await _mediator.Send(new GetPostListRequest { queryParams = postParams });
             return Ok(new { data = response });
         }
 

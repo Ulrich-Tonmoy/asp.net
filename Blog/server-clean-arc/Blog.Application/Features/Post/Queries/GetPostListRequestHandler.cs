@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Blog.Application.DTOs;
 using Blog.Application.IRepository;
+using Blog.Application.QueryParams;
 using Blog.Domain;
 using MediatR;
 
@@ -8,6 +9,7 @@ namespace Blog.Application.Features.PostQueries
 {
     public class GetPostListRequest : IRequest<List<GetPostResponseDto>>
     {
+        public PostQueryParameters queryParams { get; set; }
     }
 
     public class GetPostListRequestHandler : IRequestHandler<GetPostListRequest, List<GetPostResponseDto>>
@@ -23,7 +25,7 @@ namespace Blog.Application.Features.PostQueries
 
         public async Task<List<GetPostResponseDto>> Handle(GetPostListRequest request, CancellationToken cancellationToken)
         {
-            IReadOnlyList<Post> posts = await _postRepository.GetAllPost();
+            IReadOnlyList<Post> posts = await _postRepository.GetAllPost(request.queryParams);
             return _mapper.Map<List<GetPostResponseDto>>(posts);
         }
     }
