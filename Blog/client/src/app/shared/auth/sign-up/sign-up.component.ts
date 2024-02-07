@@ -13,7 +13,8 @@ export class SignUpComponent {
     this.authService.signup(
       formValue.name,
       formValue.email,
-      formValue.password
+      formValue.password,
+      formValue.confirmPassword
     );
   }
 }

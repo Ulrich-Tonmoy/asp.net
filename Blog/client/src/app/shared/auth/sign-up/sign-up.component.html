@@ -74,6 +74,27 @@
                 >
                   Password cannot be Empty.
                 </div>
+                <div class="form-group my-3">
+                  <input
+                    type="password"
+                    class="form-control"
+                    placeholder="Confirm Password"
+                    name="confirmPassword"
+                    #ConfirmPassword="ngModel"
+                    ngModel
+                    required
+                    [ngClass]="{
+                      'is-invalid':
+                        ConfirmPassword.touched && ConfirmPassword.invalid
+                    }"
+                  />
+                  <div
+                    class="alert alert-danger"
+                    *ngIf="ConfirmPassword.touched && ConfirmPassword.invalid"
+                  >
+                    Confirm Password cannot be Empty.
+                  </div>
+                </div>
               </div>
               <button
                 class="btn btn-info w-100 btn-theme"
