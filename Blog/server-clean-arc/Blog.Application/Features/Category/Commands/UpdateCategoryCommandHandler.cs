@@ -6,12 +6,12 @@ using MediatR;
 
 namespace Blog.Application.Features.CategoryCommands
 {
-    public class UpdateLeaveRequestCommand : IRequest<UpdateCategoryResponseDto>
+    public class UpdateCategoryCommand : IRequest<UpdateCategoryResponseDto>
     {
         public UpdateCategoryDto UpdateCategoryDto { get; set; }
     }
 
-    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateLeaveRequestCommand, UpdateCategoryResponseDto>
+    public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, UpdateCategoryResponseDto>
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
@@ -22,7 +22,7 @@ namespace Blog.Application.Features.CategoryCommands
             _mapper = mapper;
         }
 
-        public async Task<UpdateCategoryResponseDto> Handle(UpdateLeaveRequestCommand request, CancellationToken cancellationToken)
+        public async Task<UpdateCategoryResponseDto> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
             Category category = _categoryRepository.GetByCondition(c => c.Id.Equals(request.UpdateCategoryDto.Id)).FirstOrDefault();
             _mapper.Map(request.UpdateCategoryDto, category);

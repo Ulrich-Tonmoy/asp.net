@@ -63,8 +63,8 @@ namespace Blog.API.Controllers
         public async Task<IActionResult> DeleteUser(Guid id)
         {
             var command = new DeleteUserCommand { Id = id };
-            await _mediator.Send(command);
-            return Ok();
+            Unit response = await _mediator.Send(command);
+            return Ok(new { data = response });
         }
     }
 }
