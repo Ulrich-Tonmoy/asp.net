@@ -34,7 +34,7 @@ export class CategoriesService {
   };
 
   updateCategory = (id: string, name: string) => {
-    this.http.patch(`${this.baseUrl}/category`, { id, name }).subscribe(
+    this.http.put(`${this.baseUrl}/category`, { id, name }).subscribe(
       (response: any) => {
         console.log(response.data);
         this.toastr.success(`Category ${name} updated successfully!`);

@@ -48,7 +48,7 @@ export class PostsService {
 
   updatePost = (id: string, post: Post) => {
     this.http
-      .patch(`${this.baseUrl}/post`, {
+      .put(`${this.baseUrl}/post`, {
         ...post,
         categoryId: post.category.id,
         id,
@@ -80,7 +80,7 @@ export class PostsService {
   };
 
   markFeatured = (post: any, isFeatured: boolean) => {
-    this.http.patch(`${this.baseUrl}/post`, { ...post, isFeatured }).subscribe(
+    this.http.put(`${this.baseUrl}/post`, { ...post, isFeatured }).subscribe(
       (response: any) => {
         console.log(response.data);
         this.toastr.success(
@@ -124,7 +124,7 @@ export class PostsService {
   };
 
   viewPost = (post: any, views: number) => {
-    this.http.patch(`${this.baseUrl}/post`, { ...post, views }).subscribe(
+    this.http.put(`${this.baseUrl}/post`, { ...post, views }).subscribe(
       (response: any) => {
         console.log(response);
         this.toastr.success(`Post Vew count updated!`);
