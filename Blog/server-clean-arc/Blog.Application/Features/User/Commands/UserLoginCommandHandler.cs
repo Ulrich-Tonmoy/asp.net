@@ -33,7 +33,7 @@ namespace Blog.Application.Features.UserCommands
             if (!BCrypt.Net.BCrypt.Verify(request.UserLoginDto.Password, user.Password)) return null;
 
             UserLoginResponseDto userResult = _mapper.Map<UserLoginResponseDto>(user);
-            string token = CreateToken(user, request.UserLoginDto.Secret);
+            string token = CreateToken(user, request.UserLoginDto.Secret!);
             userResult.Token = token;
 
             return userResult;
