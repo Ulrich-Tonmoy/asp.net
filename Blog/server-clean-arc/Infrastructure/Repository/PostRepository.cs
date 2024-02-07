@@ -17,7 +17,7 @@ namespace Blog.Infrastructure.Repository
 
         public async Task<IReadOnlyList<Post>> GetAllPost(PostQueryParameters queryParams)
         {
-            IQueryable<Post> query = _dbContext.Posts.Include(c => c.Category);
+            IQueryable<Post> query = _dbContext.Posts;
 
             if (queryParams.IsFeatured != null)
                 query = query.Where(post => post.IsFeatured == queryParams.IsFeatured);
@@ -30,19 +30,17 @@ namespace Blog.Infrastructure.Repository
 
             if (!string.IsNullOrEmpty(queryParams.SortBy) && !string.IsNullOrEmpty(queryParams.OrderBy))
             {
-                bool isDescending = queryParams.OrderBy.ToLower() == "desc";
-                switch (queryParams.SortBy.ToLower())
+                if (queryParams.SortBy.ToLower() == "createdat")
                 {
-                    case "createdat":
-                        query = isDescending ? query.OrderByDescending(post => post.CreatedAt) : query.OrderBy(post => post.CreatedAt);
-                        break;
-                    default:
-                        break;
+                    if (queryParams.OrderBy.ToLower() == "desc")
+                        query = query.OrderByDescending(post => post.CreatedAt);
+                    else
+                        query = query.OrderBy(post => post.CreatedAt);
                 }
             }
 
             query = query.Take(queryParams.Limit);
-            List<Post> posts = await query.ToListAsync();
+            List<Post> posts = await query.Include(p => p.Category).ToListAsync();
 
             return posts;
         }
