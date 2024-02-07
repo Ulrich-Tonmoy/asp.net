@@ -40,5 +40,14 @@ namespace Blog.API.Controllers
             Unit response = await _mediator.Send(command);
             return Ok(new { data = response });
         }
+
+        [HttpGet("any")]
+        public async Task<IActionResult> AnySubscriptionExist([FromQuery] string email)
+        {
+            var command = new GetSubscriptionExistRequest { Email = email };
+            bool response = await _mediator.Send(command);
+
+            return Ok(new { data = response });
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace Blog.Application.Features.PostQueries
 
         public async Task<List<GetPostResponseDto>> Handle(GetPostListRequest request, CancellationToken cancellationToken)
         {
-            IReadOnlyList<Post> posts = await _postRepository.GetAll();
+            IReadOnlyList<Post> posts = await _postRepository.GetAllPost();
             return _mapper.Map<List<GetPostResponseDto>>(posts);
         }
     }

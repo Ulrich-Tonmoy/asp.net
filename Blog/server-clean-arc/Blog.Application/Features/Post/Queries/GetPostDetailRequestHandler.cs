@@ -24,7 +24,7 @@ namespace Blog.Application.Features.PostQueries
 
         public async Task<GetPostResponseDto> Handle(GetPostDetailRequest request, CancellationToken cancellationToken)
         {
-            Post post = _postRepository.GetByCondition(p => p.Id.Equals(request.Id)).FirstOrDefault();
+            Post post = await _postRepository.GetById(request.Id);
             return _mapper.Map<GetPostResponseDto>(post);
         }
     }
