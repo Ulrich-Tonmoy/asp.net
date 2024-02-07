@@ -161,6 +161,7 @@
                 <angular-editor
                   placeholder="Add your content here..."
                   formControlName="content"
+                  [config]="editorConfig"
                 ></angular-editor>
                 <div
                   *ngIf="
@@ -171,7 +172,7 @@
                     class="alert alert-danger"
                     *ngIf="fc['content'].touched && fc['content'].invalid"
                   >
-                    Content Image is required
+                    Content is required
                   </div>
                 </div>
               </div>

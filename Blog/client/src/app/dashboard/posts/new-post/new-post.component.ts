@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { Category } from 'src/app/core/models/category';
 import { Post } from 'src/app/core/models/post';
 import { CategoriesService } from 'src/app/core/services/categories.service';
@@ -18,6 +19,13 @@ export class NewPostComponent implements OnInit {
   postForm: FormGroup = new FormGroup('');
   formStatus: string = 'Add New';
   id: string = '';
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    translate: 'yes',
+    minHeight: '200px',
+    maxHeight: '600px',
+  };
 
   constructor(
     private catService: CategoriesService,
