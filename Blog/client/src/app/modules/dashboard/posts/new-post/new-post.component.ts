@@ -81,6 +81,10 @@ export class NewPostComponent implements OnInit {
     });
   }
 
+  get fc() {
+    return this.postForm.controls;
+  }
+
   ngOnInit(): void {
     this.catService
       .getCategories()
@@ -88,10 +92,6 @@ export class NewPostComponent implements OnInit {
       .subscribe((data) => {
         this.categories = data;
       });
-  }
-
-  get fc() {
-    return this.postForm.controls;
   }
 
   onTitleChange(e: any) {

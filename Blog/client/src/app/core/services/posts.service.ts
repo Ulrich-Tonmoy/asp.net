@@ -38,7 +38,7 @@ export class PostsService {
     });
   }
 
-  public deletePost(id: string, title: string): Observable<any> {
+  public deletePost(id: string): Observable<any> {
     return this.baseHttp.delete(EndpointService.postById.replace('{id}', id));
   }
 

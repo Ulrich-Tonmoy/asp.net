@@ -1,4 +1,4 @@
-import { Component, DestroyRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -25,7 +25,7 @@ export class SignUpComponent {
         formValue.confirmPassword
       )
       .pipe(takeUntilDestroyed())
-      .subscribe((response: any) => {
+      .subscribe((_response) => {
         this.toastr.success('User Successfully Registered.');
         this.router.navigate(['/login']);
       });

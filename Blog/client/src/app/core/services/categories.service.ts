@@ -24,7 +24,9 @@ export class CategoriesService {
     return this.baseHttp.put(EndpointService.category, { id, name });
   }
 
-  public deleteCategory(id: string, name: string): Observable<any> {
-    return this.baseHttp.delete(EndpointService.categoryById);
+  public deleteCategory(id: string): Observable<any> {
+    return this.baseHttp.delete(
+      EndpointService.categoryById.replace('{id}', id)
+    );
   }
 }

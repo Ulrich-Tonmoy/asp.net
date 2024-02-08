@@ -26,7 +26,7 @@ export class AllPostComponent implements OnInit {
   public onDelete(id: any, title: string): void {
     if (confirm(`Do you want to delete the post '${title}'?`)) {
       this.postService
-        .deletePost(id.toString(), title)
+        .deletePost(id.toString())
         .pipe(takeUntilDestroyed())
         .subscribe((_response: any) => {
           this.toastr.warning(`Post '${title}' deleted successfully!`);
@@ -48,7 +48,7 @@ export class AllPostComponent implements OnInit {
     this.postService
       .markFeatured(post, isFeatured)
       .pipe(takeUntilDestroyed())
-      .subscribe((_response: any) => {
+      .subscribe((_response) => {
         this.toastr.success(
           `Post ${isFeatured ? 'is now Featured' : 'Featured removed'}!`
         );

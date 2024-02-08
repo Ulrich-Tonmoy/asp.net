@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router,
-  UrlTree,
-} from '@angular/router';
+import { Router, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
@@ -14,10 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 export class AuthGuard {
   constructor(private toastr: ToastrService, public router: Router) {}
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> | Promise<boolean> | UrlTree | boolean {
+  canActivate(): Observable<boolean> | Promise<boolean> | UrlTree | boolean {
     const user = JSON.parse(
       JSON.parse(JSON.stringify(localStorage.getItem('user')))
     )?.email;

@@ -3,6 +3,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "resolveJsonModule": true,
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -22,7 +23,7 @@
     "paths": {
       "@shared/libs": ["src/app/shared/index.ts"]
     },
-    "lib": ["ES2022", "dom"]
+    "lib": ["ES2022", "dom", "dom.iterable"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

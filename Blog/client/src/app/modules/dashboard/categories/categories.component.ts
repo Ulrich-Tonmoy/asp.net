@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Category } from '@shared/libs';
 import { ToastrService } from 'ngx-toastr';
@@ -9,7 +9,7 @@ import { CategoriesService } from 'src/app/core/services/categories.service';
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss'],
 })
-export class CategoriesComponent implements OnInit {
+export class CategoriesComponent implements OnInit, AfterViewInit {
   categories: Array<Category> = [];
   categoryForm: string = '';
   editingId: string = '';
@@ -24,19 +24,19 @@ export class CategoriesComponent implements OnInit {
   }
 
   public onSubmit = async (formData: any) => {
-    let name = formData.value.category;
+    const name = formData.value.category;
     if (!this.editingId) {
       this.catService
         .createCategory(name)
         .pipe(takeUntilDestroyed())
-        .subscribe((response: any) => {
+        .subscribe((_response) => {
           this.toastr.success(`Category ${name} added successfully!`);
         });
     } else {
       this.catService
         .updateCategory(this.editingId, name)
         .pipe(takeUntilDestroyed())
-        .subscribe((response: any) => {
+        .subscribe((_response) => {
           this.toastr.success(`Category ${name} updated successfully!`);
         });
       this.editingId = '';
@@ -53,9 +53,9 @@ export class CategoriesComponent implements OnInit {
   public onDelete(cat: Category) {
     if (confirm(`Do you want to delete category '${cat.name}'?`)) {
       this.catService
-        .deleteCategory(cat.id, cat.name)
+        .deleteCategory(cat.id)
         .pipe(takeUntilDestroyed())
-        .subscribe((response: any) => {
+        .subscribe((_response) => {
           this.toastr.warning(`Category ${name} deleted successfully!`);
         });
       this.getCategories();

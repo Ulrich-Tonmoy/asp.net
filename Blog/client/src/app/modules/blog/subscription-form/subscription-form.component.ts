@@ -23,7 +23,7 @@ export class SubscriptionFormComponent {
           this.subService
             .addSub(data)
             .pipe(takeUntilDestroyed())
-            .subscribe((response: any) => {
+            .subscribe((_response) => {
               this.toastr
                 .success(`Thank you for subscribing to our newsletter service. Stay tuned for
             awesome blog posts...`);
