@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Category } from 'src/app/core/models/category';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Category } from '@shared/libs';
 import { CategoriesService } from 'src/app/core/services/categories.service';
 
 @Component({
@@ -13,8 +14,11 @@ export class CategoryNavbarComponent implements OnInit {
   constructor(private catService: CategoriesService) {}
 
   ngOnInit(): void {
-    this.catService.getCategories().subscribe((data) => {
-      this.categories = data;
-    });
+    this.catService
+      .getCategories()
+      .pipe(takeUntilDestroyed())
+      .subscribe((data) => {
+        this.categories = data;
+      });
   }
 }

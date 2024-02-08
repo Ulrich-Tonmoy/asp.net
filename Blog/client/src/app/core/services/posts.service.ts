@@ -1,138 +1,84 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
-import { Post } from '../models/post';
 import { map } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
+import { BaseHttpService } from '../http/base-http.service';
+import { EndpointService } from '../http/endpoint.service';
+import { Post } from '@shared/libs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostsService {
-  baseUrl: string = environment.apiUrl;
+  constructor(private baseHttp: BaseHttpService) {}
 
-  constructor(
-    private http: HttpClient,
-    private toastr: ToastrService,
-    private router: Router
-  ) {}
+  public createPost(post: Post): Observable<any> {
+    return this.baseHttp.post(EndpointService.post, {
+      ...post,
+      categoryId: post.category.id,
+    });
+  }
 
-  createPost = (post: Post) => {
-    this.http
-      .post(`${this.baseUrl}/post`, { ...post, categoryId: post.category.id })
-      .subscribe(
-        (response: any) => {
-          console.log(response);
-          this.toastr.success(`Post ${post.title} added successfully!`);
-          this.router.navigate(['dashboard/posts']);
-        },
-        (error: any) => {
-          this.toastr.error('Error occurred creating post!');
-          this.toastr.error(error);
-        }
-      );
-  };
-
-  getPosts = () => {
-    return this.http
-      .get(`${this.baseUrl}/post`)
+  public getPosts(): Observable<any> {
+    return this.baseHttp
+      .get(EndpointService.post)
       .pipe(map((actions: any) => actions.data));
-  };
+  }
 
-  getPostById = (id: string) => {
-    return this.http
-      .get(`${this.baseUrl}/post/${id}`)
+  public getPostById(id: string): Observable<any> {
+    return this.baseHttp
+      .get(EndpointService.postById.replace('{id}', id))
       .pipe(map((actions: any) => actions.data));
-  };
+  }
 
-  updatePost = (id: string, post: Post) => {
-    this.http
-      .put(`${this.baseUrl}/post`, {
-        ...post,
-        categoryId: post.category.id,
-        id,
-      })
-      .subscribe(
-        (response: any) => {
-          console.log(response.data);
-          this.toastr.success(`Post ${post.title} updated successfully!`);
-          this.router.navigate(['dashboard/posts']);
-        },
-        (error: any) => {
-          this.toastr.error('Error occurred updating post!');
-          this.toastr.error(error);
-        }
-      );
-  };
+  public updatePost(id: string, post: Post): Observable<any> {
+    return this.baseHttp.put(EndpointService.post, {
+      ...post,
+      categoryId: post.category.id,
+      id,
+    });
+  }
 
-  deletePost = (id: string, title: string) => {
-    this.http.delete(`${this.baseUrl}/post/${id}`).subscribe(
-      (response: any) => {
-        console.log(response);
-        this.toastr.warning(`Post '${title}' deleted successfully!`);
-      },
-      (error: any) => {
-        this.toastr.error('Error occurred deleting post!');
-        this.toastr.error(error);
-      }
-    );
-  };
+  public deletePost(id: string, title: string): Observable<any> {
+    return this.baseHttp.delete(EndpointService.postById.replace('{id}', id));
+  }
 
-  markFeatured = (post: any, isFeatured: boolean) => {
-    this.http.put(`${this.baseUrl}/post`, { ...post, isFeatured }).subscribe(
-      (response: any) => {
-        console.log(response.data);
-        this.toastr.success(
-          `Post ${isFeatured ? 'is now Featured' : 'Featured removed'}!`
-        );
-        this.router.navigate(['dashboard/posts']);
-      },
-      (error: any) => {
-        this.toastr.error('Error occurred updating post!');
-        this.toastr.error(error);
-      }
-    );
-  };
+  public markFeatured(post: any, isFeatured: boolean): Observable<any> {
+    return this.baseHttp.put(EndpointService.post, { ...post, isFeatured });
+  }
 
-  getFeaturedPost = () => {
-    return this.http
+  public getFeaturedPost(): Observable<any> {
+    return this.baseHttp
       .get(
-        `${this.baseUrl}/post?sortBy=createdAt&orderBy=desc&isFeatured=true&limit=4`
+        `${EndpointService.post}?sortBy=createdAt&orderBy=desc&isFeatured=true&limit=4`
       )
       .pipe(map((actions: any) => actions.data));
-  };
+  }
 
-  getLatestPost = () => {
-    return this.http
-      .get(`${this.baseUrl}/post?sortBy=createdAt&orderBy=desc&limit=6`)
+  public getLatestPost(): Observable<any> {
+    return this.baseHttp
+      .get(`${EndpointService.post}?sortBy=createdAt&orderBy=desc&limit=6`)
       .pipe(map((actions: any) => actions.data));
-  };
+  }
 
-  getSimilarPost = (catId: string, postId: string, limit: number = 4) => {
-    return this.http
+  public getSimilarPost(
+    catId: string,
+    postId: string,
+    limit: number = 4
+  ): Observable<any> {
+    return this.baseHttp
       .get(
-        `${this.baseUrl}/post?idNotEqual=${postId}&categoryId=${catId}&limit=${limit}`
+        `${EndpointService.post}?idNotEqual=${postId}&categoryId=${catId}&limit=${limit}`
       )
       .pipe(map((actions: any) => actions.data));
-  };
+  }
 
-  getPostByCategory = (cat: string) => {
-    return this.http
-      .get(`${this.baseUrl}/post?categoryId=${cat}`)
+  public getPostByCategory(cat: string): Observable<any> {
+    return this.baseHttp
+      .get(`${EndpointService.post}?categoryId=${cat}`)
       .pipe(map((actions: any) => actions.data));
-  };
+  }
 
-  viewPost = (post: any, views: number) => {
-    this.http.put(`${this.baseUrl}/post`, { ...post, views }).subscribe(
-      (response: any) => {
-        console.log(response);
-        this.toastr.success(`Post Vew count updated!`);
-      },
-      (error: any) => {
-        this.toastr.error('Error occurred updating post!');
-        this.toastr.error(error);
-      }
-    );
-  };
+  public viewPost(post: any, views: number): Observable<any> {
+    return this.baseHttp.put(EndpointService.post, { ...post, views });
+  }
 }

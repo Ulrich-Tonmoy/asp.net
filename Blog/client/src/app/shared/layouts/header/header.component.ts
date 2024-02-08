@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +11,7 @@ export class HeaderComponent implements OnInit {
   user: any = null;
   isLogged: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private toastr: ToastrService, private router: Router) {}
 
   ngOnInit(): void {
     this.user = JSON.parse(
@@ -21,11 +20,13 @@ export class HeaderComponent implements OnInit {
     this.isLogged = this.user.email ? true : false;
   }
 
-  onLogout(): void {
-    this.authService.logout();
+  public onLogout(): void {
+    this.toastr.success('Successfully Logged Out.');
+    localStorage.clear();
+    this.router.navigate(['/login']);
   }
 
-  onLogin() {
+  public onLogin() {
     this.router.navigate(['/login']);
   }
 }

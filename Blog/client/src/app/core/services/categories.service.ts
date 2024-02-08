@@ -1,61 +1,30 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Category } from '../models/category';
-import { ToastrService } from 'ngx-toastr';
 import { map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { Router } from '@angular/router';
+import { BaseHttpService } from '../http/base-http.service';
+import { EndpointService } from '../http/endpoint.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoriesService {
-  baseUrl: string = environment.apiUrl;
+  constructor(private baseHttp: BaseHttpService) {}
 
-  constructor(private http: HttpClient, private toastr: ToastrService) {}
+  public createCategory(name: string): Observable<any> {
+    return this.baseHttp.post(EndpointService.category, { name });
+  }
 
-  createCategory = (name: string) => {
-    this.http.post(`${this.baseUrl}/category`, { name }).subscribe(
-      (response: any) => {
-        console.log(response);
-        this.toastr.success(`Category ${name} added successfully!`);
-      },
-      (error: any) => {
-        this.toastr.error('Error occurred creating category!');
-        this.toastr.error(error);
-      }
-    );
-  };
-
-  getCategories = () => {
-    return this.http
-      .get(`${this.baseUrl}/category`)
+  public getCategories(): Observable<any> {
+    return this.baseHttp
+      .get(EndpointService.category)
       .pipe(map((actions: any) => actions.data));
-  };
+  }
 
-  updateCategory = (id: string, name: string) => {
-    this.http.put(`${this.baseUrl}/category`, { id, name }).subscribe(
-      (response: any) => {
-        console.log(response.data);
-        this.toastr.success(`Category ${name} updated successfully!`);
-      },
-      (error: any) => {
-        this.toastr.error('Error occurred updating category!');
-        this.toastr.error(error);
-      }
-    );
-  };
+  public updateCategory(id: string, name: string): Observable<any> {
+    return this.baseHttp.put(EndpointService.category, { id, name });
+  }
 
-  deleteCategory = (id: string, name: string) => {
-    this.http.delete(`${this.baseUrl}/category/${id}`).subscribe(
-      (response: any) => {
-        console.log(response);
-        this.toastr.warning(`Category ${name} deleted successfully!`);
-      },
-      (error: any) => {
-        this.toastr.error('Error occurred deleting category!');
-        this.toastr.error(error);
-      }
-    );
-  };
+  public deleteCategory(id: string, name: string): Observable<any> {
+    return this.baseHttp.delete(EndpointService.categoryById);
+  }
 }

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { Category } from 'src/app/core/models/category';
-import { Post } from 'src/app/core/models/post';
+import { Category, Post } from '@shared/libs';
+import { ToastrService } from 'ngx-toastr';
 import { CategoriesService } from 'src/app/core/services/categories.service';
 import { PostsService } from 'src/app/core/services/posts.service';
 
@@ -31,34 +32,42 @@ export class NewPostComponent implements OnInit {
     private catService: CategoriesService,
     private formBuilder: FormBuilder,
     private postService: PostsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrService,
+    private router: Router
   ) {
-    this.route.queryParams.subscribe((data) => {
+    this.route.queryParams.pipe(takeUntilDestroyed()).subscribe((data) => {
       this.id = data['id'];
 
       if (this.id) {
-        this.postService.getPostById(data['id']).subscribe((post) => {
-          this.postForm = formBuilder.group({
-            title: [post.title, [Validators.required, Validators.minLength(5)]],
-            permaLink: [
-              { value: post.permaLink, disabled: true },
-              Validators.required,
-            ],
-            excerpt: [
-              post.excerpt,
-              [Validators.required, Validators.minLength(20)],
-            ],
-            category: [
-              `${post.category.id}/${post.category.name}`,
-              Validators.required,
-            ],
-            heroImg: [''],
-            content: [post.content, Validators.required],
+        this.postService
+          .getPostById(data['id'])
+          .pipe(takeUntilDestroyed())
+          .subscribe((post) => {
+            this.postForm = formBuilder.group({
+              title: [
+                post.title,
+                [Validators.required, Validators.minLength(5)],
+              ],
+              permaLink: [
+                { value: post.permaLink, disabled: true },
+                Validators.required,
+              ],
+              excerpt: [
+                post.excerpt,
+                [Validators.required, Validators.minLength(20)],
+              ],
+              category: [
+                `${post.category.id}/${post.category.name}`,
+                Validators.required,
+              ],
+              heroImg: [''],
+              content: [post.content, Validators.required],
+            });
+            this.heroImg = post.heroImg;
+            this.permaLink = post.permaLink;
+            this.formStatus = 'Update';
           });
-          this.heroImg = post.heroImg;
-          this.permaLink = post.permaLink;
-          this.formStatus = 'Update';
-        });
       } else {
         this.postForm = formBuilder.group({
           title: ['', [Validators.required, Validators.minLength(5)]],
@@ -73,9 +82,12 @@ export class NewPostComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.catService.getCategories().subscribe((data) => {
-      this.categories = data;
-    });
+    this.catService
+      .getCategories()
+      .pipe(takeUntilDestroyed())
+      .subscribe((data) => {
+        this.categories = data;
+      });
   }
 
   get fc() {
@@ -113,9 +125,26 @@ export class NewPostComponent implements OnInit {
       createdAt: new Date(),
     };
     if (this.id) {
-      this.postService.updatePost(this.id, postData);
+      this.postService
+        .updatePost(this.id, postData)
+        .pipe(takeUntilDestroyed())
+        .subscribe((response: any) => {
+          console.log(response.data);
+          this.toastr.success(
+            `Post ${response.data.title} updated successfully!`
+          );
+          this.router.navigate(['dashboard/posts']);
+        });
     } else {
-      this.postService.createPost(postData);
+      this.postService
+        .createPost(postData)
+        .pipe(takeUntilDestroyed())
+        .subscribe((response: any) => {
+          this.toastr.success(
+            `Post ${response.data.title} added successfully!`
+          );
+          this.router.navigate(['dashboard/posts']);
+        });
     }
     this.postForm.reset();
     this.heroImg = '';

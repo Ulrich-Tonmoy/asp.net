@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Post } from 'src/app/core/models/post';
 import { PostsService } from 'src/app/core/services/posts.service';
+import { Post } from '@shared/libs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-home',
@@ -14,12 +15,18 @@ export class HomeComponent implements OnInit {
   constructor(private postService: PostsService) {}
 
   ngOnInit(): void {
-    this.postService.getFeaturedPost().subscribe((data) => {
-      this.featuredPost = data;
-    });
+    this.postService
+      .getFeaturedPost()
+      .pipe(takeUntilDestroyed())
+      .subscribe((data) => {
+        this.featuredPost = data;
+      });
 
-    this.postService.getLatestPost().subscribe((data) => {
-      this.latestPost = data;
-    });
+    this.postService
+      .getLatestPost()
+      .pipe(takeUntilDestroyed())
+      .subscribe((data) => {
+        this.latestPost = data;
+      });
   }
 }

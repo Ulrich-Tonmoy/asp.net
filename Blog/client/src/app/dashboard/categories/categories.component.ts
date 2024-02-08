@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Category } from 'src/app/core/models/category';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Category } from '@shared/libs';
+import { ToastrService } from 'ngx-toastr';
 import { CategoriesService } from 'src/app/core/services/categories.service';
 
 @Component({
@@ -12,32 +14,50 @@ export class CategoriesComponent implements OnInit {
   categoryForm: string = '';
   editingId: string = '';
 
-  constructor(private catService: CategoriesService) {}
+  constructor(
+    private catService: CategoriesService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.getCategories();
   }
 
-  onSubmit = async (formData: any) => {
+  public onSubmit = async (formData: any) => {
     let name = formData.value.category;
     if (!this.editingId) {
-      this.catService.createCategory(name);
+      this.catService
+        .createCategory(name)
+        .pipe(takeUntilDestroyed())
+        .subscribe((response: any) => {
+          this.toastr.success(`Category ${name} added successfully!`);
+        });
     } else {
-      this.catService.updateCategory(this.editingId, name);
+      this.catService
+        .updateCategory(this.editingId, name)
+        .pipe(takeUntilDestroyed())
+        .subscribe((response: any) => {
+          this.toastr.success(`Category ${name} updated successfully!`);
+        });
       this.editingId = '';
     }
     formData.reset();
     this.getCategories();
   };
 
-  onEdit(cat: Category) {
+  public onEdit(cat: Category) {
     this.categoryForm = cat.name;
     this.editingId = cat.id;
   }
 
-  onDelete(cat: Category) {
+  public onDelete(cat: Category) {
     if (confirm(`Do you want to delete category '${cat.name}'?`)) {
-      this.catService.deleteCategory(cat.id, cat.name);
+      this.catService
+        .deleteCategory(cat.id, cat.name)
+        .pipe(takeUntilDestroyed())
+        .subscribe((response: any) => {
+          this.toastr.warning(`Category ${name} deleted successfully!`);
+        });
       this.getCategories();
     }
   }
@@ -47,8 +67,11 @@ export class CategoriesComponent implements OnInit {
   }
 
   private getCategories() {
-    this.catService.getCategories().subscribe((data) => {
-      this.categories = data;
-    });
+    this.catService
+      .getCategories()
+      .pipe(takeUntilDestroyed())
+      .subscribe((data) => {
+        this.categories = data;
+      });
   }
 }

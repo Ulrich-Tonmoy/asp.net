@@ -1,66 +1,33 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { map } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { Observable, map } from 'rxjs';
+import { BaseHttpService } from '../http/base-http.service';
+import { EndpointService } from '../http/endpoint.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  baseUrl: string = environment.apiUrl;
+  constructor(private baseHttp: BaseHttpService) {}
 
-  constructor(
-    private http: HttpClient,
-    private toastr: ToastrService,
-    private router: Router
-  ) {}
-
-  login(email: string, password: string) {
-    this.http
-      .post(`${this.baseUrl}/user/login`, { email, password })
-      .pipe(map((actions: any) => actions))
-      .subscribe(
-        (response: any) => {
-          this.toastr.success('Successfully Logged In.');
-          localStorage.setItem('user', JSON.stringify(response.data));
-          this.router.navigate(['/dashboard']);
-        },
-        (error: any) => {
-          this.toastr.error(error.error);
-        }
-      );
+  public login(email: string, password: string): Observable<any> {
+    return this.baseHttp
+      .post(EndpointService.login, { email, password })
+      .pipe(map((actions: any) => actions));
   }
 
-  signup(
+  public registration(
     name: string,
     email: string,
     password: string,
     confirmPassword: string
-  ) {
-    this.http
-      .post(`${this.baseUrl}/user/registration`, {
+  ): Observable<any> {
+    return this.baseHttp
+      .post(EndpointService.registration, {
         name,
         email,
         password,
         confirmPassword,
       })
-      .pipe(map((actions: any) => actions))
-      .subscribe(
-        (response: any) => {
-          this.toastr.success('User Successfully Registered.');
-          this.router.navigate(['/login']);
-        },
-        (error: any) => {
-          this.toastr.error(error.error);
-        }
-      );
-  }
-
-  logout() {
-    this.toastr.success('Successfully Logged Out.');
-    localStorage.clear();
-    this.router.navigate(['/login']);
+      .pipe(map((actions: any) => actions));
   }
 }

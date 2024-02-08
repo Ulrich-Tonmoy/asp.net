@@ -22,7 +22,7 @@ export class AuthGuard {
       JSON.parse(JSON.stringify(localStorage.getItem('user')))
     )?.email;
     if (!user) {
-      this.toastr.warning('Login to Access dashboard.');
+      this.toastr.warning('Login to Access the dashboard.');
       this.router.navigate(['/login']);
       return false;
     }

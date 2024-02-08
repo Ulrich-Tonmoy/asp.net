@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Post } from 'src/app/core/models/post';
 import { PostsService } from 'src/app/core/services/posts.service';
+import { Post } from '@shared/libs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-single-category',
@@ -18,11 +19,14 @@ export class SingleCategoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params: any) => {
+    this.route.params.pipe(takeUntilDestroyed()).subscribe((params: any) => {
       this.catName = params['category'];
-      this.postService.getPostByCategory(params.id).subscribe((data) => {
-        this.posts = data;
-      });
+      this.postService
+        .getPostByCategory(params.id)
+        .pipe(takeUntilDestroyed())
+        .subscribe((data) => {
+          this.posts = data;
+        });
     });
   }
 }
