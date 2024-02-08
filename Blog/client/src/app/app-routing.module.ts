@@ -7,7 +7,8 @@ import { SignUpComponent } from './shared/auth/sign-up/sign-up.component';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./blog/blog.module').then((m) => m.BlogModule),
+    loadChildren: () =>
+      import('./modules/blog/blog.module').then((m) => m.BlogModule),
   },
   {
     path: 'login',
@@ -21,7 +22,9 @@ const routes: Routes = [
     path: 'dashboard',
     canActivate: [AuthGuard],
     loadChildren: () =>
-      import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
+      import('./modules/dashboard/dashboard.module').then(
+        (m) => m.DashboardModule
+      ),
   },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
