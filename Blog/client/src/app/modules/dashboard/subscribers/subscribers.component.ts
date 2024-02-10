@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { SubService } from 'src/app/core/services/sub.service';
 import { Sub } from '@shared/libs';
 import { ToastrService } from 'ngx-toastr';
@@ -11,6 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class SubscribersComponent implements OnInit {
   subs: Array<Sub> = [];
+  destroyRef = inject(DestroyRef);
 
   constructor(private subService: SubService, private toastr: ToastrService) {}
 
@@ -22,7 +23,7 @@ export class SubscribersComponent implements OnInit {
     if (confirm(`Are you sure you want to delete subscription of ${email}?`)) {
       this.subService
         .deleteSub(id)
-        .pipe(takeUntilDestroyed())
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((_response: any) => {
           this.toastr.warning(
             `Subscriber with '${email}' deleted successfully!`
@@ -35,7 +36,7 @@ export class SubscribersComponent implements OnInit {
   getAllSubs = () => {
     this.subService
       .getSubs()
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((data) => {
         this.subs = data;
       });

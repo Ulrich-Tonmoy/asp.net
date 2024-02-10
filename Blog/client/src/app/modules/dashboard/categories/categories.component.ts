@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  DestroyRef,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Category } from '@shared/libs';
 import { ToastrService } from 'ngx-toastr';
@@ -13,6 +19,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit {
   categories: Array<Category> = [];
   categoryForm: string = '';
   editingId: string = '';
+  destroyRef = inject(DestroyRef);
 
   constructor(
     private catService: CategoriesService,
@@ -28,14 +35,14 @@ export class CategoriesComponent implements OnInit, AfterViewInit {
     if (!this.editingId) {
       this.catService
         .createCategory(name)
-        .pipe(takeUntilDestroyed())
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((_response) => {
           this.toastr.success(`Category ${name} added successfully!`);
         });
     } else {
       this.catService
         .updateCategory(this.editingId, name)
-        .pipe(takeUntilDestroyed())
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((_response) => {
           this.toastr.success(`Category ${name} updated successfully!`);
         });
@@ -54,7 +61,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit {
     if (confirm(`Do you want to delete category '${cat.name}'?`)) {
       this.catService
         .deleteCategory(cat.id)
-        .pipe(takeUntilDestroyed())
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((_response) => {
           this.toastr.warning(`Category ${name} deleted successfully!`);
         });
@@ -69,7 +76,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit {
   private getCategories() {
     this.catService
       .getCategories()
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((data) => {
         this.categories = data;
       });

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PostsService } from 'src/app/core/services/posts.service';
 import { Post } from '@shared/libs';
@@ -12,6 +12,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class SinglePostComponent implements OnInit {
   post: any = null;
   similarPost: Array<Post> = [];
+  destroyRef = inject(DestroyRef);
 
   constructor(
     private route: ActivatedRoute,
@@ -22,18 +23,18 @@ export class SinglePostComponent implements OnInit {
     this.route.params.pipe(takeUntilDestroyed()).subscribe((params: any) => {
       this.postService
         .getPostById(params.id)
-        .pipe(takeUntilDestroyed())
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((data) => {
           this.postService
             .viewPost(data, data.views + 1)
-            .pipe(takeUntilDestroyed())
+            .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((_response: any) => {});
           this.post = data;
           this.post.views = data.views + 1;
 
           this.postService
             .getSimilarPost(data.category.id, data.id)
-            .pipe(takeUntilDestroyed())
+            .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((data) => {
               this.similarPost = data;
             });

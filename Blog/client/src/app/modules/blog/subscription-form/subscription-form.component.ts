@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { SubService } from 'src/app/core/services/sub.service';
 import { Sub } from '@shared/libs';
 import { ToastrService } from 'ngx-toastr';
@@ -11,18 +11,19 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class SubscriptionFormComponent {
   isSubscribed: boolean = false;
+  destroyRef = inject(DestroyRef);
 
   constructor(private subService: SubService, private toastr: ToastrService) {}
 
   onSubmit(data: Sub): void {
     this.subService
       .checkSubscription(data.email)
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((data) => {
         if (!data) {
           this.subService
             .addSub(data)
-            .pipe(takeUntilDestroyed())
+            .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe((_response) => {
               this.toastr
                 .success(`Thank you for subscribing to our newsletter service. Stay tuned for

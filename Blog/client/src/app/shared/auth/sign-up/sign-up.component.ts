@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -10,6 +10,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrls: ['./sign-up.component.scss'],
 })
 export class SignUpComponent {
+  destroyRef = inject(DestroyRef);
+
   constructor(
     private authService: AuthService,
     private toastr: ToastrService,
@@ -24,7 +26,7 @@ export class SignUpComponent {
         formValue.password,
         formValue.confirmPassword
       )
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((_response) => {
         this.toastr.success('User Successfully Registered.');
         this.router.navigate(['/login']);

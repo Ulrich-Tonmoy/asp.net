@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -27,6 +27,7 @@ export class NewPostComponent implements OnInit {
     minHeight: '200px',
     maxHeight: '600px',
   };
+  destroyRef = inject(DestroyRef);
 
   constructor(
     private catService: CategoriesService,
@@ -42,7 +43,7 @@ export class NewPostComponent implements OnInit {
       if (this.id) {
         this.postService
           .getPostById(data['id'])
-          .pipe(takeUntilDestroyed())
+          .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((post) => {
             this.postForm = formBuilder.group({
               title: [
@@ -88,7 +89,7 @@ export class NewPostComponent implements OnInit {
   ngOnInit(): void {
     this.catService
       .getCategories()
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((data) => {
         this.categories = data;
       });
@@ -127,7 +128,7 @@ export class NewPostComponent implements OnInit {
     if (this.id) {
       this.postService
         .updatePost(this.id, postData)
-        .pipe(takeUntilDestroyed())
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((response: any) => {
           console.log(response.data);
           this.toastr.success(
@@ -138,7 +139,7 @@ export class NewPostComponent implements OnInit {
     } else {
       this.postService
         .createPost(postData)
-        .pipe(takeUntilDestroyed())
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((response: any) => {
           this.toastr.success(
             `Post ${response.data.title} added successfully!`

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { PostsService } from 'src/app/core/services/posts.service';
 import { Post } from '@shared/libs';
 import { ToastrService } from 'ngx-toastr';
@@ -12,6 +12,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class AllPostComponent implements OnInit {
   posts: Array<Post> = [];
+  destroyRef = inject(DestroyRef);
 
   constructor(
     private postService: PostsService,
@@ -27,7 +28,7 @@ export class AllPostComponent implements OnInit {
     if (confirm(`Do you want to delete the post '${title}'?`)) {
       this.postService
         .deletePost(id.toString())
-        .pipe(takeUntilDestroyed())
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((_response: any) => {
           this.toastr.warning(`Post '${title}' deleted successfully!`);
         });
@@ -38,7 +39,7 @@ export class AllPostComponent implements OnInit {
   public getAllPosts() {
     this.postService
       .getPosts()
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((data) => {
         this.posts = data;
       });
@@ -47,7 +48,7 @@ export class AllPostComponent implements OnInit {
   public onFeatured(post: any, isFeatured: boolean) {
     this.postService
       .markFeatured(post, isFeatured)
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((_response) => {
         this.toastr.success(
           `Post ${isFeatured ? 'is now Featured' : 'Featured removed'}!`
