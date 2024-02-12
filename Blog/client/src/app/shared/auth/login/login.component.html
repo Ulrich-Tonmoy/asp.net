@@ -10,27 +10,30 @@
               <h3 class="text-theme-primary">Login</h3>
               <p>Please login to manage posts and categories.</p>
             </div>
-            <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm.value)">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
               <div class="form-group">
                 <input
                   type="email"
                   class="form-control"
                   placeholder="Email"
-                  name="email"
-                  #Email="ngModel"
-                  ngModel
-                  required
-                  email
-                  [ngClass]="{ 'is-invalid': Email.touched && Email.invalid }"
+                  formControlName="email"
+                  [ngClass]="{
+                    'is-invalid':
+                      loginForm.get('email')?.touched &&
+                      loginForm.get('email')?.invalid
+                  }"
                 />
                 <div
                   class="alert alert-danger"
-                  *ngIf="Email.touched && Email.invalid"
+                  *ngIf="
+                    loginForm.get('email')?.touched &&
+                    loginForm.get('email')?.invalid
+                  "
                 >
-                  <div *ngIf="Email.errors && Email.errors['required']">
+                  <div *ngIf="loginForm.get('email')?.errors?.['required']">
                     Email cannot be Empty.
                   </div>
-                  <div *ngIf="Email.errors && Email.errors['email']">
+                  <div *ngIf="loginForm.get('email')?.errors?.['email']">
                     Invalid Email.
                   </div>
                 </div>
@@ -40,19 +43,26 @@
                   type="password"
                   class="form-control"
                   placeholder="Password"
-                  name="password"
-                  #Password="ngModel"
-                  ngModel
-                  required
+                  formControlName="password"
                   [ngClass]="{
-                    'is-invalid': Password.touched && Password.invalid
+                    'is-invalid':
+                      loginForm.get('password')?.touched &&
+                      loginForm.get('password')?.invalid
                   }"
                 />
                 <div
                   class="alert alert-danger"
-                  *ngIf="Password.touched && Password.invalid"
+                  *ngIf="
+                    loginForm.get('password')?.touched &&
+                    loginForm.get('password')?.invalid
+                  "
                 >
-                  Password cannot be Empty.
+                  <div *ngIf="loginForm.get('password')?.errors?.['required']">
+                    Password cannot be Empty.
+                  </div>
+                  <div *ngIf="loginForm.get('password')?.errors?.['minlength']">
+                    Password lengths needs to be more than 6.
+                  </div>
                 </div>
               </div>
               <button
