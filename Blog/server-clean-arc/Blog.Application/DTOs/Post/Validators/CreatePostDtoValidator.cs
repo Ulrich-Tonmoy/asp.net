@@ -1,7 +1,7 @@
 ﻿using Blog.Application.IRepository;
 using FluentValidation;
 
-namespace Blog.Application.DTOs.Post.Validators
+namespace Blog.Application.DTOs.PostValidators
 {
     public class CreatePostDtoValidator : AbstractValidator<CreatePostDto>
     {

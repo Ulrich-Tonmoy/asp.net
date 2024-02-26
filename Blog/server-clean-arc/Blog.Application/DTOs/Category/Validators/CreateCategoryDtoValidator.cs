@@ -1,7 +1,7 @@
 ﻿using Blog.Application.IRepository;
 using FluentValidation;
 
-namespace Blog.Application.DTOs.Category.Validators
+namespace Blog.Application.DTOs.CategoryValidators
 {
     public class CreateCategoryDtoValidator : AbstractValidator<CreateCategoryDto>
     {

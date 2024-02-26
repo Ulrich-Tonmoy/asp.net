@@ -1,7 +1,7 @@
 ﻿using Blog.Application.IRepository;
 using FluentValidation;
 
-namespace Blog.Application.DTOs.Subscription.Validators
+namespace Blog.Application.DTOs.SubscriptionValidators
 {
     public class CreateSubscriptionDtoValidator : AbstractValidator<CreateSubscriptionDto>
     {

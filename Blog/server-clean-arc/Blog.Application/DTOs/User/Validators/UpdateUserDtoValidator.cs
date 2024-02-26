@@ -1,7 +1,7 @@
 ﻿using Blog.Application.IRepository;
 using FluentValidation;
 
-namespace Blog.Application.DTOs.User.Validators
+namespace Blog.Application.DTOs.UserValidators
 {
     public class UpdateUserDtoValidator : AbstractValidator<UpdateUserDto>
     {
