@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -11,6 +12,7 @@ namespace Blog.Application
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(config => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddFluentValidationAutoValidation();
 
             return services;
         }
