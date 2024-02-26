@@ -10,7 +10,6 @@ namespace Blog.Application.DTOs.User.Validators
             RuleFor(l => l.Name).NotNull();
             RuleFor(l => l.Password).NotNull().MinimumLength(6);
             RuleFor(l => l.ConfirmPassword).NotNull().MinimumLength(6);
-            RuleFor(l => l.Name).NotNull();
             RuleFor(l => l.Email).MustAsync(async (email, token) =>
             {
                 var exist = await userRepository.Exists(u => u.Email.Equals(email));
