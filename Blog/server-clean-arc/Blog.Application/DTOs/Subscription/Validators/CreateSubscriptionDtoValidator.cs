@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Blog.Application.DTOs.Subscription.Validators
 {
-    public class CreateSubscriptionValidator : AbstractValidator<CreateSubscriptionDto>
+    public class CreateSubscriptionDtoValidator : AbstractValidator<CreateSubscriptionDto>
     {
-        public CreateSubscriptionValidator(ISubscriptionRepository subRepository)
+        public CreateSubscriptionDtoValidator(ISubscriptionRepository subRepository)
         {
             RuleFor(l => l.Name).NotNull();
             RuleFor(l => l.Email).MustAsync(async (email, token) =>
