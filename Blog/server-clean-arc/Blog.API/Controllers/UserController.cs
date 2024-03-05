@@ -45,8 +45,8 @@ namespace Blog.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> UserLogin([FromBody] UserLoginDto user)
         {
-            var command = new UserLoginCommand { UserLoginDto = user };
-            command.UserLoginDto.Secret = _configuration.GetSection("AppSettings:Secret").Value!;
+            string secret = _configuration.GetSection("AppSettings:Secret").Value!;
+            var command = new UserLoginCommand { UserLoginDto = user, Secret = secret };
             UserLoginResponseDto response = await _mediator.Send(command);
             return Ok(new { data = response });
         }

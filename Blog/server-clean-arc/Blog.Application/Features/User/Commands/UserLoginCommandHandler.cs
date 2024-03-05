@@ -13,6 +13,7 @@ namespace Blog.Application.Features.UserCommands
     public class UserLoginCommand : IRequest<UserLoginResponseDto>
     {
         public UserLoginDto UserLoginDto { get; set; }
+        public string Secret { get; set; }
     }
 
     public class UserLoginCommandHandler : IRequestHandler<UserLoginCommand, UserLoginResponseDto>
@@ -33,7 +34,7 @@ namespace Blog.Application.Features.UserCommands
             if (!BCrypt.Net.BCrypt.Verify(request.UserLoginDto.Password, user.Password)) return null;
 
             UserLoginResponseDto userResult = _mapper.Map<UserLoginResponseDto>(user);
-            string token = CreateToken(user, request.UserLoginDto.Secret!);
+            string token = CreateToken(user, request.Secret);
             userResult.Token = token;
 
             return userResult;
