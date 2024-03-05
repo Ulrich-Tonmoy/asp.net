@@ -39,7 +39,7 @@ namespace Blog.Infrastructure.Repository
                 }
             }
 
-            query = query.Take(queryParams.Limit);
+            query = query.Skip((queryParams.PageNumber - 1) * queryParams.PageSize).Take(queryParams.Limit);
             List<Post> posts = await query.Include(p => p.Category).ToListAsync();
 
             return posts;
