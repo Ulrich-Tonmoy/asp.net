@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PostsService } from 'src/app/core/services/posts.service';
 import { Post } from '@shared/libs';
@@ -9,17 +9,15 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './single-post.component.html',
   styleUrls: ['./single-post.component.scss'],
 })
-export class SinglePostComponent implements OnInit {
+export class SinglePostComponent {
   post: any = null;
   similarPost: Array<Post> = [];
   destroyRef = inject(DestroyRef);
 
   constructor(
     private route: ActivatedRoute,
-    private postService: PostsService
-  ) {}
-
-  ngOnInit(): void {
+    private postService: PostsService,
+  ) {
     this.route.params.pipe(takeUntilDestroyed()).subscribe((params: any) => {
       this.postService
         .getPostById(params.id)

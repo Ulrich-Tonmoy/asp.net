@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PostsService } from 'src/app/core/services/posts.service';
 import { Post } from '@shared/libs';
@@ -9,7 +9,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './single-category.component.html',
   styleUrls: ['./single-category.component.scss'],
 })
-export class SingleCategoryComponent implements OnInit {
+export class SingleCategoryComponent {
   posts: Post[] = [];
   catName: string = '';
   destroyRef = inject(DestroyRef);
@@ -17,9 +17,7 @@ export class SingleCategoryComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private postService: PostsService
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     this.route.params.pipe(takeUntilDestroyed()).subscribe((params: any) => {
       this.catName = params['category'];
       this.postService
