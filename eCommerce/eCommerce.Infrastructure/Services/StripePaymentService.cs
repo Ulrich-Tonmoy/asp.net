@@ -37,8 +37,8 @@ namespace eCommerce.Infrastructure.Services
                     PaymentMethodTypes = ["card"],
                     LineItems = lineItems,
                     Mode = "payment",
-                    SuccessUrl = "http://localhost:5297/payment-success",
-                    CancelUrl = "http://localhost:5297/payment-cancel",
+                    SuccessUrl = "https://localhost:7048/payment-success",
+                    CancelUrl = "https://localhost:7048/payment-cancel",
                 };
 
                 var service = new SessionService();

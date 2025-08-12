@@ -46,7 +46,7 @@ builder.Services.AddCors(builder =>
     {
         option.AllowAnyHeader()
         .AllowAnyMethod()
-        .WithOrigins(["http://localhost:5139", "http://localhost:5297"])
+        .WithOrigins(["https://localhost:7222", "https://localhost:7048"])
         .AllowCredentials();
     });
 });
@@ -67,8 +67,8 @@ try
         // Launch URLs in Chrome Incognito
         void OpenUrlsInChromeIncognito()
         {
-            string swaggerUrl = "http://localhost:5139/swagger/index.html";
-            string scalarUrl = "http://localhost:5139/scalar/v1";
+            string swaggerUrl = "https://localhost:7222/swagger/index.html";
+            string scalarUrl = "https://localhost:7222/scalar/v1";
             string chromePath = @"C:\Program Files\Google\Chrome\Application\chrome.exe";
             string args = $"--incognito {swaggerUrl} {scalarUrl}";
 
