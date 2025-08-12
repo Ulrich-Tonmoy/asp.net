@@ -1,0 +1,75 @@
+﻿@page "/auth/Register"
+
+<div class="container-fluid m-5 p-5">
+	<div class="row">
+		<div class="col-lg-4 offset-4">
+			<EditForm Model="User" Enhance OnValidSubmit="CreateUser">
+				<DataAnnotationsValidator />
+				@if (!string.IsNullOrEmpty(Message))
+				{
+					<div class="alert alert-@AlertType">@Message</div>
+				}
+				<div class="card p-4">
+					<div class="card-header">Registration</div>
+					<div class="card-body">
+						<div class="form-group">
+							<FloatingText @bind-Value="User.FullName" class="form-control" Label="FullName" Placeholder="John Doe" Type="text" />
+							<ValidationMessage For="() => User.FullName" />
+						</div
+						<div class="form-group">
+							<FloatingText @bind-Value="User.Email" class="form-control" Label="Email Address" Placeholder="john@doe.com" Type="text" />
+							<ValidationMessage For="() => User.Email" />
+						</div>
+						<div class="form-group">
+							<FloatingText @bind-Value="User.Password" class="form-control" Label="Password" Type="password" />
+							<ValidationMessage For="() => User.Password" />
+						</div>
+						<div class="form-group">
+							<FloatingText @bind-Value="User.ConfirmPassword" class="form-control" Label="ConfirmPassword" Type="password" />
+							<ValidationMessage For="() => User.ConfirmPassword" />
+						</div>
+					</div>
+					<button class="btn btn-primary" type="submit">Submit</button>
+				</div>
+			</EditForm>
+		</div>
+	</div>
+</div>
+
+
+@code {
+	[Parameter] public string Route { get; set; } = null!;
+
+	string AlertType = string.Empty;
+	string Message = string.Empty;
+
+	public CreateUser User { get; set; } = new();
+	async Task CreateUser()
+	{
+		Message = string.Empty;
+		AlertType = string.Empty;
+
+		var regiResult = await authService.CreateUser(User);
+		if (!regiResult.Success)
+		{
+			Message = regiResult.Message;
+			AlertType = "danger";
+			return;
+		}
+		var result = await authService.LoginUser(new LoginUser
+			{
+				Email = User.Email,
+				Password = User.Password
+			});
+		if (!result.Success)
+		{
+			Message = result.Message;
+			AlertType = "danger";
+			return;
+		}
+		string cookie = tokenService.FormToken(result.Token, result.RefreshToken);
+		await tokenService.SetCookies(Constant.Cookie.Name, cookie, Constant.Cookie.Days, Constant.Cookie.Path);
+		(authStateProvider as AuthStateProvider)!.NotifyAuthenticationState();
+		navManager.NavigateTo(Route == null ? "/" : Route, true);
+	}
+}
