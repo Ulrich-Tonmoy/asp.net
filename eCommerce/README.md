@@ -120,42 +120,45 @@ Interactive API documentation is available via Swagger UI.
 
 ## 🖥️ Blazor WebAssembly Frontend
 
-The eCommerce.Web project is a modern single-page application (SPA) built with Blazor WebAssembly, providing a rich, interactive user interface that communicates with the backend API.
+The eCommerce.Web project is a modern single-page application (SPA) built with Blazor WebAssembly, providing a rich, interactive user interface that communicates with the backend API. The frontend project is just to visualize the backend so used a html template for building the site so its ui is not that intuitive.
+
+<p align="center">
+  <img alt="Login" src="./docs/1.jpeg" width="330px"/>
+  <img alt="Registration" src="./docs/2.jpeg" width="330px"/>
+  <img alt="Home" src="./docs/3.jpeg" width="330px"/>
+  <img alt="Category" src="./docs/4.jpeg" width="330px"/>
+  <img alt="Cart" src="./docs/5.jpeg" width="330px"/>
+  <img alt="Payment" src="./docs/6.jpeg" width="330px"/>
+  <img alt="Payment Success" src="./docs/7.jpeg" width="330px"/>
+  <img alt="Admin Home" src="./docs/8.jpeg" width="330px"/>
+  <img alt="Admin Category" src="./docs/9.jpeg" width="330px"/>
+  <img alt="Admin Product" src="./docs/10.jpeg" width="330px"/>
+</p>
 
 ### Key Features
 
-#### User Interface
-
-- Responsive design that works on desktop and mobile devices
-- Modern, clean UI with smooth animations and transitions
-- Real-time updates using SignalR (if implemented)
-- Client-side validation and form handling
-
 #### Shopping Experience
 
-- Browse products by categories
-- Product search with auto-suggestions
-- Product details with image gallery
-- Shopping cart with persistent storage
-- Secure checkout process
-- Order history and tracking
+- Intuitive product browsing with category filters
+- Advanced search with auto-suggestions
+- Persistent shopping cart across sessions
+- Secure, multi-step checkout process
 
 #### Admin Dashboard
 
-- Product management (CRUD operations)
-- Category management
-- Order management and processing
-- Sales analytics and reports
-- User management
+- Comprehensive product management (CRUD operations)
+- Category organization and management
+- Order history
 
 #### Technical Highlights
 
 - Built with .NET 9.0 and Blazor WebAssembly
 - State management using built-in services
 - JWT authentication with refresh tokens
-- Responsive design with Bootstrap 5
-- Client-side caching for better performance
-- Progressive Web App (PWA) support
+- Responsive design with Bootstrap 5 and custom components
+- Client-side caching with IndexedDB for offline support
+- Progressive Web App (PWA) with service workers
+- SEO optimization with pre-rendering
 
 ## 🚀 Getting Started
 
@@ -163,7 +166,7 @@ The eCommerce.Web project is a modern single-page application (SPA) built with B
 
 - [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) or later
 - [Microsoft SQL Server Express](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
-- [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) or [VS Code](https://code.visualstudio.com/)
+- [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) (recommended) or [VS Code](https://code.visualstudio.com/)
 - [Stripe Account](https://dashboard.stripe.com/register) (for payment processing)
 
 ### Installation
@@ -182,6 +185,21 @@ The eCommerce.Web project is a modern single-page application (SPA) built with B
      - Configure Stripe API keys
      - Update JWT settings
 
+#### Option A: Using Visual Studio (Recommended)
+
+3. **Open the solution in Visual Studio 2022**
+
+   - Double-click `eCommerce.sln` to open the solution
+   - In the Package Manager Console (Tools > NuGet Package Manager > Package Manager Console):
+     ```bash
+     Update-Database -Context ApplicationDbContext
+     ```
+
+4. **Run the application**
+   - Press F5 or click the "Start" button to run both projects
+
+#### Option B: Using Command Line
+
 3. **Apply database migrations**
 
    ```bash
@@ -191,14 +209,22 @@ The eCommerce.Web project is a modern single-page application (SPA) built with B
 
 4. **Run the application**
 
-   ```bash
-   dotnet restore
-   dotnet run --project eCommerce.API
-   ```
+   - In one terminal, start the API:
+     ```bash
+     cd eCommerce.API
+     dotnet run
+     ```
+   - In another terminal, start the Blazor WebAssembly app:
+     ```bash
+     cd eCommerce.Web
+     dotnet run
+     ```
 
 5. **Access the application**
-   - API: `http://localhost:5139/api/`
-   - Swagger UI: `http://localhost:5139/swagger/index.html`
+   - Backend API: `https://localhost:7222/api/`
+   - Swagger UI: `https://localhost:7222/swagger`
+   - Frontend (Blazor WASM): `https://localhost:7048`
+   - Admin Dashboard: `https://localhost:7048/admin` (requires admin privileges)
 
 ## 🔒 Authentication
 
