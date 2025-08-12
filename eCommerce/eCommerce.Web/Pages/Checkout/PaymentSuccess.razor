@@ -1,0 +1,43 @@
+﻿@page "/payment-success"
+
+<div class="container">
+	<div class="row">
+		<div class="col offset-3 m-5 p-5">
+			<div class="alert alert-success text-center">
+				Payment made successfully, Thank you for shopping wiht us!
+			</div>
+		</div>
+	</div>
+</div>
+
+@code {
+	[CascadingParameter] public Task<AuthenticationState>? UserAuthState{ get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			var user = (await UserAuthState!).User;
+			if (user.Identity!.IsAuthenticated)
+			{
+				string cart = await browserCookieStorageService.GetAsync(Constant.Cart.Name);
+				if(!string.IsNullOrEmpty(cart))
+				{
+					var list = JsonSerializer.Deserialize<IEnumerable<ProcessCart>>(cart);
+					var arc = list!.Select(x => new CreateAchieve
+						{
+							ProductId = x.ProductId,
+							Quantity = x.Quantity,
+							UserId = user.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier)!.Value
+						});
+					await cartService.SaveCheckoutHistory(arc);
+					await browserCookieStorageService.RemoveAsync(Constant.Cart.Name);
+				}
+			}
+		}
+		catch (Exception)
+		{
+			
+		}
+	}
+}

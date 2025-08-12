@@ -1,0 +1,57 @@
+﻿@page "/search/{Filter}"
+
+@if (SearchedProducts.Any())
+{
+    <div class="container-fluid mt-5 p-3">
+        <h1 class="fashion_taital text-light fw-bold">Search Results</h1>
+        <div class="fashion_section_2">
+            <div class="row">
+                @foreach (var product in SearchedProducts)
+                {
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="box_main">
+                            <h4 class="shirt_text">@product.Name</h4>
+                            @if (product.IsNew)
+                            {
+                                <span id="newTag" class="badge badge-pill badge-success fs-2">New</span>
+                            }
+                            <p class="price_text">Price  <span style="color: #262626;">$ @product.Price</span></p>
+                            <div class="tshirt_img"><img src="@product.Base64Image"></div>
+                            <div class="btn_main">
+                                <div class="buy_bt">
+                                    <a href="#">
+                                        <i class="fa fa-cart-plus"></i>Add To Cart
+                                    </a>
+                                </div>
+                                <div class="seemore_bt"><a href="#">See More</a></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+	[Parameter] public string Filter { get; set; } = string.Empty;
+
+	IEnumerable<GetProduct> SearchedProducts = [];
+
+	protected override async Task OnParametersSetAsync()
+	{
+		if (string.IsNullOrEmpty(Filter))
+			navManager.NavigateTo("/");
+
+		var products = await productService.GetAllAsync();
+		// Improvements to make api based searching
+		if (products.Any())
+		{
+			var searchWords = Filter.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+			SearchedProducts = products.Where(p =>
+				searchWords.Any(word => p.Name!.Contains(word, StringComparison.OrdinalIgnoreCase)) ||
+				searchWords.Any(word => p.Description!.Contains(word, StringComparison.OrdinalIgnoreCase)))
+				.ToList();
+		}
+	}
+}

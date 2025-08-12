@@ -1,0 +1,95 @@
+﻿@implements IAsyncDisposable
+
+<div class="fashion_section">
+    <div id="main_slider" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            @if (ProductGroups.Any())
+            {
+                int sn = 1;
+                foreach (var group in ProductGroups)
+                {
+                    <div class="carousel-item @(sn==1?"active":null)">
+                        <div class="container-fluid">
+                            <h1 class="fashion_taital text-light fw-bold">Latest Products</h1>
+                            <div class="fashion_section_2">
+                                <div class="row">
+                                    @foreach (var product in group)
+                                    {
+                                        <div class="col-lg-4 col-sm-4">
+                                            <div class="box_main">
+                                                <h4 class="shirt_text">@product.Name</h4>
+                                                @if (product.IsNew)
+                                                {
+                                                    <span id="newTag" class="badge badge-pill badge-success fs-6">New</span>
+                                                }
+                                                <p class="price_text">Price  <span style="color: #262626;">$ @product.Price</span></p>
+                                                <div class="tshirt_img"><img src="@product.Base64Image"></div>
+                                                <div class="btn_main">
+                                                    <div class="buy_bt text-danger" @onclick="()=>AddItemToCart(product.Id)">
+                                                            <i class="fa fa-cart-plus"></i>Add To Cart
+                                                    </div>
+                                                    <div class="seemore_bt"><a href="/main/products/category/@product.CategoryId">See More</a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    sn++;
+                }
+            }
+        </div>
+        @if (Products.Any())
+        {
+            <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+                <i class="fa fa-angle-left"></i>
+            </a>
+            <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        }
+    </div>
+</div>
+<NetcodeHubToast @ref="ToastComponent" Position="@ToastPosition.Bottom()" IconClass="fa fa-check" Persist="true" Duration="4000" />
+
+@code {
+    NetcodeHubToast? ToastComponent;
+    IEnumerable<GetProduct> Products = [];
+    List<List<GetProduct>> ProductGroups = [];
+    List<ProcessCart> MyCarts = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        Products = await productService.GetAllAsync();
+
+        if (Products.Count() > 0)
+        {
+            ProductGroups = Products.Where(x => x.CreatedDate.AddDays(7) >= DateTime.Now)
+            .Select((product, index) => new { product, index })
+            .GroupBy(x => x.index / 4)
+            .Select(group => group.Select(x => x.product).ToList())
+            .ToList();
+        }
+    }
+
+    async Task AddItemToCart(Guid productId)
+    {
+        var getCart = MyCarts.FirstOrDefault(x => x.ProductId == productId);
+        if (getCart == null)
+        {
+            MyCarts.Add(new ProcessCart { ProductId = productId, Quantity = 1 });
+            await ToastComponent!.ShowSuccessToast("Cart", "Product Added to cart!");
+            // Might also update the cookies storage to set the cart data and also instead of pushing data get the old date and add new
+        }
+        else
+            await ToastComponent!.ShowInfoToast("Cart", "Product Already Added to cart!");
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (MyCarts.Any())
+            await browserCookieStorageService.SetAsync(Constant.Cart.Name, JsonSerializer.Serialize(MyCarts), Constant.Cart.Seconds, "/");
+    }
+}

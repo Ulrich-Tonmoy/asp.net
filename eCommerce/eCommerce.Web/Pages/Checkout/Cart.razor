@@ -1,0 +1,221 @@
+﻿@page "/my-cart"
+
+<div class="container">
+	<div class="row">
+		@if (SelectedProducts.Any())
+		{
+			<div class="col-lg-12">
+				<div class="p-2 mt-3 w-100 bg-warning">
+					<div class="card m-2">
+						<h3 class="text-center">My Cart</h3>
+					</div>
+					<div class="card-body">
+						<NetcodeHubDataGrid CssClass="table table-light">
+							<HeaderTemplate>
+								<tr>
+									<th>Image</th>
+									<th style="width:150px">Name</th>
+									<th>Price</th>
+									<th>Quantity</th>
+									<th>Total</th>
+									<th class="text-center">Manage</th>
+								</tr>
+							</HeaderTemplate>
+							<ContentTemplate>
+								@foreach (var item in SelectedProducts)
+								{
+									Guid productId = item.Id;
+									<tr>
+										<td style="width:150px">
+											<img src="@item.Base64Image" class="h-25 w-25" />
+										</td>
+										<td style="width:250px">@item.Name</td>
+										<td style="width:250px">$@item.Price</td>
+										<td>
+											<div class="hstack gap-1">
+												<input class="form-control w-25" type="number" min="1" value="@(GetProductQuantity(productId))" @oninput="(e)=>HandleInputChange(e,productId)" id="@productId"/>
+											</div>
+										</td>
+										<td>@(GetProductTotalPrice(productId))</td>
+										<td class="text-center">
+											<i class="fa fa-trash text-danger buy_bt" @onclick="()=>DeleteCartItem(productId)"></i>
+										</td>
+									</tr>
+								}
+							</ContentTemplate>
+						</NetcodeHubDataGrid>
+					</div>
+					<div class="card-footer">
+						<div class="fs-3 mb-3">Grand Total: $@(GetGrandTotal(SelectedProducts))</div>
+						<button class="btn btn-danger btn-lg" @onclick="Checkout">Checkout</button>
+					</div>
+				</div>
+			</div>
+		}
+		else
+		{
+			<div class="col-lg-4 offset-4 m-5 p-5">
+				<div class="text-center alert alert-info">Cart is Empty!</div>
+			</div>
+		}
+		@if (ShowPaymentDialog)
+		{
+			<div class="modalDialog">
+				<NetcodeHubModal CustomStyle="modalDialog" BootstrapClass="border-warning">
+				<ContentTemplate>
+					<div class="card">
+						<div class="card-header">Select PaymentMethod</div>
+						<div class="card-body">
+							@if (PaymentMethods.Any())
+							{
+								<ul class="list-group">
+									@foreach (var item in PaymentMethods)
+									{
+										var payment =item;
+										<li class="list-group-item list-group-item-action buy_bt" @onclick="()=>SelectedPaymentMethod(payment)">
+											@payment.Name
+										</li>
+									}
+								</ul>
+							}
+						</div>
+					</div>
+				</ContentTemplate>
+				<ButtonTemplate>
+					<div class="card border-0">
+						<div class="card-body">
+							<div class="d-flex justify-content-center align-items-center">
+								@if (Paying != null)
+								{
+									<button class="btn btn-outline-success mr-2">@Paying</button>
+								}
+								<button class="btn btn-danger" onclick="Cancel">Cancel</button>
+							</div>
+						</div>
+					</div>
+				</ButtonTemplate>
+			</NetcodeHubModal>
+			</div>
+		}
+	</div>
+</div>
+<NetcodeHubToast @ref="ToastComponent" Position="@ToastPosition.Bottom()" IconClass="fa fa-check" Persist="true" Duration="4000"/>
+
+@code {
+	string Paying = null!;
+	NetcodeHubToast? ToastComponent;
+	bool ShowPaymentDialog = false;
+	IEnumerable<GetPaymentMethod> PaymentMethods = [];
+	List<GetProduct> SelectedProducts = [];
+	IEnumerable<GetProduct> Products = [];
+	List<ProcessCart> MyCarts = [];
+
+	protected override async Task OnInitializedAsync()
+	{
+		PaymentMethods = await paymentMethodService.GetPaymentMethods();
+		Products = await productService.GetAllAsync();
+		string cartData = await browserCookieStorageService.GetAsync(Constant.Cart.Name);
+		if (string.IsNullOrEmpty(cartData)) return;
+
+		MyCarts = JsonSerializer.Deserialize<List<ProcessCart>>(cartData)!;
+		if (!MyCarts.Any()) return;
+		GetCart();
+	}
+
+	void GetCart()
+	{
+		SelectedProducts?.Clear();
+		foreach(var item in MyCarts)
+		{
+			var product = Products.FirstOrDefault(x => x.Id == item.ProductId);
+			if (product != null && !SelectedProducts!.Contains(product))
+				SelectedProducts.Add(product);
+		}
+		SelectedProducts!.OrderBy(x => x.Name);
+	}
+
+	int GetProductQuantity(Guid productId) => GetCartItem(productId).Quantity;
+
+	ProcessCart GetCartItem(Guid productId) => MyCarts.FirstOrDefault(x => x.ProductId == productId)!;
+
+	decimal GetProductTotalPrice(Guid productId)
+	{
+		int quantity = GetProductQuantity(productId);
+		decimal price = Products.FirstOrDefault(x => x.Id == productId)!.Price;
+		return quantity * price;
+	}
+
+	async Task HandleInputChange(ChangeEventArgs eventArgs, Guid productId)
+	{
+		int newQuantity = int.Parse(eventArgs.Value?.ToString()!);
+		MyCarts.FirstOrDefault(x => x.ProductId == productId)!.Quantity = newQuantity;
+		await SaveCart(MyCarts);
+		GetCart();
+		StateHasChanged();
+	}
+
+	async Task SaveCart(List<ProcessCart> myCarts) => await browserCookieStorageService.SetAsync(Constant.Cart.Name, JsonSerializer.Serialize(myCarts), Constant.Cart.Seconds, "/");
+
+	decimal GetGrandTotal(List<GetProduct> products)
+	{
+		decimal grandTotal = 0.00m;
+		foreach (var product in products)
+			grandTotal += GetProductTotalPrice(product.Id);
+
+		return grandTotal;
+	}
+
+	async Task DeleteCartItem(Guid productId)
+	{
+		var cartItem = GetCartItem(productId);
+		MyCarts.Remove(cartItem);
+		var product = SelectedProducts.FirstOrDefault(x => x.Id == productId);
+		SelectedProducts.Remove(product!);
+		await browserCookieStorageService.RemoveAsync(Constant.Cart.Name);
+		await SaveCart(MyCarts);
+		await ToastComponent!.ShowDangerToast("Cart", "Product removed");
+	}
+
+	[CascadingParameter]
+	public Task<AuthenticationState>? UserAuthState { get; set; }
+
+	async Task Checkout()
+	{
+		try
+		{
+			var user = (await UserAuthState!).User;
+			if (!user.Identity!.IsAuthenticated)
+				navManager.NavigateTo($"auth/login/{Constant.Cart.Name}");
+
+			ShowPaymentDialog = true;
+		}
+		catch 
+		{
+			navManager.NavigateTo($"auth/login/{Constant.Cart.Name}");
+		}
+	}
+
+	async Task SelectedPaymentMethod(GetPaymentMethod paymentMethod)
+	{
+		if (paymentMethod == null) return;
+		Paying = "Processing... please wait!";
+		var checkout = new Checkout
+			{
+				PaymentMethodId = paymentMethod.Id,
+				Carts = MyCarts
+			};
+		var (success, paymentLink) = await cartService.Checkout(checkout);
+		if (success)
+		{
+			Paying = null!;
+			navManager.NavigateTo(paymentLink);
+		}
+		else
+		{
+			await ToastComponent.ShowDangerToast("Checkout", paymentLink);
+		}
+
+	}
+
+	void Cancel() => ShowPaymentDialog = false;
+}

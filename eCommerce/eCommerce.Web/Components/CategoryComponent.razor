@@ -1,0 +1,19 @@
+﻿@if(Categories.Any())
+{
+    foreach(var category in Categories)
+    {
+        <a href="@($"main/products/category/{category.Id}")" onclick="closeNav()">
+            <i class="fa fa-archive fs-2" style="color:#cca120" aria-hidden="true"></i>
+            @category.Name
+        </a>
+    }
+}
+
+@code {
+    IEnumerable<GetCategory> Categories = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        Categories = await categoryService.GetAllAsync();
+    }
+}

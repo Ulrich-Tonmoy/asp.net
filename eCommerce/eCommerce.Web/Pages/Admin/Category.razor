@@ -1,0 +1,112 @@
+﻿@page "/category"
+@layout AdminLayoutComponent
+
+<div class="banner_section">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card p-5 m-2">
+					<div class="card-header text-center fs-3">Manage Categories</div>
+					<div class="card-title">
+						<button class="btn btn-outline-success btn-lg mt-2 float-end" @onclick="AddCategory">
+							Add Category
+						</button>
+					</div>
+					<div class="card-body" style="height:500px;overflow:auto">
+						@if(Categories.Any())
+						{
+							<table class="table table-striped">
+								<thead>
+									<tr class="bg-light mb-5">
+										<th>Id</th>
+										<th>Name</th>
+										<th class="text-danger">Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach (var cat in Categories)
+									{
+										<tr>
+											<td>@cat.Id</td>
+											<td>@cat.Name</td>
+											<td>
+												<i class="fa fa-trash text-danger buy_bt" @onclick="()=>DeleteCategory(cat.Id)"></i>
+											</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						}
+						else
+						{
+							<div class="alert alert-info fw-bold text-center">No Category Found</div>
+						}
+					</div>
+				</div>
+			</div>
+			@if (ShowDialog)
+			{
+				<NetcodeHubModal BootstrapClass="modalDialog border-success">
+					<ContentTemplate>
+						<div class="card">
+							<div class="card-header">Add Category</div>
+							<div class="card-body">
+								<EditForm Model="NewCategory" OnValidSubmit="SaveCategory">
+									<div class="form-group p-2">
+										<FloatingText @bind-Value="NewCategory.Name" Label="Category Name" class="form-control" />
+										<button class="btn btn-primary mt-3" type="submit">Save Category</button>
+										<button class="btn btn-danger mt-3" @onclick="Cancel">Cancel</button>
+									</div>
+								</EditForm>
+							</div>
+						</div>
+					</ContentTemplate>
+				</NetcodeHubModal>
+			}
+		</div>
+	</div>
+</div>
+
+<NetcodeHubToast @ref="ToastComponent" Position="@ToastPosition.Bottom()" IconClass="bi bi-check" Persist="true" Duration="4000" />
+
+@code {
+	bool ShowDialog = false;
+	NetcodeHubToast? ToastComponent;
+	IEnumerable<GetCategory> Categories = [];
+	CreateCategory NewCategory = new();
+
+	protected override async Task OnInitializedAsync() => await GetCategories();
+
+	async Task GetCategories() => Categories = await categoryService.GetAllAsync();
+
+	void AddCategory() => ShowDialog = true;
+
+	void Cancel() => ShowDialog = false;
+
+	async Task DeleteCategory(Guid id)
+	{
+		var result = await categoryService.DeleteAsync(id);
+		if (result.Success)
+			await GetCategories();
+
+		await ShowToast(result, "Delete-Category");
+	}
+
+	async Task SaveCategory()
+	{
+		var result = await categoryService.AddAsync(NewCategory);
+		if (result.Success)
+			await GetCategories();
+
+		await ShowToast(result, "Add-Category");
+		Cancel();
+	}
+
+	async Task ShowToast(ServiceResponse result,string title)
+	{
+		if (result.Success)
+			await ToastComponent!.ShowSuccessToast(result.Message, title);
+		else
+			await ToastComponent!.ShowErrorToast(result.Message, title);
+	}
+}

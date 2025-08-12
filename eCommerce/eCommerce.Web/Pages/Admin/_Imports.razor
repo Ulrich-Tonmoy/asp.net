@@ -1,0 +1,41 @@
+﻿@using System.Net.Http
+@using System.Text.Json
+@using System.Net.Http.Json
+@using System.Security.Claims
+@using Blazored.Typeahead
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.AspNetCore.Components.WebAssembly.Http
+@using Microsoft.JSInterop
+
+@using eCommerce.Web
+@using eCommerce.Web.Components
+@using eCommerce.Web.DTOs.Auth
+@using eCommerce.Web.DTOs.Category
+@using eCommerce.Web.DTOs.Product
+@using eCommerce.Web.DTOs.Cart
+@using eCommerce.Web.Helper
+@using eCommerce.Web.Helper.Auth
+@using eCommerce.Web.Layout
+@using eCommerce.Web.Services
+@using eCommerce.Web.Services.Interfaces
+@using eCommerce.Web.DTOs
+
+@using NetcodeHub.Packages.WebAssembly.Storage.Cookie
+@using NetcodeHub.Packages.Components.Validations.OnInput
+@using NetcodeHub.Packages.Components.Toast
+@using NetcodeHub.Packages.Components.Modal
+@using NetcodeHub.Packages.Components.DataGrid
+@using NetcodeHub.Packages.Components.FileUpload
+
+@* Services Injection *@
+@inject ICategoryService categoryService
+@inject IProductService productService
+@inject NavigationManager navManager
+@inject ICartService cartService
+
+@attribute [Authorize(Roles = Constant.Administration.AdminRole)]

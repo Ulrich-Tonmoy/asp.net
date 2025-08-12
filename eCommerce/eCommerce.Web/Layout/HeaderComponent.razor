@@ -1,0 +1,134 @@
+﻿<div class="header_section mt-5">
+    <div class="container">
+        <div class="containt_main">
+            <div id="mySidenav" class="sidenav z-3">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <div class="fw-bold text-center text-warning" style="font:Tahoma; font-size:20px">CATEGORIES</div>
+                <hr style="height:5px; background:linear-gradient(to bottom, #cca120, gray)" class="text-light" />
+                <CategoryComponent />
+                <hr style="height:5px; position:relative; top:60%; background:linear-gradient(to bottom, #cca120, gray)" class="text-light" />
+                <div class="fw-bold text-center text-warning" style="font:Tahoma; font-size:16px; position:relative; top:60%">Version 1.0</div>
+            </div>
+            <span class="toggle_icon" onclick="openNav()"><img src="images/toggle-icon.png"></span>
+            <div class="main">
+                <!-- Another variation with a button -->
+                <div class="input-group bg-light text-dark">
+                    <BlazoredTypeahead SearchMethod="SearchProducts" @bind-Value="SelectedProduct" Placeholder="Search Products...">
+                        <SelectedTemplate>@context.Name</SelectedTemplate>
+                        <ResultTemplate>@context.Name</ResultTemplate>
+                        <NotFoundTemplate>
+                            <span>No Products Found</span>
+                        </NotFoundTemplate>
+                    </BlazoredTypeahead>
+                </div>
+            </div>
+            <div class="header_box">
+                <div class="login_menu">
+                    <ul>
+                        <li>
+                            <a href="/my-cart">
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                <span class="padding_10">Cart</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="login_menu ml-3">
+                    <a href="#" title="Account" class="nav-link" data-toggle="dropdown" aria-expanded="true">
+                        <i class="fa fa-user text-light" aria-hidden="true"></i>
+                        <span class="text-light">
+                            <AuthorizeView>
+                                <Authorized>
+                                    @context.User.Claims.FirstOrDefault(c=>c.Type==ClaimTypes.Email)!.Value
+                                </Authorized>
+                                <NotAuthorized>ACCOUNT</NotAuthorized>
+                            </AuthorizeView>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <AuthorizeView>
+                            <Authorized>
+                                <div href="#" class="dropdown-item">
+                                    <div class="hstack gap-1">
+                                        <i class="fa fa-tasks"></i>
+                                        <a href="auth/logout"> Logout</a>
+                                    </div>
+                                </div>
+                            </Authorized>
+                            <NotAuthorized>
+                                <div href="#" class="dropdown-item">
+                                    <div class="hstack gap-1">
+                                        <i class="fa fa-tasks"></i>
+                                        <a href="auth/login"> Login</a>
+                                    </div>
+                                </div>
+                                <div href="#" class="dropdown-item">
+                                    <div class="hstack gap-1">
+                                        <i class="fa fa-tasks"></i>
+                                        <a href="auth/register"> Register</a>
+                                    </div>
+                                </div>
+                            </NotAuthorized>
+                        </AuthorizeView>
+                    </div>
+                </div>
+                @if (showAdminNav)
+                {
+                    <div class="login_menu">
+                        <ul>
+                            <li>
+                                <a href="/admin">
+                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                    <span class="padding_10">Admin Page</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter] Task<AuthenticationState>? AuthState { get; set; }
+    bool showAdminNav = false;
+    IEnumerable<GetProduct> Products = [];
+    private GetProduct _selectedProduct = new();
+    public GetProduct SelectedProduct
+    {
+        get => _selectedProduct;
+        set 
+        {
+            if(_selectedProduct !=value)
+            {
+                _selectedProduct = value;
+                OnSelectedProductChanged();
+            }
+        }
+    }
+
+    private void OnSelectedProductChanged()
+    {
+        if (_selectedProduct == null) return;
+        navManager.NavigateTo($"search/{_selectedProduct.Name}");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Products = await productService.GetAllAsync();
+
+        try
+        {
+            var user = (await AuthState!).User;
+            if (user.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role)!.Value == Constant.Administration.AdminRole)
+                showAdminNav = true;
+        }
+        catch { }
+    }
+
+    async Task<IEnumerable<GetProduct>> SearchProducts(string searchText)
+    {
+        return await Task.FromResult(Products.Where(x => x.Name!.Contains(searchText, StringComparison.CurrentCultureIgnoreCase) || x.Description!.Contains(searchText, StringComparison.CurrentCultureIgnoreCase)).ToList());
+    }
+}

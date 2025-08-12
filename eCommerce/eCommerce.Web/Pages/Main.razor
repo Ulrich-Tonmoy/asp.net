@@ -1,0 +1,82 @@
+﻿@page "/main/products/category/{CategoryId}"
+
+@if (SelectedCategory !=null && ProductsByCategory.Any())
+{
+    <div class="container-fluid">
+        <h1 class="fashion_taital text-light fw-bold">@SelectedCategory.Name Products</h1>
+        <div class="fashion_section_2">
+            <div class="row">
+                @foreach (var product in ProductsByCategory)
+                {
+                    <div class="col-lg-4 col-sm-4">
+                        <div class="box_main">
+                            <h4 class="shirt_text">@product.Name</h4>
+                            @if (product.IsNew)
+                            {
+                                <span id="newTag" class="badge badge-pill badge-success fs-2">New</span>
+                            }
+                            <p class="price_text">Price  <span style="color: #262626;">$ @product.Price</span></p>
+                            <div class="tshirt_img"><img src="@product.Base64Image"></div>
+                            <div class="btn_main">
+                                <div class="buy_bt">
+                                    <div class="buy_bt text-danger" @onclick="() => AddItemToCart(product.Id)">
+                                        <i class="fa fa-cart-plus"></i>Add To Cart
+                                    </div>
+                                </div>
+                                <div class="seemore_bt"><a href="#">See More</a></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container-fluid m-5 ">
+        <div class="row p-5">
+            <div class="col-lg-2 offset-4">
+                <div class="alert alert-info">No Products Found</div>
+            </div>
+        </div>
+    </div>
+}
+<NetcodeHubToast @ref="ToastComponent" Position="@ToastPosition.Bottom()" IconClass="fa fa-check" Persist="true" Duration="4000" />
+
+@code {
+    [Parameter] public string CategoryId { get; set; } = string.Empty;
+
+    NetcodeHubToast? ToastComponent;
+    public GetCategory SelectedCategory { get; set; } = new();
+    IEnumerable<GetProduct> ProductsByCategory = [];
+    List<ProcessCart> MyCarts = [];
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (string.IsNullOrEmpty(CategoryId))
+            navManager.NavigateTo("/");
+
+        SelectedCategory = await categoryService.GetByIdAsync(Guid.Parse(CategoryId));
+        ProductsByCategory = await categoryService.GetProductsByCategory(Guid.Parse(CategoryId));
+    }
+
+    async Task AddItemToCart(Guid productId)
+    {
+        var getCart = MyCarts.FirstOrDefault(x => x.ProductId == productId);
+        if (getCart == null)
+        {
+            MyCarts.Add(new ProcessCart { ProductId = productId, Quantity = 1 });
+            await ToastComponent!.ShowSuccessToast("Cart", "Product Added to cart!");
+            // Might also update the cookies storage to set the cart data
+        }
+        else
+            await ToastComponent!.ShowInfoToast("Cart", "Product Already Added to cart!");
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (MyCarts.Any())
+            await browserCookieStorageService.SetAsync(Constant.Cart.Name, JsonSerializer.Serialize(MyCarts), Constant.Cart.Seconds, "/");
+    }
+}
